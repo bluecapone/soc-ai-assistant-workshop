@@ -1,4 +1,4 @@
-# Attendee manual
+# Workshop Guide
 
 In this workshop you build a triage agent that ingests an alert, enriches it from your own telemetry, reasons about it with a hosted model, and writes a verdict into a case system. You run it against an intrusion you launch yourself, on your own laptop. Nothing is pre-recorded, and no part of the lab is shared with the room.
 
@@ -21,19 +21,19 @@ hidden: true
 ## Exercises
 
 - [Part 0: Connect](02-connect.md)
-  - [Exercise #0.1: bring up the lab](02-connect.md#exercise-0-1-bring-up-the-lab)
-  - [Exercise #0.2: sign in everywhere](02-connect.md#exercise-0-2-sign-in-everywhere)
-  - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-0-3-fire-a-benign-button-and-follow-it)
+  - [Exercise #0.1: bring up the lab](02-connect.md#exercise-01-bring-up-the-lab)
+  - [Exercise #0.2: sign in everywhere](02-connect.md#exercise-02-sign-in-everywhere)
+  - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-03-fire-a-benign-button-and-follow-it)
 - [Part 1: Module 1, drive it by hand](03-module-1.md)
-  - [Exercise #1.1: connect Claude Code to the gateway](03-module-1.md#exercise-1-1-connect-claude-code-to-the-gateway)
-  - [Exercise #1.2: draft the skill and edit it by hand](03-module-1.md#exercise-1-2-draft-the-skill-and-edit-it-by-hand)
-  - [Exercise #1.3: give it Wazuh](03-module-1.md#exercise-1-3-give-it-wazuh)
-  - [Exercise #1.4: give it TheHive](03-module-1.md#exercise-1-4-give-it-thehive)
-  - [Exercise #1.5: fire an alert and drive it by hand](03-module-1.md#exercise-1-5-fire-an-alert-and-drive-it-by-hand)
-  - [Exercise #1.6: run it again on a twin](03-module-1.md#exercise-1-6-run-it-again-on-a-twin)
-  - [Exercise #1.7: does the skill load?](03-module-1.md#exercise-1-7-does-the-skill-load)
-  - [Exercise #1.8: extract reusable skills](03-module-1.md#exercise-1-8-extract-reusable-skills)
-  - [Exercise #1.9, bonus: add a reputation lookup](03-module-1.md#exercise-1-9-bonus-add-a-reputation-lookup)
+  - [Exercise #1.1: connect Claude Code to the gateway](03-module-1.md#exercise-11-connect-claude-code-to-the-gateway)
+  - [Exercise #1.2: draft the skill and edit it by hand](03-module-1.md#exercise-12-draft-the-skill-and-edit-it-by-hand)
+  - [Exercise #1.3: give it Wazuh](03-module-1.md#exercise-13-give-it-wazuh)
+  - [Exercise #1.4: give it TheHive](03-module-1.md#exercise-14-give-it-thehive)
+  - [Exercise #1.5: fire an alert and drive it by hand](03-module-1.md#exercise-15-fire-an-alert-and-drive-it-by-hand)
+  - [Exercise #1.6: run it again on a twin](03-module-1.md#exercise-16-run-it-again-on-a-twin)
+  - [Exercise #1.7: does the skill load?](03-module-1.md#exercise-17-does-the-skill-load)
+  - [Exercise #1.8: extract reusable skills](03-module-1.md#exercise-18-extract-reusable-skills)
+  - [Exercise #1.9, bonus: add a reputation lookup](03-module-1.md#exercise-19-bonus-add-a-reputation-lookup)
 - [Part 2: Module 2, run it unattended](04-module-2.md)
 - [Part 3: Module 3, let it decide](05-module-3.md)
 - [Take-home](07-take-home.md)
@@ -54,14 +54,14 @@ You need to be able to read code. You never have to write any. Work is solo, wit
 
 Every attendee runs an independent copy of the same six components. Nothing is shared.
 
-| Component | Role | Login |
-|---|---|---|
-| TheHive | Case management; your agent writes verdicts here | `analyst@brucon.local` / `brucon2026` |
-| n8n | Workflow orchestration for Modules 2 and 3 | `admin@brucon.local` / `Brucon2026` |
-| Wazuh | SIEM; collects live logs from bank-web and fires detections | `admin` / `brucon2026` |
-| Range control panel | Attack console: ten attack buttons and six benign twins, all real commands against bank-web | none |
-| bank-web | Deliberately vulnerable web application, the detection target | none |
-| Model gateway | Every model call routes through it | your token, one per attendee |
+| Component           | Role                                                                                        | Login                                 |
+| ------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------- |
+| TheHive             | Case management; your agent writes verdicts here                                            | `analyst@brucon.local` / `brucon2026` |
+| n8n                 | Workflow orchestration for Modules 2 and 3                                                  | `admin@brucon.local` / `Brucon2026`   |
+| Wazuh               | SIEM; collects live logs from bank-web and fires detections                                 | `admin` / `brucon2026`                |
+| Range control panel | Attack console: ten attack buttons and six benign twins, all real commands against bank-web | none                                  |
+| bank-web            | Deliberately vulnerable web application, the detection target                               | none                                  |
+| Model gateway       | Every model call routes through it                                                          | your token, one per attendee          |
 
 Configuration lives in `lab/.env`: `THEHIVE_N8N_APIKEY` (minted by the start script), `GATEWAY_BASE_URL`, `GATEWAY_API_KEY`, `MODEL_WEAK`, `MODEL_FRONTIER`. Model ids are announced from the slide on the day.
 
