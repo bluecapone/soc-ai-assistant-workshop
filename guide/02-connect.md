@@ -82,15 +82,15 @@ Exercise 0.3 walks it once by hand.
 
 1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login; *click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
 
-   ![Attack console, quick access](../exercises/connect/screenshots/03-panel.png)
+   ![Attack console, quick access](screenshots/connect/03-panel.png)
 
 2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login; the lab runs on the free tier and nothing in the workshop needs more.
 
-   ![TheHive login](../exercises/connect/screenshots/01-thehive-login.png)
+   ![TheHive login](screenshots/connect/01-thehive-login.png)
 
 3. **n8n.** From its card, open `http://n8n.localhost`. Sign in as `admin@brucon.local`, password `Brucon2026`. You see the workflow canvas with two nodes already built: a webhook trigger and a verdict writer.
 
-   ![n8n sign in](../exercises/connect/screenshots/02-n8n-login.png)
+   ![n8n sign in](screenshots/connect/02-n8n-login.png)
 
 **Expected**: TheHive shows an empty case list. The integrator has not fired yet, so *empty means success*.
 

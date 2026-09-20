@@ -1,0 +1,14 @@
+site_name: SOC AI Assistant Workshop
+site_url: https://soc-ai-assistant-workshop.readthedocs.io/
+repo_url: https://github.com/bluecapone/soc-ai-assistant-workshop
+docs_dir: guide
+site_dir: .site
+theme:
+  name: readthedocs
+nav:
+  - Home: README.md
+  - Part 0, Connect: 02-connect.md
+  - Part 1, Module 1: 03-module-1.md
+  - Part 2, Module 2: 04-module-2.md
+  - Part 3, Module 3: 05-module-3.md
+  - Take-home: 07-take-home.md

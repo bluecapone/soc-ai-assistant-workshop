@@ -226,7 +226,7 @@ Captured from the running lab; capture commands are in `lab/exercises/README.md`
 
 | Figure | File | What it shows |
 |--------|------|---------------|
-| 1 | `exercises/module-1/screenshots/01-panel.png` | The attack console |
-| 2 | `exercises/module-1/screenshots/02-thehive-case.png` | The case an attack created: title, tags and the description table |
+| 1 | `guide/screenshots/module-1/01-panel.png` | The attack console |
+| 2 | `guide/screenshots/module-1/02-thehive-case.png` | The case an attack created: title, tags and the description table |
 | 3 | **TBC** | The terminal after `/soc-triage`, showing the three-section verdict |
 | 4 | **TBC** | The verdict landed as a comment on the case |

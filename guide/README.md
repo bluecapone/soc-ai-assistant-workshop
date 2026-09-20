@@ -28,7 +28,7 @@ This manual is exercises only. Each exercise has a goal, the steps, what you sho
 
 Have these before Part 0:
 
-- The *workshop folder*: a clone of [github.com/bluecapone/soc-ai-assistant-workshop](https://github.com/bluecapone/soc-ai-assistant-workshop) (Exercise 0.1 shows the command). Its name does not matter. It contains `lab/` and the workshop folder, and every command in this manual says which folder to run it from.
+- The *workshop folder*: a clone of [github.com/bluecapone/soc-ai-assistant-workshop](https://github.com/bluecapone/soc-ai-assistant-workshop) (Exercise 0.1 shows the command). Its name does not matter. It contains `guide/`, `exercises/` and `lab/`, and every command in this manual says which folder to run it from.
 - Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/start.sh` (or `start.ps1`) from the lab directory. Podman is untested.
 - 16 GB RAM and free disk for the compose stack.
 - Claude Code installed.

@@ -18,9 +18,9 @@ Every module's exercises, exact expressions and expected outcomes live in the at
 
 ## Screenshots
 
-Every figure in the guides is captured from the running lab at 1440x900, saved as PNG under the guide's `screenshots/` directory.
+Every figure in the guides is captured from the running lab at 1440x900, saved as PNG under `guide/screenshots/<part>/`.
 
 ```bash
-mkdir -p exercises/module-1/screenshots
+mkdir -p guide/screenshots/module-1
 # Captures are taken with a headless browser against http://panel.localhost, http://thehive.localhost and http://n8n.localhost while the stack is up
 ```
