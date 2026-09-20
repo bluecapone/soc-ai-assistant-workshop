@@ -6,7 +6,7 @@ Every verdict in this workshop has the same three sections: a summary, a suggest
 
 ## Exercise #1.1: connect Claude Code to the gateway
 
-**Goal**: Claude Code answers a prompt through the workshop gateway with your token, from a directory that holds the skill template.
+**Goal**: Claude Code answers a prompt through the workshop gateway with your token, started from the workshop folder with the skill template in place.
 
 Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it; any client that reads the same two variables uses the gateway too.
 
@@ -32,12 +32,11 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
    export WAZUH_URL=https://localhost:9200
    ```
 
-3. **Working directory.** Still from the workshop folder, make one with the skill template in place, then start Claude Code there. <ins>Start Claude Code in this directory every time</ins>; the skill is only found from here.
+3. **Skill in place.** Still from the workshop folder, copy the skill template into the folder Claude Code reads skills from, then start Claude Code here. <ins>Start Claude Code from the workshop folder every time</ins>; the skill is only found from here.
 
    ```bash
-   mkdir -p ~/soc-triage-lab/.claude/skills
-   cp -r attendee-manual/exercises/module-1/soc-triage-template ~/soc-triage-lab/.claude/skills/soc-triage
-   cd ~/soc-triage-lab
+   mkdir -p .claude/skills
+   cp -r exercises/module-1/soc-triage-template .claude/skills/soc-triage
    claude
    ```
 
@@ -208,7 +207,7 @@ Expected: the summary names the reputation, labelled "offline list, not live rep
 From the workshop folder, copy the checkpoint skill over your template and run the same command:
 
 ```bash
-cp -r lab/checkpoints/module-1/soc-triage ~/soc-triage-lab/.claude/skills/
+cp -r lab/checkpoints/module-1/soc-triage .claude/skills/
 ```
 
 Then in Claude Code, `/soc-triage ~<case id>`. The checkpoint produces the same three-section verdict your own skill would.

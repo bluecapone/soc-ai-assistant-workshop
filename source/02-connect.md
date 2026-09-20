@@ -8,7 +8,15 @@ Your lab is a Docker compose stack on your own laptop: **TheHive**, **n8n**, **W
 
 The start script does the one-time setup, so there is nothing to configure by hand. It is safe to run again if you interrupt it.
 
-1. **Start Docker** and wait until it reports running. No Docker yet? Install Docker Desktop from [docs.docker.com/desktop](https://docs.docker.com/desktop/) first (it includes Docker Compose). Open Docker Desktop from the applications menu, or from a terminal:
+1. **Get the workshop folder.** Clone the workshop repository, then enter it. Every later command that says "from the workshop folder" runs here.
+
+   ```bash
+   git clone https://github.com/bluecapone/soc-ai-assistant-workshop
+   cd soc-ai-assistant-workshop
+   ```
+
+   No git? On the repository page, `Code`, `Download ZIP`, unzip it and open a terminal in the unzipped folder.
+2. **Start Docker** and wait until it reports running. No Docker yet? Install Docker Desktop from [docs.docker.com/desktop](https://docs.docker.com/desktop/) first (it includes Docker Compose). Open Docker Desktop from the applications menu, or from a terminal:
 
    ```bash
    open -a Docker          # macOS
@@ -20,7 +28,7 @@ The start script does the one-time setup, so there is nothing to configure by ha
    ```
 
    Check with `docker info`; it errors until Docker is up. The start script checks this first and stops with `Docker is installed but the daemon isn't running` if you skip it.
-2. **Run the start script.** From the workshop folder, on macOS or Linux:
+3. **Run the start script.** From the workshop folder, on macOS or Linux:
 
    ```bash
    cd lab
@@ -34,7 +42,7 @@ The start script does the one-time setup, so there is nothing to configure by ha
    .\scripts\start.ps1
    ```
 
-3. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest; a few minutes.
+4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest; a few minutes.
 
 **Expected**: a `== Ready` block with five addresses and their logins, each with a `:port` alternative. If a `*.localhost` name does not open in your browser, use the port form.
 
@@ -74,15 +82,15 @@ Exercise 0.3 walks it once by hand.
 
 1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login; *click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
 
-   ![Attack console, quick access](exercises/connect/screenshots/03-panel.png)
+   ![Attack console, quick access](../exercises/connect/screenshots/03-panel.png)
 
 2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login; the lab runs on the free tier and nothing in the workshop needs more.
 
-   ![TheHive login](exercises/connect/screenshots/01-thehive-login.png)
+   ![TheHive login](../exercises/connect/screenshots/01-thehive-login.png)
 
 3. **n8n.** From its card, open `http://n8n.localhost`. Sign in as `admin@brucon.local`, password `Brucon2026`. You see the workflow canvas with two nodes already built: a webhook trigger and a verdict writer.
 
-   ![n8n sign in](exercises/connect/screenshots/02-n8n-login.png)
+   ![n8n sign in](../exercises/connect/screenshots/02-n8n-login.png)
 
 **Expected**: TheHive shows an empty case list. The integrator has not fired yet, so *empty means success*.
 

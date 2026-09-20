@@ -1,6 +1,6 @@
 # Wazuh config
 
-Detection and TheHive-forwarding config for the lab's single-node Wazuh. See the attack-to-detection map in the button set of [`../../../docs/workshop/lab-build-spec.md`](../../../docs/workshop/lab-build-spec.md).
+Detection and TheHive-forwarding config for the lab's single-node Wazuh. See the attack-to-detection map in the button set of [`../../../../docs/workshop/lab-build-spec.md`](../../../../docs/workshop/lab-build-spec.md).
 
 ## Files
 
@@ -19,7 +19,7 @@ Detection and TheHive-forwarding config for the lab's single-node Wazuh. See the
 
    Verified end to end 2026-09-13: with the key in place and `wazuh-integratord` running, firing panel attacks opened TheHive **cases** for rules 100110, 100121, 100130, 100140, and 100150, each with the source IP, URL, and beacon domain attached as observables. `custom-w2thive` creates a case (`POST /api/v1/case`) then attaches each observable (`POST /api/v1/case/{id}/observable`). The whole chain (attack → target log → manager → analysisd → integratord → TheHive case) works under emulation on arm64.
 2. **Make the integrator executable.** `custom-w2thive` and `custom-w2thive.py` must be mode 750 and owned by `wazuh:wazuh` inside the container; `chmod 750` both if you mount them by hand.
-3. **Set `vm.max_map_count`.** The indexer needs `sysctl -w vm.max_map_count=262144` on the Docker host (recorded as a boot hazard in [`../../../docs/workshop/lab-build-spec.md`](../../../docs/workshop/lab-build-spec.md)).
+3. **Set `vm.max_map_count`.** The indexer needs `sysctl -w vm.max_map_count=262144` on the Docker host (recorded as a boot hazard in [`../../../../docs/workshop/lab-build-spec.md`](../../../../docs/workshop/lab-build-spec.md)).
 
 ## Verify on a live manager (this is the load-bearing seam)
 
