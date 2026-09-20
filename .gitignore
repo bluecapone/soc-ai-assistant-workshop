@@ -1,2 +1,3 @@
 .DS_Store
 guide/_build/
+.venv/
