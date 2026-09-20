@@ -4,6 +4,20 @@ In this workshop you build a triage agent that ingests an alert, enriches it fro
 
 This manual is exercises only. Each exercise has a goal, the steps, what you should see, and a question whose answer proves you did it. The theory is on the slides.
 
+```{toctree}
+---
+caption: Exercises
+maxdepth: 2
+hidden: true
+---
+
+02-connect.md
+03-module-1.md
+04-module-2.md
+05-module-3.md
+07-take-home.md
+```
+
 ## Exercises
 
 - [Part 0: Connect](02-connect.md)

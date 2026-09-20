@@ -66,17 +66,26 @@ on host `web-server-01`
 
 Use a Set node to pull the fields you need out of the webhook's payload. Add a field for each item in the table below. Reference them with the expressions shown. TheHive's case object nests under `object` in the payload, and each expression includes a fallback using `||` for when the field is absent.
 
-| Field | Expression |
-|---|---|
-| `caseId` | `{{ $json.body.object._id \|\| $json.body.objectId \|\| '' }}` |
-| `title` | `{{ $json.body.object.title \|\| 'unknown case' }}` |
-| `ruleId` | `{{ ((($json.body.object.tags \|\| []).find(t => String(t).startsWith('rule:'))) \|\| 'rule:').slice(5) }}` |
-| `srcip` | `{{ (String($json.body.object.description \|\| '').match(/\\\| Source IP \\\| \`([^\`]+)\` \\\|/) \|\| [])[1] \|\| '' }}` |
-| `host` | `{{ (String($json.body.object.description \|\| '').match(/on host \`([^\`]+)\`/) \|\| [])[1] \|\| '' }}` |
-| `target` | `{{ (String($json.body.object.description \|\| '').match(/\\\| Target \\\| \`([^\`]+)\` \\\|/) \|\| [])[1] \|\| '' }}` |
-| `domain` | `{{ (String($json.body.object.description \|\| '').match(/host=([A-Za-z0-9.-]+\.[A-Za-z]{2,})/) \|\| [])[1] \|\| '' }}` |
-| `tagsForModel` | `{{ ($json.body.object.tags \|\| []).filter(t => !String(t).startsWith('kind:')) }}` |
-| `descriptionForModel` | `{{ String($json.body.object.description \|\| '').split('\\n').filter(l => !l.startsWith('\\| Classification \\|')).join('\\n') }}` |
+```text
+caseId:
+  {{ $json.body.object._id || $json.body.objectId || '' }}
+title:
+  {{ $json.body.object.title || 'unknown case' }}
+ruleId:
+  {{ ((($json.body.object.tags || []).find(t => String(t).startsWith('rule:'))) || 'rule:').slice(5) }}
+srcip:
+  {{ (String($json.body.object.description || '').match(/\\| Source IP \\| `([^`]+)` \\|/) || [])[1] || '' }}
+host:
+  {{ (String($json.body.object.description || '').match(/on host `([^`]+)`/) || [])[1] || '' }}
+target:
+  {{ (String($json.body.object.description || '').match(/\\| Target \\| `([^`]+)` \\|/) || [])[1] || '' }}
+domain:
+  {{ (String($json.body.object.description || '').match(/host=([A-Za-z0-9.-]+\.[A-Za-z]{2,})/) || [])[1] || '' }}
+tagsForModel:
+  {{ ($json.body.object.tags || []).filter(t => !String(t).startsWith('kind:')) }}
+descriptionForModel:
+  {{ String($json.body.object.description || '').split('\\n').filter(l => !l.startsWith('\| Classification \|')).join('\\n') }}
+```
 
 The `tagsForModel` and `descriptionForModel` fields exist separately from `tags` and `description` because the model must not see the analyst's own verdict tags (those starting with `kind:`) or the classification row they added to the description; passing these would let the model parrot back the answer already on the case.
 

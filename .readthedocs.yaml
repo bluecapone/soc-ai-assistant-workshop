@@ -5,9 +5,9 @@ build:
   tools:
     python: "3.12"
 
-mkdocs:
-  configuration: mkdocs.yml
+sphinx:
+  configuration: guide/conf.py
 
 python:
   install:
-    - requirements: requirements-docs.txt
+    - requirements: requirements.txt
