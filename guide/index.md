@@ -24,16 +24,18 @@ hidden: true
   - [Exercise #0.1: bring up the lab](02-connect.md#exercise-01-bring-up-the-lab)
   - [Exercise #0.2: sign in everywhere](02-connect.md#exercise-02-sign-in-everywhere)
   - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-03-fire-a-benign-button-and-follow-it)
+  - [Exercise #0.4: connect Claude Code to the gateway](02-connect.md#exercise-04-connect-claude-code-to-the-gateway)
 - [Part 1: Module 1, drive it by hand](03-module-1.md)
-  - [Exercise #1.1: connect Claude Code to the gateway](03-module-1.md#exercise-11-connect-claude-code-to-the-gateway)
-  - [Exercise #1.2: draft the skill and edit it by hand](03-module-1.md#exercise-12-draft-the-skill-and-edit-it-by-hand)
-  - [Exercise #1.3: give it Wazuh](03-module-1.md#exercise-13-give-it-wazuh)
-  - [Exercise #1.4: give it TheHive](03-module-1.md#exercise-14-give-it-thehive)
-  - [Exercise #1.5: fire an alert and drive it by hand](03-module-1.md#exercise-15-fire-an-alert-and-drive-it-by-hand)
-  - [Exercise #1.6: run it again on a twin](03-module-1.md#exercise-16-run-it-again-on-a-twin)
-  - [Exercise #1.7: does the skill load?](03-module-1.md#exercise-17-does-the-skill-load)
-  - [Exercise #1.8: extract reusable skills](03-module-1.md#exercise-18-extract-reusable-skills)
-  - [Exercise #1.9, bonus: add a reputation lookup](03-module-1.md#exercise-19-bonus-add-a-reputation-lookup)
+  - [Exercise #1.1: plan the skill](03-module-1.md#exercise-11-plan-the-skill)
+  - [Exercise #1.2: name it and describe it](03-module-1.md#exercise-12-name-it-and-describe-it)
+  - [Exercise #1.3: learn the Wazuh lookup](03-module-1.md#exercise-13-learn-the-wazuh-lookup)
+  - [Exercise #1.4: learn the TheHive read and write](03-module-1.md#exercise-14-learn-the-thehive-read-and-write)
+  - [Exercise #1.5: write the instructions](03-module-1.md#exercise-15-write-the-instructions)
+  - [Exercise #1.6: does it load?](03-module-1.md#exercise-16-does-it-load)
+  - [Exercise #1.7: fire an alert and run it](03-module-1.md#exercise-17-fire-an-alert-and-run-it)
+  - [Exercise #1.8: run it again on a twin, then tighten](03-module-1.md#exercise-18-run-it-again-on-a-twin-then-tighten)
+  - [Exercise #1.9: extract reusable skills and share them](03-module-1.md#exercise-19-extract-reusable-skills-and-share-them)
+  - [Exercise #1.10, bonus: add a reputation lookup](03-module-1.md#exercise-110-bonus-add-a-reputation-lookup)
 - [Part 2: Module 2, run it unattended](04-module-2.md)
 - [Part 3: Module 3, let it decide](05-module-3.md)
 - [Take-home](07-take-home.md)
@@ -43,7 +45,7 @@ hidden: true
 Have these before Part 0:
 
 - The *workshop folder*: a clone of [github.com/bluecapone/soc-ai-assistant-workshop](https://github.com/bluecapone/soc-ai-assistant-workshop) (Exercise 0.1 shows the command). Its name does not matter. It contains `guide/`, `exercises/` and `lab/`, and every command in this manual says which folder to run it from.
-- Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/start.sh` (or `start.ps1`) from the lab directory. Podman is untested.
+- Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/macos-linux/start.sh` (or `.\scripts\windows\start.ps1` on Windows) from the lab directory. Podman is untested.
 - 16 GB RAM and free disk for the compose stack.
 - Claude Code installed.
 - A gateway token, handed out at the door and revoked when the workshop ends.
@@ -75,7 +77,7 @@ Solo work. One checkpoint per module. **Stuck for more than five minutes: take t
 
 - `lab/exercises/README.md`: starting artifacts and checkpoints per module
 - `lab/checkpoints/README.md`: how to use each checkpoint, credentials the workflows expect
-- `skills/README.md`: the finished `wazuh-query` and `thehive-case` skills
+- `exercises/module-1/README.md`: the finished `wazuh-query` and `thehive-case` skills
 - `instructor-docs/`: the theory behind each part, as background reading
 - [TheHive API](https://docs.strangebee.com/thehive/api-docs/), [Wazuh indexer search](https://documentation.wazuh.com/current/user-manual/wazuh-indexer/index.html), [n8n docs](https://docs.n8n.io/)
 

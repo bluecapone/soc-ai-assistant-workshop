@@ -8,10 +8,10 @@
 # Slow the first time (containers pull + JVMs boot, slower still under emulation).
 set -uo pipefail
 export DOCKER_CLI_HINTS=false   # no "What's next: Debug with Gordon" noise after compose commands
-# Work from the lab root (the dir with docker-compose.yml), whether this script
-# lives in lab/ or lab/scripts/.
+# Work from the lab root (the dir with docker-compose.yml). This script lives in
+# lab/scripts/macos-linux/, so climb up until the compose file is found.
 cd "$(dirname "$0")"
-[ -f docker-compose.yml ] || cd ..
+for _ in 1 2 3; do [ -f docker-compose.yml ] && break; cd ..; done
 
 TH="http://localhost:9000"
 N8N="http://localhost:5678"
@@ -67,6 +67,20 @@ ok "runtime ossec.conf created from template"
 
 # --- 1. bring everything up ---------------------------------------------------
 say "Starting the stack"
+# Docker auto-creates a missing per-file bind-mount source (each cert *.pem) as an empty
+# DIRECTORY at container-create time, so a plain `up` builds the indexer's cert mounts as
+# directories before the generator can write the files -> "Is a directory" crash. Two
+# defences: clear a previously-wedged dir (stack down first to release the mounts, then
+# delete the whole dir), then generate the certs in their own step so every cert is a FILE
+# before the indexer/manager/dashboard containers are created.
+certdir="platform/wazuh/certs/generated"
+if [ -d "$certdir" ]; then
+  for p in "$certdir"/*.pem; do
+    [ -d "$p" ] && { docker compose down --remove-orphans >/dev/null 2>&1; rm -rf "$certdir"; ok "cleared a wedged certs dir"; break; }
+  done
+fi
+docker compose up -d wazuh-certs-generator
+for _ in $(seq 1 30); do [ -f "$certdir/root-ca.pem" ] && break; sleep 2; done
 docker compose up -d --build
 
 # --- 2. TheHive: password, org, users -----------------------------------------

@@ -4,7 +4,7 @@ The attendee guide is published at [soc-ai-assistant-workshop.readthedocs.io](ht
 
 - `guide/`: the manual, one page per part.
 - `exercises/`: files the exercises tell you to copy.
-- `lab/`: the Docker Compose lab, started with `lab/scripts/start.sh`.
+- `lab/`: the Docker Compose lab, started with `lab/scripts/macos-linux/start.sh` or `lab\scripts\windows\start.ps1`.
 
 Build the guide locally:
 

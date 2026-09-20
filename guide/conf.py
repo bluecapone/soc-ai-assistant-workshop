@@ -8,3 +8,4 @@ exclude_patterns = ["_build"]
 html_theme = "sphinx_rtd_theme"
 
 myst_heading_anchors = 2
+myst_enable_extensions = ["tasklist"]

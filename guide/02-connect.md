@@ -9,42 +9,48 @@ Your lab is a Docker compose stack on your own laptop: **TheHive**, **n8n**, **W
 The start script does the one-time setup, so there is nothing to configure by hand. It is safe to run again if you interrupt it.
 
 1. **Get the workshop folder.** Clone the workshop repository, then enter it. Every later command that says "from the workshop folder" runs here.
-
+   
    ```bash
    git clone https://github.com/bluecapone/soc-ai-assistant-workshop
    cd soc-ai-assistant-workshop
    ```
-
+   
    No git? On the repository page, `Code`, `Download ZIP`, unzip it and open a terminal in the unzipped folder.
-2. **Start Docker** and wait until it reports running. No Docker yet? Install Docker Desktop from [docs.docker.com/desktop](https://docs.docker.com/desktop/) first (it includes Docker Compose). Open Docker Desktop from the applications menu, or from a terminal:
 
+2. **Start Docker** and wait until it reports running. No Docker yet? Install Docker Desktop from [docs.docker.com/desktop](https://docs.docker.com/desktop/) first (it includes Docker Compose). Open Docker Desktop from the applications menu, or from a terminal:
+   
    ```bash
    open -a Docker          # macOS
    sudo systemctl start docker   # Linux
    ```
-
+   
    ```powershell
    Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"   # Windows
    ```
-
+   
    Check with `docker info`; it errors until Docker is up. The start script checks this first and stops with `Docker is installed but the daemon isn't running` if you skip it.
-3. **Run the start script.** From the workshop folder, on macOS or Linux:
 
+3. **Run the start script.** From the workshop folder, on macOS or Linux:
+   
    ```bash
    cd lab
-   ./scripts/start.sh
+   ./scripts/macos-linux/start.sh
    ```
-
+   
    On Windows:
-
+   
    ```powershell
    cd lab
-   .\scripts\start.ps1
+   .\scripts\windows\start.ps1
    ```
 
 4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest; a few minutes.
 
-**Expected**: a `== Ready` block with five addresses and their logins, each with a `:port` alternative. If a `*.localhost` name does not open in your browser, use the port form.
+**Expected**:
+
+- [ ] The script ends with a `== Ready` block: five addresses with their logins, each with a `:port` alternative.
+- [ ] Each address opens in your browser. If a `*.localhost` name does not open, use the port form.
+- [ ] `lab/.env` exists: a copy of `lab/.env.example` with the TheHive API key the script minted. Module 1 reads that key from there; do not edit the file.
 
 Two containers show as *exited* in Docker Desktop: `wazuh-certs-generator` and `thehive-init`. Both are one-time setup jobs that finish before the services start. **Exit code 0 is normal.**
 
@@ -65,14 +71,7 @@ The *range* is the chain one click travels. Every element below is a container o
 - **TheHive** (`http://thehive.localhost`) is case management. A *case* is the analyst's work item: a description, *observables* (the IPs, URLs and user agents taken from the alert) and tasks. Your verdicts land here.
 - **n8n** (`http://n8n.localhost`) is workflow automation. A *workflow* is a chain of nodes on a canvas: a trigger node starts it (a webhook the integrator calls when it opens a case) and each next node does one thing with the data, such as calling a model or writing a verdict back to TheHive. Module 1 puts your AI triage in the middle of that chain.
 
-The chain, in order:
 
-1. panel click
-2. bank-web log line
-3. Wazuh alert
-4. integrator
-5. TheHive case
-6. n8n workflow
 
 Exercise 0.3 walks it once by hand.
 
@@ -81,18 +80,22 @@ Exercise 0.3 walks it once by hand.
 **Goal**: the panel is your front door; from it you reach TheHive and n8n and sign in to both.
 
 1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login; *click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
-
+   
    ![Attack console, quick access](screenshots/connect/03-panel.png)
 
 2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login; the lab runs on the free tier and nothing in the workshop needs more.
-
+   
    ![TheHive login](screenshots/connect/01-thehive-login.png)
 
 3. **n8n.** From its card, open `http://n8n.localhost`. Sign in as `admin@brucon.local`, password `Brucon2026`. You see the workflow canvas with two nodes already built: a webhook trigger and a verdict writer.
-
+   
    ![n8n sign in](screenshots/connect/02-n8n-login.png)
 
-**Expected**: TheHive shows an empty case list. The integrator has not fired yet, so *empty means success*.
+**Expected**:
+
+- [ ] The panel shows the quick-access cards and the attack console.
+- [ ] TheHive is signed in and shows an empty case list. The integrator has not fired yet, so *empty means success*.
+- [ ] n8n is signed in and shows a canvas with two nodes.
 
 **Question 1**: how many cases does TheHive list?
 
@@ -113,10 +116,64 @@ Exercise 0.3 walks it once by hand.
    - rule `100200` is *noise*: normal internet traffic against the bank site, thousands of events, generated on purpose;
    - rule `100152` is the single crawler hits that `100151` counted.
 
-**Expected**: a case whose observables match the `data.*` fields of the Wazuh alert it links to.
+**Expected**:
+
+- [ ] TheHive lists one new case.
+- [ ] The `Wazuh alert` link in its description opens the one detection in Wazuh.
+- [ ] The case observables match the `data.*` fields of that alert.
+- [ ] Wazuh `Events` shows rules `100151`, `100152` and `100200` around it.
 
 **Question 2**: which rule id fired?
 
 **Question 3**: what is the case id (the `~nnnnnn` in the case URL)?
 
 *Module 1 needs this case.* If it never appears, pair with a neighbour and use their lab for Module 1.
+
+## Exercise #0.4: connect Claude Code to the gateway
+
+**Goal**: Claude Code answers a prompt through the workshop gateway with your token, started from the workshop folder.
+
+Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it; any client that reads the same two variables uses the gateway too.
+
+1. **Gateway.** Export the gateway address (announced from the slide) and the token you got at the door. macOS or Linux:
+
+   ```bash
+   export ANTHROPIC_BASE_URL=<gateway URL from the slide>
+   export ANTHROPIC_AUTH_TOKEN=<your token>
+   ```
+
+   Windows PowerShell:
+
+   ```powershell
+   $env:ANTHROPIC_BASE_URL = "<gateway URL from the slide>"
+   $env:ANTHROPIC_AUTH_TOKEN = "<your token>"
+   ```
+
+2. **Lab credentials.** From the workshop folder, export the values the skill uses. `THEHIVE_N8N_APIKEY` in `lab/.env` is a real key after Exercise 0.1, not `replace-after-first-boot`. Nothing reads `lab/.env` for you: Docker Compose uses it, your shell does not.
+
+   ```bash
+   export THEHIVE_URL=http://localhost:9000
+   export THEHIVE_APIKEY=$(grep THEHIVE_N8N_APIKEY lab/.env | cut -d= -f2-)
+   export WAZUH_URL=https://localhost:9200
+   ```
+
+3. **Start Claude Code** from the workshop folder. <ins>Start it from here every time</ins>; the skill you build in Module 1 is only found from here.
+
+   ```bash
+   claude
+   ```
+
+4. **Test.** Send one test prompt: `what is 2+2?`
+
+**Expected**:
+
+- [ ] Claude Code starts without asking you to log in; the two variables did that.
+- [ ] A notice says claude.ai connectors are disabled because another auth source is set. That is the token variable doing its job; ignore it.
+- [ ] The test prompt gets an answer.
+- [ ] `! echo $THEHIVE_APIKEY` inside Claude Code (the `!` prefix runs a shell command) prints a long key, not `replace-after-first-boot` and not an empty line.
+
+A `401` means the token is wrong or expired; ask an instructor for a new one.
+
+To keep the variables across terminals, add the export lines to `~/.zshrc` or `~/.bash_profile`. On Windows, use the *Environment Variables* control panel.
+
+**Question 4**: what did the test prompt answer?

@@ -4,7 +4,7 @@ A checkpoint is the known good solution for one module. The syllabus rule is tha
 
 | Module | Artifact | n8n name and id | How to use |
 |--------|----------|-----------------|-----------|
-| Module 1 | `module-1/soc-triage/SKILL.md` | none (a Claude Code skill, not a workflow) | `cp -r lab/checkpoints/module-1/soc-triage <your-repo>/.claude/skills/` then in Claude Code run `/soc-triage ~<caseId>` |
+| Module 1 | handed over by an instructor (a Claude Code skill, not a workflow) | none | copy the folder you receive to `.claude/skills/soc-triage/`, then in Claude Code run `/soc-triage ~<caseId>` |
 | Module 2 | `module-2/triage-m2-chain.json` | `SOC triage, Module 2 checkpoint (LLM chain)`, `soctriagem2chk01` | already imported by `start.sh`; open it in n8n, deactivate whatever else listens on `thehive-alert`, activate it |
 | Module 3 | `module-3/triage-m3-agent.json` | `SOC triage, Module 3 checkpoint (AI Agent)`, `soctriagem3chk01` | same as Module 2 |
 

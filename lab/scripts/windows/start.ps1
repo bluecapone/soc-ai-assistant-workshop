@@ -8,10 +8,10 @@
   Uses curl (curl.exe ships with Windows 10/11) for HTTP, which handles TheHive's
   responses and cookies reliably where Invoke-RestMethod does not.
 #>
-# Work from the lab root (the dir with docker-compose.yml), whether this script
-# lives in lab/ or lab/scripts/.
+# Work from the lab root (the dir with docker-compose.yml). This script lives in
+# lab/scripts/windows/, so climb up until the compose file is found.
 Set-Location $PSScriptRoot
-if (-not (Test-Path docker-compose.yml)) { Set-Location .. }
+for ($i = 0; $i -lt 3 -and -not (Test-Path docker-compose.yml); $i++) { Set-Location .. }
 $ErrorActionPreference = 'Continue'
 $env:DOCKER_CLI_HINTS = 'false'   # no "What's next: Debug with Gordon" noise after compose commands
 
@@ -79,6 +79,7 @@ docker info *> $null
 if ($LASTEXITCODE -ne 0) { Die "Docker is installed but not running - start Docker Desktop (WSL2 backend) and re-run." }
 Ok "Docker present and running"
 if (-not (Test-Path .env)) { Copy-Item .env.example .env; Ok ".env created from .env.example" }
+if (Test-Path .env) { attrib -R .env }   # a leftover/deployed .env may be read-only; the n8n key write-back needs it writable
 # Wazuh publishes no arm64 image. On an arm64 host layer docker-compose.amd64.yml,
 # which pins only the Wazuh services to linux/amd64. Set it in .env, which compose
 # reads, so every later compose command uses the same files.
@@ -94,6 +95,22 @@ Ok "runtime ossec.conf created from template"
 
 # --- 1. up --------------------------------------------------------------------
 Say "Starting the stack"
+# Docker Desktop auto-creates a missing per-file bind-mount source (each cert *.pem) as an
+# empty DIRECTORY when it creates a container, so a plain `up` builds the indexer's cert
+# mounts as directories before the generator can write the files, and the indexer crashes
+# with "Is a directory". Two defences: if an earlier run already wedged the dir, bring the
+# stack down (to release the mounts) and delete the whole generated dir; then generate the
+# certs in their own step so every cert exists as a FILE before the indexer/manager/dashboard
+# containers are created.
+$certDir = "platform/wazuh/certs/generated"
+if ((Test-Path $certDir) -and (Get-ChildItem $certDir -Filter *.pem -Directory -ErrorAction SilentlyContinue)) {
+    docker compose down --remove-orphans | Out-Null
+    Remove-Item -Recurse -Force $certDir
+    Ok "cleared a wedged certs dir"
+}
+docker compose up -d wazuh-certs-generator
+$wait = 60
+while ($wait -gt 0 -and -not (Test-Path "$certDir/root-ca.pem" -PathType Leaf)) { Start-Sleep -Seconds 2; $wait -= 2 }
 docker compose up -d --build
 
 # --- 2. TheHive: password, org, users -----------------------------------------
