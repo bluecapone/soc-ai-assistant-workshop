@@ -1,0 +1,1754 @@
+type,value,role,label,source
+domain,ma.zk89.net,c2,Vidar,ThreatFox
+domain,ma.199cuan.org,c2,Vidar,ThreatFox
+ip,154.91.57.118,c2,VShell,ThreatFox
+ip,154.91.57.115,c2,VShell,ThreatFox
+ip,154.91.57.110,c2,VShell,ThreatFox
+ip,154.91.56.116,c2,VShell,ThreatFox
+ip,154.91.57.105,c2,VShell,ThreatFox
+domain,shiningmooncare.com.au,phishing,ClearFake,ThreatFox
+domain,vinmartfoundation.org,phishing,ClearFake,ThreatFox
+domain,habibventure.com,phishing,ClearFake,ThreatFox
+domain,www.jeffersontomaz1749157674000.construtoraeverest.com.br,phishing,ClearFake,ThreatFox
+ip,46.151.182.200,c2,Bashlite,ThreatFox
+domain,majithiamasala.co.in,phishing,ClearFake,ThreatFox
+ip,154.91.56.113,c2,VShell,ThreatFox
+ip,154.91.56.106,c2,VShell,ThreatFox
+ip,154.91.56.100,c2,VShell,ThreatFox
+ip,134.122.202.217,c2,Unknown malware,ThreatFox
+domain,www.shanefoods.com,phishing,ClearFake,ThreatFox
+domain,ciu2swv9.alibabasport.ir,phishing,ClearFake,ThreatFox
+url,https://autoescolalp.com.br/,phishing,Unknown malware,ThreatFox
+url,https://cybercoinslab.com/,phishing,Unknown malware,ThreatFox
+domain,alibabasport.ir,phishing,ClearFake,ThreatFox
+domain,csjr0p6y.www-bellyflush.com,phishing,ClearFake,ThreatFox
+ip,36.255.97.162,c2,Cobalt Strike,ThreatFox
+domain,synton.ch,phishing,ClearFake,ThreatFox
+domain,f3e33vzn.nurvesoothe.com,phishing,ClearFake,ThreatFox
+domain,nurvesoothe.com,phishing,ClearFake,ThreatFox
+ip,103.101.85.26,c2,Unknown malware,ThreatFox
+ip,206.123.137.132,c2,Remcos,ThreatFox
+ip,45.194.92.41,c2,Mirai,ThreatFox
+ip,217.60.103.96,c2,CECbot,ThreatFox
+ip,64.89.160.15,c2,CECbot,ThreatFox
+ip,94.154.43.235,c2,CECbot,ThreatFox
+url,http://43.230.94.186:58162/Mozi.m,phishing,Mozi,ThreatFox
+url,http://153.117.34.135:48306/Mozi.a,phishing,Mozi,ThreatFox
+ip,62.60.226.173,c2,CECbot,ThreatFox
+ip,154.91.63.98,c2,VShell,ThreatFox
+ip,154.91.63.119,c2,VShell,ThreatFox
+ip,154.91.63.122,c2,VShell,ThreatFox
+ip,154.91.63.111,c2,VShell,ThreatFox
+ip,154.91.63.110,c2,VShell,ThreatFox
+ip,154.91.63.108,c2,VShell,ThreatFox
+ip,154.91.63.107,c2,VShell,ThreatFox
+ip,154.91.62.99,c2,VShell,ThreatFox
+ip,154.91.63.101,c2,VShell,ThreatFox
+ip,154.91.62.122,c2,VShell,ThreatFox
+domain,yw8bvcf7.betandyou90.com,phishing,ClearFake,ThreatFox
+domain,betandyou90.com,phishing,ClearFake,ThreatFox
+ip,155.254.99.109,c2,Unknown RAT,ThreatFox
+domain,www.ecorgysolutions.com,phishing,ClearFake,ThreatFox
+domain,churchoflife.io,c2,Unknown RAT,ThreatFox
+domain,diabetir.online,phishing,ClearFake,ThreatFox
+domain,1xbitios.com,phishing,ClearFake,ThreatFox
+domain,usa-gutlite.us,phishing,ClearFake,ThreatFox
+url,https://testingcf.jsdelivr.net/gh/989A-A-3fF2465495760-2B3a/dhfgr657399876/44563893876402336,phishing,ClearFake,ThreatFox
+domain,kiln-skioi-c29ap.com,phishing,IClickFix,ThreatFox
+domain,9li95l5d.en-us-cardioslimtea.us,phishing,ClearFake,ThreatFox
+domain,en-us-cardioslimtea.us,phishing,ClearFake,ThreatFox
+domain,sallowcloister.co,phishing,SmartApeSG,ThreatFox
+url,https://sallowcloister.co/settings/secure-script.js,phishing,SmartApeSG,ThreatFox
+domain,gaezskoynbrisk.com,phishing,IClickFix,ThreatFox
+ip,130.12.181.199,c2,CECbot,ThreatFox
+ip,62.60.226.111,c2,CECbot,ThreatFox
+ip,141.98.10.26,c2,CECbot,ThreatFox
+ip,154.91.62.109,c2,VShell,ThreatFox
+ip,154.91.62.110,c2,VShell,ThreatFox
+ip,154.91.62.107,c2,VShell,ThreatFox
+ip,154.91.62.108,c2,VShell,ThreatFox
+domain,kz.zk89.net,c2,Vidar,ThreatFox
+domain,kz.199cuan.org,c2,Vidar,ThreatFox
+ip,8.160.168.147,c2,Cobalt Strike,ThreatFox
+ip,60.204.248.97,c2,Cobalt Strike,ThreatFox
+ip,80.76.49.209,c2,PureRAT,ThreatFox
+ip,5.163.239.119,c2,Havoc,ThreatFox
+ip,46.246.6.18,c2,DCRat,ThreatFox
+ip,45.202.0.48,c2,DCRat,ThreatFox
+ip,45.202.0.55,c2,DCRat,ThreatFox
+ip,45.139.104.222,c2,PureRAT,ThreatFox
+ip,45.139.104.26,c2,PureRAT,ThreatFox
+ip,38.242.209.29,c2,Havoc,ThreatFox
+domain,fvrfq4s8.us-slimsplitsmethod.com,phishing,ClearFake,ThreatFox
+ip,2.56.97.65,c2,Unknown malware,ThreatFox
+ip,191.107.92.58,c2,DCRat,ThreatFox
+ip,144.31.148.132,c2,Hook,ThreatFox
+domain,s48bo9y4.en-en--enerflow.com,phishing,ClearFake,ThreatFox
+ip,109.205.212.241,c2,Havoc,ThreatFox
+ip,178.16.54.195,c2,Quasar RAT,ThreatFox
+domain,60aahn1v.nurvealive.com,phishing,ClearFake,ThreatFox
+ip,49.232.21.222,c2,Cobalt Strike,ThreatFox
+ip,45.207.219.134,c2,Cobalt Strike,ThreatFox
+ip,106.54.201.103,c2,Cobalt Strike,ThreatFox
+ip,81.70.21.163,c2,Cobalt Strike,ThreatFox
+ip,112.126.27.96,c2,Cobalt Strike,ThreatFox
+ip,47.99.109.10,c2,Cobalt Strike,ThreatFox
+domain,lyph0k3g.enus-beastforce.com,phishing,ClearFake,ThreatFox
+domain,enus-beastforce.com,phishing,ClearFake,ThreatFox
+domain,spiritofswitzerland.ch,phishing,ClearFake,ThreatFox
+ip,43.226.39.138,c2,Cobalt Strike,ThreatFox
+url,http://111.184.208.168:54288/Mozi.m,phishing,Mozi,ThreatFox
+url,http://105.184.7.6:49853/Mozi.m,phishing,Mozi,ThreatFox
+domain,scientologyschweiz.ch,phishing,ClearFake,ThreatFox
+ip,176.65.139.219,c2,Mirai,ThreatFox
+domain,j2zz03ut.belly-flush.us,phishing,ClearFake,ThreatFox
+ip,117.72.202.154,c2,Cobalt Strike,ThreatFox
+ip,179.199.143.63,c2,Unknown malware,ThreatFox
+ip,117.50.214.223,c2,VShell,ThreatFox
+url,https://rudder-moss.com/zxc/app.zip,phishing,AMOS,ThreatFox
+url,https://rudder-moss.com/zxc/apptwo.zip,phishing,AMOS,ThreatFox
+url,https://rudder-moss.com/zxc/appex.zip,phishing,AMOS,ThreatFox
+url,https://rudder-moss.com/zxc/kito,phishing,AMOS,ThreatFox
+url,https://rudder-moss.com/zxc/mdw,phishing,AMOS,ThreatFox
+domain,friendsanchor.xyz,c2,Unknown Loader,ThreatFox
+domain,doctorboundary.xyz,c2,Unknown Loader,ThreatFox
+domain,fv1hcoo0.neuro-neurosharp.com,phishing,ClearFake,ThreatFox
+domain,neuro-neurosharp.com,phishing,ClearFake,ThreatFox
+domain,0ijvvr6j.en-en--cardioslim.com,phishing,ClearFake,ThreatFox
+domain,test.adriance.workers.dev,phishing,Unknown malware,ThreatFox
+domain,search.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,help1.mcsq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,clean.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,connect.mcfind.workers.dev,phishing,Unknown malware,ThreatFox
+domain,crs.defenders.workers.dev,phishing,Unknown malware,ThreatFox
+domain,cdn.mcsq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,src.mcfind.workers.dev,phishing,Unknown malware,ThreatFox
+domain,cfd.fins.workers.dev,phishing,Unknown malware,ThreatFox
+domain,api.federickcasto.workers.dev,phishing,Unknown malware,ThreatFox
+domain,api.groundexpressdispatch.workers.dev,phishing,Unknown malware,ThreatFox
+domain,wise.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,find.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,open.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,check.mcsq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,rally.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,fly.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,olympic.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,husband.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,crs.aiservices.workers.dev,phishing,Unknown malware,ThreatFox
+domain,make.thbwi.workers.dev,phishing,Unknown malware,ThreatFox
+domain,build-asdasd.4b3a91fd1b35ab2d023f5d71713a6c00.workers.dev,phishing,Unknown malware,ThreatFox
+domain,cup.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,little.vwgze.workers.dev,phishing,Unknown malware,ThreatFox
+domain,suggest.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,wreck.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,src.mcsq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tool.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,burden.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,cms.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,defy.3ce7ab2da45404231f376cac66904a01.workers.dev,phishing,Unknown malware,ThreatFox
+domain,pet.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,t.vwgze.workers.dev,phishing,Unknown malware,ThreatFox
+domain,alcohol.4b3a91fd1b35ab2d023f5d71713a6c00.workers.dev,phishing,Unknown malware,ThreatFox
+domain,bulb.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,camp.4b3a91fd1b35ab2d023f5d71713a6c00.workers.dev,phishing,Unknown malware,ThreatFox
+domain,crane.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,dheya.dheya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,dice.1467dd4e407bdff28460ad05765f04e0.workers.dev,phishing,Unknown malware,ThreatFox
+domain,fit.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,grace.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,help.mcsq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,item.ikevbhm-gitch.workers.dev,phishing,Unknown malware,ThreatFox
+domain,mail.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,packet.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,palace.mdlrh.workers.dev,phishing,Unknown malware,ThreatFox
+url,https://gamboracle.vercel.app/api,phishing,BeaverTail,ThreatFox
+ip,51.210.52.212,c2,BeaverTail,ThreatFox
+url,https://ip-vm.vercel.app/api/settings/mac,phishing,BeaverTail,ThreatFox
+url,https://ip-vm.vercel.app/api/settings/linux,phishing,BeaverTail,ThreatFox
+url,https://ip-vm.vercel.app/api/settings/windows,phishing,BeaverTail,ThreatFox
+url,https://ip-vm.vercel.app/api/settings/env,phishing,BeaverTail,ThreatFox
+ip,172.86.126.227,c2,Unknown malware,ThreatFox
+url,https://www.jsonkeeper.com/b/7EBZP,phishing,OtterCookie,ThreatFox
+url,https://www.jsonkeeper.com/b/PAB1R,phishing,OtterCookie,ThreatFox
+url,http://138.226.247.152:80/session/0f2a3fba69d29493,phishing,OtterCookie,ThreatFox
+ip,138.226.247.152,c2,OtterCookie,ThreatFox
+url,https://jsonkeeper.com/b/J0VBJ,phishing,Unknown malware,ThreatFox
+ip,43.157.63.92,c2,Aisuru,ThreatFox
+ip,185.215.151.15,c2,Remcos,ThreatFox
+domain,right.4b3a91fd1b35ab2d023f5d71713a6c00.workers.dev,phishing,Unknown malware,ThreatFox
+domain,slam.ssybd.workers.dev,phishing,Unknown malware,ThreatFox
+domain,smart.ikevbhm-gitch.workers.dev,phishing,Unknown malware,ThreatFox
+domain,thank.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,too.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tool.mdlrh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,write567.hxjcj-klolko.workers.dev,phishing,Unknown malware,ThreatFox
+domain,annual.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,api.adriance.workers.dev,phishing,Unknown malware,ThreatFox
+domain,api.aiservices.workers.dev,phishing,Unknown malware,ThreatFox
+domain,bam.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,borrow.vuulh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,cdn.clintonpqfg-adriance.workers.dev,phishing,Unknown malware,ThreatFox
+url,http://42.7.119.110:43491/Mozi.m,phishing,Mozi,ThreatFox
+url,http://190.196.253.126:11853/Mozi.m,phishing,Mozi,ThreatFox
+domain,check.adriance.workers.dev,phishing,Unknown malware,ThreatFox
+domain,coffee.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,connect.defenders.workers.dev,phishing,Unknown malware,ThreatFox
+domain,dawn.ssybd.workers.dev,phishing,Unknown malware,ThreatFox
+domain,craft.zjkgx.workers.dev,phishing,Unknown malware,ThreatFox
+domain,depart.aasya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,drip.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,edit.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,endorse8767.lrndn.workers.dev,phishing,Unknown malware,ThreatFox
+domain,engage.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,essence.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,evil.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,evoke.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,excite.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,exercise.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,false.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,farm.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,frequent.adam-46c.workers.dev,phishing,Unknown malware,ThreatFox
+domain,frown76.hxjcj-klolko.workers.dev,phishing,Unknown malware,ThreatFox
+ip,187.52.119.59,c2,Cobalt Strike,ThreatFox
+domain,globe.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,inherit.zjkgx.workers.dev,phishing,Unknown malware,ThreatFox
+domain,injury.vuulh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,iron.qdzibqajika.workers.dev,phishing,Unknown malware,ThreatFox
+domain,lobster.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,message.uljhs.workers.dev,phishing,Unknown malware,ThreatFox
+domain,machine.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,occur.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,peanut.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,plain-wood-6829.aasya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,region8879.hxjcj-klolko.workers.dev,phishing,Unknown malware,ThreatFox
+domain,remember.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,render.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,retire.qdzibqajika.workers.dev,phishing,Unknown malware,ThreatFox
+domain,rich.aasya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,romance.aasya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,school.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,scare.zedqo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,seat.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,siren.aeafh.workers.dev,phishing,Unknown malware,ThreatFox
+domain,soft-feather-0c50.alladinbarry.workers.dev,phishing,Unknown malware,ThreatFox
+domain,solid.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,spray.mwbwu.workers.dev,phishing,Unknown malware,ThreatFox
+domain,start.csmq.workers.dev,phishing,Unknown malware,ThreatFox
+domain,swampfak.hxjcj-klolko.workers.dev,phishing,Unknown malware,ThreatFox
+domain,test.mcfind.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tilt.wiwgf.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tissue.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tms.vwgze.workers.dev,phishing,Unknown malware,ThreatFox
+domain,tomato.ncsgo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,undo.ssybd.workers.dev,phishing,Unknown malware,ThreatFox
+domain,upon.zedqo.workers.dev,phishing,Unknown malware,ThreatFox
+domain,verifiedcarrier.alladinbarry.workers.dev,phishing,Unknown malware,ThreatFox
+domain,wandering-field-2b83.aasya.workers.dev,phishing,Unknown malware,ThreatFox
+domain,get.whitelllshop.icu,phishing,Unknown malware,ThreatFox
+domain,wordpresslogin.kinsta.cloud,phishing,Unknown malware,ThreatFox
+url,https://wordpresslogin.kinsta.cloud,phishing,Unknown malware,ThreatFox
+url,https://get.whitelllshop.icu/landers/tzt.php,phishing,Unknown malware,ThreatFox
+domain,leaf-core.com,c2,AMOS,ThreatFox
+domain,postaspen18.com,phishing,AMOS,ThreatFox
+url,https://postaspen18.com/curl/vopt4gbk1/ov19v1sg6oxsfg536m.json,phishing,AMOS,ThreatFox
+url,https://postaspen18.com/2kqYRM0DCrnyJgoS4gVLl_FHJRRdTUhGCbjyuYwpZ6c/apph4/update,phishing,AMOS,ThreatFox
+ip,185.173.39.2,c2,Jackskid,ThreatFox
+ip,77.232.37.55,c2,Jackskid,ThreatFox
+ip,185.173.38.47,c2,Jackskid,ThreatFox
+ip,77.232.41.119,c2,Jackskid,ThreatFox
+ip,77.232.42.76,c2,Jackskid,ThreatFox
+ip,164.92.207.173,c2,Aisuru,ThreatFox
+url,http://genovaw.com/curl/001e07c934e19b9d10f621c6b7546b43b2fb1c7b8fce2625fc7b767dfb626336,phishing,Unknown malware,ThreatFox
+domain,tawona.co.za,phishing,ClearFake,ThreatFox
+domain,www.steuern-und-strafe.de,phishing,ClearFake,ThreatFox
+domain,www.transitionplus.com,phishing,ClearFake,ThreatFox
+domain,webzine.hjculture.org,phishing,ClearFake,ThreatFox
+domain,omrents.com,phishing,ClearFake,ThreatFox
+domain,marquesuavisita.com.br,phishing,ClearFake,ThreatFox
+domain,pastoralresume.proclaimdesign.com,phishing,ClearFake,ThreatFox
+domain,www.fitness-magazine.com,phishing,ClearFake,ThreatFox
+ip,154.219.101.56,c2,Cobalt Strike,ThreatFox
+url,https://vernonsu.com/,phishing,Unknown malware,ThreatFox
+domain,newskapital.com,phishing,ClearFake,ThreatFox
+domain,33hb26ve.usa--flashburn.com,phishing,ClearFake,ThreatFox
+domain,usa--flashburn.com,phishing,ClearFake,ThreatFox
+domain,chic-toys.com,phishing,ClearFake,ThreatFox
+domain,yoj8sdzn.neurowave.us,phishing,ClearFake,ThreatFox
+ip,130.94.30.47,c2,Cobalt Strike,ThreatFox
+ip,115.159.101.177,c2,Cobalt Strike,ThreatFox
+domain,f2z84wi9.usa-enerflow.us,phishing,ClearFake,ThreatFox
+domain,usa-enerflow.us,phishing,ClearFake,ThreatFox
+domain,8ik02ax8.en-belly--flush.com,phishing,ClearFake,ThreatFox
+domain,gcif61zz.belly--flush.com,phishing,ClearFake,ThreatFox
+url,https://republika-srpska-stuttgart.de/,phishing,Unknown malware,ThreatFox
+ip,167.172.133.4,c2,Remus,ThreatFox
+domain,sh.zk89.net,c2,Vidar,ThreatFox
+domain,sh.199cuan.org,c2,Vidar,ThreatFox
+ip,47.98.177.11,c2,VShell,ThreatFox
+domain,pjw2jloy.synadentics.com,phishing,ClearFake,ThreatFox
+domain,synadentics.com,phishing,ClearFake,ThreatFox
+url,https://aspentraverse.co/status/version-sessionstore.js,phishing,SmartApeSG,ThreatFox
+domain,aspentraverse.co,phishing,SmartApeSG,ThreatFox
+ip,39.107.139.26,c2,VShell,ThreatFox
+ip,141.11.139.233,c2,VShell,ThreatFox
+domain,aah3bpf6.eng-eng-glucore.com,phishing,ClearFake,ThreatFox
+ip,192.210.197.13,c2,VShell,ThreatFox
+ip,47.129.3.232,c2,VShell,ThreatFox
+ip,185.193.126.143,c2,VShell,ThreatFox
+ip,107.148.78.97,c2,VShell,ThreatFox
+domain,fflupuez.smartwaterbox.us,phishing,ClearFake,ThreatFox
+domain,smartwaterbox.us,phishing,ClearFake,ThreatFox
+ip,124.222.77.67,c2,VShell,ThreatFox
+ip,38.22.88.155,c2,DCRat,ThreatFox
+ip,42.192.54.109,c2,VShell,ThreatFox
+domain,suibzkdc.wece.store,phishing,ClearFake,ThreatFox
+domain,wece.store,phishing,ClearFake,ThreatFox
+ip,45.76.165.219,c2,SystemBC,ThreatFox
+domain,vla.tcptunnel.su,c2,XWorm,ThreatFox
+domain,Azx19-45876.portmap.host,c2,XWorm,ThreatFox
+domain,britsygomez90901002.duckdns.org,c2,XWorm,ThreatFox
+domain,tissues-carers.tun.ply.gg,c2,XWorm,ThreatFox
+ip,31.57.97.111,c2,XWorm,ThreatFox
+ip,36.255.97.7,c2,XWorm,ThreatFox
+ip,82.47.102.179,c2,XWorm,ThreatFox
+ip,85.203.4.222,c2,XWorm,ThreatFox
+domain,sddfgdqw45tj-35300.portmap.host,c2,XWorm,ThreatFox
+ip,85.203.4.161,c2,XWorm,ThreatFox
+domain,lodalasan22wwee.duckdns.org,c2,XWorm,ThreatFox
+ip,82.22.62.195,c2,XWorm,ThreatFox
+domain,mb66.money,c2,Quasar RAT,ThreatFox
+domain,mb669.win,c2,Quasar RAT,ThreatFox
+domain,mb66d.pro,c2,Quasar RAT,ThreatFox
+domain,mb661.click,c2,Quasar RAT,ThreatFox
+domain,ga888.icu,c2,Quasar RAT,ThreatFox
+domain,ok8368.io,c2,Quasar RAT,ThreatFox
+ip,31.220.89.57,c2,Quasar RAT,ThreatFox
+domain,nyecoin.io,c2,Quasar RAT,ThreatFox
+domain,mb66.contact,c2,Quasar RAT,ThreatFox
+domain,mcw.appgame.fit,c2,Quasar RAT,ThreatFox
+domain,www.mb6623.com,c2,Quasar RAT,ThreatFox
+domain,www.sunwin1.bz,c2,Quasar RAT,ThreatFox
+domain,www.sunwin28.bz,c2,Quasar RAT,ThreatFox
+domain,jun88vn.bet,c2,Quasar RAT,ThreatFox
+domain,ownqs.com-info.bid,c2,Quasar RAT,ThreatFox
+domain,qs-work.com-info.bid,c2,Quasar RAT,ThreatFox
+ip,45.137.81.207,c2,Quasar RAT,ThreatFox
+ip,45.153.34.146,c2,Quasar RAT,ThreatFox
+domain,cellardoorchocolates.online,c2,Remcos,ThreatFox
+domain,j88.cellardoorchocolates.online,c2,Remcos,ThreatFox
+domain,rr88-link.com,c2,Remcos,ThreatFox
+domain,u888vn.co,c2,Remcos,ThreatFox
+domain,c2.pinslot.vip,c2,Remcos,ThreatFox
+domain,c2.saudi365.co,c2,Remcos,ThreatFox
+domain,c2.slotsite-top10.com,c2,Remcos,ThreatFox
+domain,c2.sunwin.sixtyseven.co.in,c2,Remcos,ThreatFox
+domain,c2.tvcasino.co,c2,Remcos,ThreatFox
+domain,c2.w88chinhthuc11.com,c2,Remcos,ThreatFox
+domain,c2.w88saba13.com,c2,Remcos,ThreatFox
+domain,c2.w88thethao26.com,c2,Remcos,ThreatFox
+domain,c2.web8kbetchinhthuc.buzz,c2,Remcos,ThreatFox
+domain,c2.zuexz.buzz,c2,Remcos,ThreatFox
+domain,c2.68gbsg.com,c2,Remcos,ThreatFox
+domain,c2.789joker.com,c2,Remcos,ThreatFox
+domain,c2.akuwin138slot.com,c2,Remcos,ThreatFox
+domain,c2.avbs.in,c2,Remcos,ThreatFox
+domain,c2.badana.me,c2,Remcos,ThreatFox
+domain,c2.bioscolombia.com.co,c2,Remcos,ThreatFox
+domain,c2.dnqj.my,c2,Remcos,ThreatFox
+domain,c2.emphasis.co.in,c2,Remcos,ThreatFox
+domain,c2.f5tech.in,c2,Remcos,ThreatFox
+domain,c2.goourl.me,c2,Remcos,ThreatFox
+domain,c2.hsdxm.buzz,c2,Remcos,ThreatFox
+domain,c2.hyperluxe.gg,c2,Remcos,ThreatFox
+domain,c2.j-88.co,c2,Remcos,ThreatFox
+domain,c2.j88viet.com,c2,Remcos,ThreatFox
+domain,c2.kubetvip.asia,c2,Remcos,ThreatFox
+domain,c2.mtoto-wa-kuwinda.de,c2,Remcos,ThreatFox
+domain,c2.news27.co.in,c2,Remcos,ThreatFox
+domain,c2.ok365.org,c2,Remcos,ThreatFox
+domain,c2.32win03.com,c2,Remcos,ThreatFox
+domain,c2.32win08.com,c2,Remcos,ThreatFox
+domain,c2.32win2.com,c2,Remcos,ThreatFox
+domain,backdoor.ok365.org,c2,Remcos,ThreatFox
+domain,backdoor.trangchuae888.com,c2,Remcos,ThreatFox
+domain,c2.trangchuae888.com,c2,Remcos,ThreatFox
+domain,news24-news.sa.com,c2,Remcos,ThreatFox
+domain,s666hp.com,c2,Remcos,ThreatFox
+domain,s8.coach,c2,Remcos,ThreatFox
+domain,kubetvip.asia,c2,Remcos,ThreatFox
+domain,mtoto-wa-kuwinda.de,c2,Remcos,ThreatFox
+domain,news27.co.in,c2,Remcos,ThreatFox
+domain,pinslot.vip,c2,Remcos,ThreatFox
+domain,saudi365.co,c2,Remcos,ThreatFox
+domain,seolink.in.net,c2,Remcos,ThreatFox
+domain,slotsite-top10.com,c2,Remcos,ThreatFox
+domain,sunwin.sixtyseven.co.in,c2,Remcos,ThreatFox
+domain,tvcasino.co,c2,Remcos,ThreatFox
+domain,w88chinhthuc11.com,c2,Remcos,ThreatFox
+domain,web8kbetchinhthuc.buzz,c2,Remcos,ThreatFox
+domain,zuexz.buzz,c2,Remcos,ThreatFox
+domain,789joker.com,c2,Remcos,ThreatFox
+domain,akuwin138slot.com,c2,Remcos,ThreatFox
+domain,avbs.in,c2,Remcos,ThreatFox
+domain,badana.me,c2,Remcos,ThreatFox
+domain,bioscolombia.com.co,c2,Remcos,ThreatFox
+domain,dnqj.my,c2,Remcos,ThreatFox
+domain,emphasis.co.in,c2,Remcos,ThreatFox
+domain,hsdxm.buzz,c2,Remcos,ThreatFox
+domain,hyperluxe.gg,c2,Remcos,ThreatFox
+domain,j-88.co,c2,Remcos,ThreatFox
+domain,j88viet.com,c2,Remcos,ThreatFox
+domain,3jrj8nat.americaeaglependant.com,phishing,ClearFake,ThreatFox
+ip,156.239.224.131,c2,Cobalt Strike,ThreatFox
+ip,101.43.31.60,c2,Cobalt Strike,ThreatFox
+url,https://studiokasa.com.br/,phishing,Unknown malware,ThreatFox
+domain,se.zk89.net,c2,Vidar,ThreatFox
+domain,se.199cuan.org,c2,Vidar,ThreatFox
+ip,92.118.126.165,c2,PureRAT,ThreatFox
+ip,89.126.221.170,c2,AdaptixC2,ThreatFox
+ip,89.126.221.216,c2,AdaptixC2,ThreatFox
+ip,45.156.87.134,c2,PureRAT,ThreatFox
+ip,23.94.197.128,c2,DCRat,ThreatFox
+ip,217.60.195.50,c2,PureRAT,ThreatFox
+ip,217.60.195.160,c2,PureRAT,ThreatFox
+ip,217.156.66.203,c2,PureRAT,ThreatFox
+ip,217.216.34.133,c2,Unknown malware,ThreatFox
+ip,20.175.26.173,c2,Evilginx,ThreatFox
+ip,192.162.199.188,c2,PureRAT,ThreatFox
+ip,185.247.211.21,c2,PureRAT,ThreatFox
+ip,176.96.137.11,c2,PureRAT,ThreatFox
+domain,up3c3qqw.shop-zensulin.us,phishing,ClearFake,ThreatFox
+ip,172.169.251.53,c2,AdaptixC2,ThreatFox
+ip,149.88.76.74,c2,PureRAT,ThreatFox
+ip,147.124.199.248,c2,PureRAT,ThreatFox
+ip,147.224.179.31,c2,DanaBot,ThreatFox
+domain,shop-zensulin.us,phishing,ClearFake,ThreatFox
+ip,132.243.221.34,c2,PureRAT,ThreatFox
+ip,128.90.136.246,c2,AsyncRAT,ThreatFox
+ip,102.220.163.36,c2,AsyncRAT,ThreatFox
+ip,102.117.163.68,c2,Unknown malware,ThreatFox
+domain,kaiangelsystems.rest,c2,Unknown Stealer,ThreatFox
+domain,agostinobruno.com,phishing,ClearFake,ThreatFox
+domain,ymemes.noip.at,c2,Remcos,ThreatFox
+url,https://www.motorway.nl,phishing,IClickFix,ThreatFox
+url,https://www.motorway.nl/nochain-sw.js,phishing,IClickFix,ThreatFox
+domain,engine.commdistinc.com,c2,FAKEUPDATES,ThreatFox
+ip,128.90.122.140,c2,Remcos,ThreatFox
+url,http://175.107.215.0:42369/Mozi.m,phishing,Mozi,ThreatFox
+ip,209.38.100.69,c2,Havoc,ThreatFox
+domain,tudfpifq.shop-glpro.com,phishing,ClearFake,ThreatFox
+domain,shop-glpro.com,phishing,ClearFake,ThreatFox
+domain,kq36oivv.eng-cardioslim.com,phishing,ClearFake,ThreatFox
+ip,3.110.54.253,c2,Unknown malware,ThreatFox
+domain,h3tnyjph.vuhw.store,phishing,ClearFake,ThreatFox
+domain,vuhw.store,phishing,ClearFake,ThreatFox
+domain,fincoadvance.com,phishing,MacSync,ThreatFox
+url,https://aidevmaster.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+url,https://alabamarecoverycenter.com/curl/b42a0ed9d1ecb72e42d6034502c304845d98805481d99cea4e259359f9ab206e,phishing,MacSync,ThreatFox
+url,https://alluringsites.com/curl/d3a55738ee5c03c285567bd1e424bf9f731ca05150e69d3ed631f01eb0d0e521,phishing,MacSync,ThreatFox
+url,https://atlantaairporttaxiservice.com/curl/8e92ee3f0bccc8211145e3aee82c34e9ae67058e9abf154e4b335a6575f97833,phishing,MacSync,ThreatFox
+url,https://atlantaairporttaxiservice.com/curl/b42a0ed9d1ecb72e42d6034502c304845d98805481d99cea4e259359f9ab206e,phishing,MacSync,ThreatFox
+url,https://atlantaairporttaxiservice.com/curl/fa90319c89e7a0272c859f9f1403c6c2f12793281d3a295ce283d6018d5dd1c3,phishing,MacSync,ThreatFox
+url,https://bestbuydomain.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+url,https://byrnewealthmanagement.com/curl/1fb7b78a1dd8d2ae0b78c34784bad25d3fb0f13aad55e1e6e51c6c7b23bac23a,phishing,MacSync,ThreatFox
+url,https://byrnewealthmanagement.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+url,https://cincycarpetcleaning.com/curl/6e2d25066bc1db68a10d55189c7c0bae6443d5178fd4310808270e261236ce30,phishing,MacSync,ThreatFox
+url,https://criminallawyerpr.com/curl/720e1e04c2690ac14874d54823354d6bd06336b23e8458debaffeb2b18f5be6a,phishing,MacSync,ThreatFox
+url,https://criminallawyerpr.com/curl/85cb26206d920216eee0c5f67e8de516b4d55bd1752025bb3c08a069a44fdbdf,phishing,MacSync,ThreatFox
+url,https://criminallawyerpr.com/curl/8e92ee3f0bccc8211145e3aee82c34e9ae67058e9abf154e4b335a6575f97833,phishing,MacSync,ThreatFox
+url,https://customroofingcontractors.com/curl/b42a0ed9d1ecb72e42d6034502c304845d98805481d99cea4e259359f9ab206e,phishing,MacSync,ThreatFox
+url,https://dallasirrigationservices.com/curl/fa90319c89e7a0272c859f9f1403c6c2f12793281d3a295ce283d6018d5dd1c3,phishing,MacSync,ThreatFox
+url,https://detroitconcretecontractor.com/curl/720e1e04c2690ac14874d54823354d6bd06336b23e8458debaffeb2b18f5be6a,phishing,MacSync,ThreatFox
+url,https://elitefenceanddeck.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+url,https://fincoadvance.com/curl/899e38e42680fe273eeda8f62382dc988907196817db5bc06e374df6c8a6dfa9,phishing,MacSync,ThreatFox
+url,https://hybridcustomhomes.com/curl/720e1e04c2690ac14874d54823354d6bd06336b23e8458debaffeb2b18f5be6a,phishing,MacSync,ThreatFox
+url,https://legacybuilderscolorado.com/curl/499a828191d39ffd2cf302b35184c87696d5e1325bc40406a88bc7d213ec83df,phishing,MacSync,ThreatFox
+url,https://legacybuilderscolorado.com/curl/720e1e04c2690ac14874d54823354d6bd06336b23e8458debaffeb2b18f5be6a,phishing,MacSync,ThreatFox
+url,https://legacybuilderscolorado.com/curl/eaed253ce468efe4a95d739c882b9694ad635169136238a4a5849734f5fd1bb8,phishing,MacSync,ThreatFox
+url,https://miamipcsupport.com/curl/57133df069b129caa0380eff96eb60ccfb5c58eb19f2d9dc8447618a1898b76a,phishing,MacSync,ThreatFox
+url,https://olympiapetemergency.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+url,https://oregoninteriors.com/curl/85cb26206d920216eee0c5f67e8de516b4d55bd1752025bb3c08a069a44fdbdf,phishing,MacSync,ThreatFox
+url,https://premierrentalpurchase.com/curl/5b7250991558c1089d217b180d9418df77886996c22f8f319d7f640895e03381,phishing,MacSync,ThreatFox
+domain,wlc.v-panel.asia,c2,Vidar,ThreatFox
+domain,ty.zk89.net,c2,Vidar,ThreatFox
+domain,ty.199cuan.org,c2,Vidar,ThreatFox
+ip,216.9.225.24,c2,Remcos,ThreatFox
+url,https://zarbari.com/,phishing,Unknown malware,ThreatFox
+domain,roptik.com,phishing,MacSync,ThreatFox
+url,https://roptik.com/curl/b54cc90c9143f757e0ac59356414f14447d5f9cbbae0b0e61cf6b4e8ced28f42,phishing,MacSync,ThreatFox
+url,https://roptik.com/dynamic?txd=b54cc90c9143f757e0ac59356414f14447d5f9cbbae0b0e61cf6b4e8ced28f42,phishing,MacSync,ThreatFox
+ip,107.172.13.250,c2,Remcos,ThreatFox
+domain,wagners123.duckdns.org,c2,Remcos,ThreatFox
+ip,188.166.254.199,c2,Havoc,ThreatFox
+ip,189.141.53.203,c2,Unknown malware,ThreatFox
+ip,31.56.36.214,c2,LxBase RAT,ThreatFox
+domain,5x6qtzvz.shop-geniusbrainsignal.com,phishing,ClearFake,ThreatFox
+domain,wrdn.rest,c2,Unknown Stealer,ThreatFox
+domain,shop-geniusbrainsignal.com,phishing,ClearFake,ThreatFox
+domain,www.neelgirlchemicals.com,c2,Remcos,ThreatFox
+domain,www.neelgirlchemicalsbackup.com,c2,Remcos,ThreatFox
+domain,www.allltrucks.com,c2,Remcos,ThreatFox
+ip,191.101.130.75,c2,XWorm,ThreatFox
+domain,pv8jpfri.alldayslimtea.uk,phishing,ClearFake,ThreatFox
+domain,wisma138ayaka.com,phishing,ClearFake,ThreatFox
+domain,rental-lodge.ch,phishing,ClearFake,ThreatFox
+domain,elitetourist.vn,phishing,ClearFake,ThreatFox
+url,https://testingcf.jsdelivr.net/gh/989A-A-3fF2465495760-2B3a/248A-2-3A-1d2290-BC-416-6DbA/Bc28-54673384617Ab9-A3E5,phishing,ClearFake,ThreatFox
+ip,45.192.248.45,c2,Cobalt Strike,ThreatFox
+domain,queue.fastclimate.click,c2,Unknown malware,ThreatFox
+ip,132.243.235.146,c2,Unknown malware,ThreatFox
+domain,tndr-panel.online,c2,Unknown malware,ThreatFox
+url,https://monokreatif.com/,phishing,Unknown malware,ThreatFox
+url,https://taylorfamilyenterprisesllc.com/,phishing,Unknown malware,ThreatFox
+url,https://rotonexpert.com/,phishing,Unknown malware,ThreatFox
+ip,95.40.197.134,c2,ValleyRAT,ThreatFox
+ip,95.40.252.4,c2,ValleyRAT,ThreatFox
+ip,43.199.50.206,c2,ValleyRAT,ThreatFox
+ip,95.40.173.114,c2,ValleyRAT,ThreatFox
+ip,18.166.206.182,c2,ValleyRAT,ThreatFox
+ip,18.166.222.99,c2,ValleyRAT,ThreatFox
+ip,18.167.107.230,c2,ValleyRAT,ThreatFox
+ip,18.167.189.134,c2,ValleyRAT,ThreatFox
+ip,43.198.123.255,c2,ValleyRAT,ThreatFox
+ip,43.198.213.132,c2,ValleyRAT,ThreatFox
+ip,16.162.108.128,c2,ValleyRAT,ThreatFox
+ip,16.163.175.60,c2,ValleyRAT,ThreatFox
+ip,18.162.174.63,c2,ValleyRAT,ThreatFox
+ip,18.166.189.193,c2,ValleyRAT,ThreatFox
+ip,217.60.195.161,c2,Aisuru,ThreatFox
+ip,104.245.107.22,c2,Remcos,ThreatFox
+ip,176.65.139.231,c2,SparkRAT,ThreatFox
+ip,146.56.245.187,c2,VShell,ThreatFox
+ip,193.160.32.138,c2,Cobalt Strike,ThreatFox
+ip,119.29.98.15,c2,Cobalt Strike,ThreatFox
+domain,4i1yrtc2.shop-genesis-revival.com,phishing,ClearFake,ThreatFox
+domain,shop-genesis-revival.com,phishing,ClearFake,ThreatFox
+ip,144.172.117.212,c2,Unknown RAT,ThreatFox
+ip,172.86.123.51,c2,Unknown RAT,ThreatFox
+domain,foldlodge.xyz,c2,Unknown Loader,ThreatFox
+domain,rmm.smartscreen.lifestyle,c2,Unknown RAT,ThreatFox
+ip,119.3.156.192,c2,VShell,ThreatFox
+ip,43.251.227.131,c2,VShell,ThreatFox
+ip,8.148.187.55,c2,Cobalt Strike,ThreatFox
+ip,43.156.82.233,c2,Jackskid,ThreatFox
+domain,me7wszz7.usalo.store,phishing,ClearFake,ThreatFox
+domain,sensa138pg.it.com,phishing,ClearFake,ThreatFox
+domain,usalo.store,phishing,ClearFake,ThreatFox
+url,http://175.107.2.57:40845/Mozi.a,phishing,Mozi,ThreatFox
+ip,129.226.82.94,c2,Jackskid,ThreatFox
+ip,43.130.251.228,c2,Jackskid,ThreatFox
+ip,43.155.204.228,c2,Jackskid,ThreatFox
+ip,43.156.47.240,c2,Jackskid,ThreatFox
+ip,43.157.142.78,c2,Jackskid,ThreatFox
+ip,43.157.181.156,c2,Jackskid,ThreatFox
+ip,43.157.198.200,c2,Jackskid,ThreatFox
+ip,43.166.153.58,c2,Jackskid,ThreatFox
+ip,43.157.78.243,c2,Jackskid,ThreatFox
+ip,43.166.68.17,c2,Jackskid,ThreatFox
+ip,43.173.124.27,c2,Jackskid,ThreatFox
+domain,uwc26lb6.wisma138cyno.net,phishing,ClearFake,ThreatFox
+domain,wisma138cyno.net,phishing,ClearFake,ThreatFox
+ip,39.100.66.238,c2,Cobalt Strike,ThreatFox
+url,https://terporten.nl/,phishing,Unknown malware,ThreatFox
+domain,ygr3wbty.prosta--fense.com,phishing,ClearFake,ThreatFox
+ip,143.244.130.3,c2,Remus,ThreatFox
+domain,siteborg.com,phishing,IClickFix,ThreatFox
+domain,taylorfamilyenterprisesllc.com,phishing,IClickFix,ThreatFox
+domain,tharposts.com,phishing,IClickFix,ThreatFox
+domain,thecareerpath.net,phishing,IClickFix,ThreatFox
+domain,thinness-minceur.com,phishing,IClickFix,ThreatFox
+domain,tycoonorganics.com,phishing,IClickFix,ThreatFox
+domain,vernonsu.com,phishing,IClickFix,ThreatFox
+domain,vitalityhealthservices.com,phishing,IClickFix,ThreatFox
+domain,xn--gp-bja.hu,phishing,IClickFix,ThreatFox
+domain,zarbari.com,phishing,IClickFix,ThreatFox
+domain,kanissaimmo.com,phishing,IClickFix,ThreatFox
+domain,kingstrategicsolutions.com,phishing,IClickFix,ThreatFox
+domain,kmjzholdings.com,phishing,IClickFix,ThreatFox
+domain,littlebitcleaning.com,phishing,IClickFix,ThreatFox
+domain,mat-part.pl,phishing,IClickFix,ThreatFox
+domain,monokreatif.com,phishing,IClickFix,ThreatFox
+domain,oklahoma-occitania.com,phishing,IClickFix,ThreatFox
+domain,procontractorsmn.co,phishing,IClickFix,ThreatFox
+domain,raymondemi.ca,phishing,IClickFix,ThreatFox
+domain,republika-srpska-stuttgart.de,phishing,IClickFix,ThreatFox
+domain,rotonexpert.com,phishing,IClickFix,ThreatFox
+domain,sabersaude.com.pt,phishing,IClickFix,ThreatFox
+domain,alolaiya.com,phishing,IClickFix,ThreatFox
+domain,bayaslimo.com,phishing,IClickFix,ThreatFox
+domain,brendastarrbooks.com,phishing,IClickFix,ThreatFox
+domain,cavendish.co,phishing,IClickFix,ThreatFox
+domain,cofevins.com,phishing,IClickFix,ThreatFox
+domain,condominiovilares.com.br,phishing,IClickFix,ThreatFox
+domain,darebinsulation.co.uk,phishing,IClickFix,ThreatFox
+domain,dortovestudiodecin.cz,phishing,IClickFix,ThreatFox
+domain,expo-tortas.com,phishing,IClickFix,ThreatFox
+domain,gusanacoating.com,phishing,IClickFix,ThreatFox
+domain,hollywoodcarpetinc.com,phishing,IClickFix,ThreatFox
+domain,jetmed.co.zw,phishing,IClickFix,ThreatFox
+domain,jurismilitaris.com.br,phishing,IClickFix,ThreatFox
+domain,13win5y.com,phishing,IClickFix,ThreatFox
+ip,181.235.13.254,c2,Quasar RAT,ThreatFox
+ip,74.50.123.47,c2,Remcos,ThreatFox
+domain,a7.zk89.net,c2,Vidar,ThreatFox
+domain,a7.199cuan.org,c2,Vidar,ThreatFox
+ip,124.221.4.84,c2,Cobalt Strike,ThreatFox
+domain,www.gatewayresearchcenter.com,phishing,ClearFake,ThreatFox
+ip,94.183.235.121,c2,Evilginx,ThreatFox
+ip,93.186.38.135,c2,DeimosC2,ThreatFox
+ip,64.181.194.179,c2,DanaBot,ThreatFox
+ip,45.207.241.47,c2,DCRat,ThreatFox
+ip,45.112.206.54,c2,AdaptixC2,ThreatFox
+ip,4.231.16.194,c2,Unknown malware,ThreatFox
+ip,31.56.209.53,c2,PureRAT,ThreatFox
+ip,209.99.188.193,c2,AdaptixC2,ThreatFox
+ip,194.26.192.153,c2,AsyncRAT,ThreatFox
+ip,144.202.84.110,c2,Jackskid,ThreatFox
+ip,45.32.64.165,c2,Jackskid,ThreatFox
+ip,45.76.84.217,c2,Jackskid,ThreatFox
+ip,64.176.67.103,c2,Jackskid,ThreatFox
+ip,70.34.221.98,c2,Jackskid,ThreatFox
+ip,172.86.91.14,c2,PureRAT,ThreatFox
+ip,172.111.139.65,c2,DCRat,ThreatFox
+ip,159.198.32.64,c2,Evilginx,ThreatFox
+ip,15.235.149.212,c2,PureRAT,ThreatFox
+ip,147.124.202.216,c2,AsyncRAT,ThreatFox
+ip,128.90.105.123,c2,DCRat,ThreatFox
+ip,122.51.212.92,c2,BianLian,ThreatFox
+ip,124.198.131.60,c2,PureRAT,ThreatFox
+ip,104.243.248.63,c2,AsyncRAT,ThreatFox
+ip,102.188.200.238,c2,DCRat,ThreatFox
+domain,yoga-fuer-maenner.de,phishing,Unknown Stealer,ThreatFox
+domain,youhityourgoal.com,phishing,Unknown Stealer,ThreatFox
+domain,zahnschirm.de,phishing,Unknown Stealer,ThreatFox
+domain,zavimed.com,phishing,Unknown Stealer,ThreatFox
+domain,zekerzit.nl,phishing,Unknown Stealer,ThreatFox
+domain,zhang-ramen.de,phishing,Unknown Stealer,ThreatFox
+domain,zwergennest-ulm.de,phishing,Unknown Stealer,ThreatFox
+domain,vircaio.com,phishing,Unknown Stealer,ThreatFox
+domain,visco-foam.com,phishing,Unknown Stealer,ThreatFox
+domain,vivasicurezza.com,phishing,Unknown Stealer,ThreatFox
+domain,vocalroads.com,phishing,Unknown Stealer,ThreatFox
+domain,wagahattourist.com,phishing,Unknown Stealer,ThreatFox
+domain,wahlplakate-archiv.de,phishing,Unknown Stealer,ThreatFox
+domain,wakeeup.com,phishing,Unknown Stealer,ThreatFox
+domain,wcpot.net,phishing,Unknown Stealer,ThreatFox
+domain,willettebuilding.com,phishing,Unknown Stealer,ThreatFox
+domain,xn--12ct4ap8bj4eva5b4gxe.com,phishing,Unknown Stealer,ThreatFox
+domain,yeralogando.com,phishing,Unknown Stealer,ThreatFox
+domain,yildirimotoaksesuar.com,phishing,Unknown Stealer,ThreatFox
+domain,toorangostar.com,phishing,Unknown Stealer,ThreatFox
+domain,topset-coaching.de,phishing,Unknown Stealer,ThreatFox
+domain,tourbigeasy.com,phishing,Unknown Stealer,ThreatFox
+domain,underthebooth.com,phishing,Unknown Stealer,ThreatFox
+domain,undoism.org,phishing,Unknown Stealer,ThreatFox
+domain,unser-dorf-lietzow.de,phishing,Unknown Stealer,ThreatFox
+domain,upsolutservice.de,phishing,Unknown Stealer,ThreatFox
+domain,uptime.com.br,phishing,Unknown Stealer,ThreatFox
+domain,urlaubsdomizil-binz.de,phishing,Unknown Stealer,ThreatFox
+domain,veprivletech.cz,phishing,Unknown Stealer,ThreatFox
+domain,verifiedstats.net,phishing,Unknown Stealer,ThreatFox
+domain,startupcv.ca,phishing,Unknown Stealer,ThreatFox
+domain,szendryk-partner.de,phishing,Unknown Stealer,ThreatFox
+domain,tadi.travel,phishing,Unknown Stealer,ThreatFox
+domain,talentclinics.com,phishing,Unknown Stealer,ThreatFox
+domain,tastyroots.blog,phishing,Unknown Stealer,ThreatFox
+domain,tc-donauwoerth.de,phishing,Unknown Stealer,ThreatFox
+domain,thanhtungtrieudo.com,phishing,Unknown Stealer,ThreatFox
+domain,thegrimeguys.com,phishing,Unknown Stealer,ThreatFox
+domain,thehappycoders.com,phishing,Unknown Stealer,ThreatFox
+domain,theluxurycruiseadvisors.com,phishing,Unknown Stealer,ThreatFox
+domain,themilkminimalist.com,phishing,Unknown Stealer,ThreatFox
+domain,theplumberinc.com,phishing,Unknown Stealer,ThreatFox
+domain,savingdogsandcats.com,phishing,Unknown Stealer,ThreatFox
+domain,schmidt-russnak.de,phishing,Unknown Stealer,ThreatFox
+domain,seiden-collagen-faden-lifting.com,phishing,Unknown Stealer,ThreatFox
+domain,selftalkinstitute.com,phishing,Unknown Stealer,ThreatFox
+domain,shopichain.com,phishing,Unknown Stealer,ThreatFox
+domain,simenyi.hu,phishing,Unknown Stealer,ThreatFox
+domain,skraddarnshus.se,phishing,Unknown Stealer,ThreatFox
+domain,smartmedservices.net,phishing,Unknown Stealer,ThreatFox
+domain,soundtrk.com,phishing,Unknown Stealer,ThreatFox
+domain,sprzataniegrobow.krakow.pl,phishing,Unknown Stealer,ThreatFox
+domain,sraak.nl,phishing,Unknown Stealer,ThreatFox
+domain,paulusgemeinde-raunheim.de,phishing,Unknown Stealer,ThreatFox
+domain,payangel.info,phishing,Unknown Stealer,ThreatFox
+domain,paystubsetc.com,phishing,Unknown Stealer,ThreatFox
+domain,pegasoheating.com,phishing,Unknown Stealer,ThreatFox
+domain,praxis-siegeris.de,phishing,Unknown Stealer,ThreatFox
+domain,pytacie.pl,phishing,Unknown Stealer,ThreatFox
+domain,restauration-galaxy-tapis.com,phishing,Unknown Stealer,ThreatFox
+domain,rijschoolpegasus.nl,phishing,Unknown Stealer,ThreatFox
+domain,romancingthebean.com,phishing,Unknown Stealer,ThreatFox
+domain,runningwithj.com,phishing,Unknown Stealer,ThreatFox
+domain,saigont-shirt.com,phishing,Unknown Stealer,ThreatFox
+domain,sandyapron.com,phishing,Unknown Stealer,ThreatFox
+domain,nutritionsecureindy.com,phishing,Unknown Stealer,ThreatFox
+domain,nycoworkspace.com,phishing,Unknown Stealer,ThreatFox
+domain,omtickets.de,phishing,Unknown Stealer,ThreatFox
+domain,onthewingsoffood.com,phishing,Unknown Stealer,ThreatFox
+domain,ortho-delfzijl.nl,phishing,Unknown Stealer,ThreatFox
+domain,osmeuspes.pt,phishing,Unknown Stealer,ThreatFox
+domain,otticamoderna.eu,phishing,Unknown Stealer,ThreatFox
+domain,outreachfarmproject.org,phishing,Unknown Stealer,ThreatFox
+domain,ozilver.nl,phishing,Unknown Stealer,ThreatFox
+domain,ozsuteknik.com,phishing,Unknown Stealer,ThreatFox
+domain,pacifictowers.com,phishing,Unknown Stealer,ThreatFox
+domain,moitruongbacninh24h.com,phishing,Unknown Stealer,ThreatFox
+domain,mossycupfarm.com,phishing,Unknown Stealer,ThreatFox
+domain,mozellatransportationinc.com,phishing,Unknown Stealer,ThreatFox
+domain,msoid.fpspoznan.pl,phishing,Unknown Stealer,ThreatFox
+domain,muehldorf-simbach.de,phishing,Unknown Stealer,ThreatFox
+domain,natalie-murray.com,phishing,Unknown Stealer,ThreatFox
+domain,ndmcorporatesolutions.com,phishing,Unknown Stealer,ThreatFox
+domain,nettwark.org,phishing,Unknown Stealer,ThreatFox
+domain,newstonerealtygroup.com,phishing,Unknown Stealer,ThreatFox
+domain,newvistastudios.com,phishing,Unknown Stealer,ThreatFox
+domain,nguyenthanhluong.com,phishing,Unknown Stealer,ThreatFox
+domain,nicole.wedler.nl,phishing,Unknown Stealer,ThreatFox
+domain,nukewatch.org,phishing,Unknown Stealer,ThreatFox
+domain,lyncdiscoverinternal.fpspoznan.pl,phishing,Unknown Stealer,ThreatFox
+domain,maasleather.com,phishing,Unknown Stealer,ThreatFox
+domain,magaleria.com,phishing,Unknown Stealer,ThreatFox
+domain,marinacolerato.com.br,phishing,Unknown Stealer,ThreatFox
+domain,marketzest.com,phishing,Unknown Stealer,ThreatFox
+domain,mashhadasansor.com,phishing,Unknown Stealer,ThreatFox
+domain,maximtubes.com,phishing,Unknown Stealer,ThreatFox
+domain,melanie-altbuerger.de,phishing,Unknown Stealer,ThreatFox
+domain,mensvitalitycenter.com,phishing,Unknown Stealer,ThreatFox
+domain,midlandsbuggyhire.co.uk,phishing,Unknown Stealer,ThreatFox
+domain,midwestfreefall.com,phishing,Unknown Stealer,ThreatFox
+domain,mindful-karrierecoaching.de,phishing,Unknown Stealer,ThreatFox
+domain,mobinnova.com,phishing,Unknown Stealer,ThreatFox
+domain,krbookstore.com,phishing,Unknown Stealer,ThreatFox
+domain,kronebo.dk,phishing,Unknown Stealer,ThreatFox
+domain,lamanchega.com.uy,phishing,Unknown Stealer,ThreatFox
+domain,largebreedpuppiesreadyfornowhome.com,phishing,Unknown Stealer,ThreatFox
+domain,laststopsolar.com,phishing,Unknown Stealer,ThreatFox
+domain,lebenslaudatio.de,phishing,Unknown Stealer,ThreatFox
+domain,lerecept.fr,phishing,Unknown Stealer,ThreatFox
+domain,lianacosmetic.com,phishing,Unknown Stealer,ThreatFox
+domain,loewenpudel.de,phishing,Unknown Stealer,ThreatFox
+domain,loginfa.ir,phishing,Unknown Stealer,ThreatFox
+domain,lot204.com,phishing,Unknown Stealer,ThreatFox
+domain,luxestorebd.com,phishing,Unknown Stealer,ThreatFox
+domain,k-heck.de,phishing,Unknown Stealer,ThreatFox
+domain,katarijewelry.com,phishing,Unknown Stealer,ThreatFox
+domain,kesaria.com,phishing,Unknown Stealer,ThreatFox
+domain,key-melody.com,phishing,Unknown Stealer,ThreatFox
+domain,kgv-eintracht.de,phishing,Unknown Stealer,ThreatFox
+domain,khtshop.com,phishing,Unknown Stealer,ThreatFox
+domain,ki-museum.de,phishing,Unknown Stealer,ThreatFox
+domain,kinderopvangdopey.com,phishing,Unknown Stealer,ThreatFox
+domain,kindmindsociety.com,phishing,Unknown Stealer,ThreatFox
+domain,knoxvol.com,phishing,Unknown Stealer,ThreatFox
+domain,konshenglass.com,phishing,Unknown Stealer,ThreatFox
+domain,halcyonresource.com,phishing,Unknown Stealer,ThreatFox
+domain,hallettsvilleculturaleventcenter.org,phishing,Unknown Stealer,ThreatFox
+domain,heinz-trox-stiftung.de,phishing,Unknown Stealer,ThreatFox
+domain,hightidedtla.com,phishing,Unknown Stealer,ThreatFox
+domain,hrconsulting.com.pl,phishing,Unknown Stealer,ThreatFox
+domain,hubusontour.de,phishing,Unknown Stealer,ThreatFox
+domain,iac-dueren.de,phishing,Unknown Stealer,ThreatFox
+domain,imstil.de,phishing,Unknown Stealer,ThreatFox
+domain,incomefolios.com,phishing,Unknown Stealer,ThreatFox
+domain,inpsicon.com,phishing,Unknown Stealer,ThreatFox
+domain,jdnsquare.com,phishing,Unknown Stealer,ThreatFox
+domain,jmraceradiators.com,phishing,Unknown Stealer,ThreatFox
+domain,justhr.be,phishing,Unknown Stealer,ThreatFox
+domain,fiy.cz,phishing,Unknown Stealer,ThreatFox
+domain,foerderverein-mineralfreibad-hoefen.de,phishing,Unknown Stealer,ThreatFox
+domain,fraukakau.com,phishing,Unknown Stealer,ThreatFox
+domain,funkenwind.de,phishing,Unknown Stealer,ThreatFox
+domain,gabfixhomesolutions.com,phishing,Unknown Stealer,ThreatFox
+domain,gasstationgourmet.com,phishing,Unknown Stealer,ThreatFox
+domain,gentlemensmechanical.com,phishing,Unknown Stealer,ThreatFox
+domain,glasreinigung-melle.de,phishing,Unknown Stealer,ThreatFox
+domain,globalfoodsafetyresource.com,phishing,Unknown Stealer,ThreatFox
+domain,goinstudios.com,phishing,Unknown Stealer,ThreatFox
+domain,greensite.org,phishing,Unknown Stealer,ThreatFox
+domain,gsimvogelgesang.de,phishing,Unknown Stealer,ThreatFox
+domain,guanacaste.info,phishing,Unknown Stealer,ThreatFox
+domain,drminaataei.com,phishing,Unknown Stealer,ThreatFox
+domain,drumfluence.com,phishing,Unknown Stealer,ThreatFox
+domain,ecoconsortium.io,phishing,Unknown Stealer,ThreatFox
+domain,edeka-kutsche.de,phishing,Unknown Stealer,ThreatFox
+domain,eft-azione.it,phishing,Unknown Stealer,ThreatFox
+domain,eltechna.com,phishing,Unknown Stealer,ThreatFox
+domain,equestrasian.org,phishing,Unknown Stealer,ThreatFox
+domain,esrataskinadiyaman.com,phishing,Unknown Stealer,ThreatFox
+domain,estevezmichelena.com,phishing,Unknown Stealer,ThreatFox
+domain,etlglobal.co.uk,phishing,Unknown Stealer,ThreatFox
+domain,etta-textservice.de,phishing,Unknown Stealer,ThreatFox
+domain,faunatravel.com,phishing,Unknown Stealer,ThreatFox
+domain,fdp-telgte.de,phishing,Unknown Stealer,ThreatFox
+domain,crustandcream.com,phishing,Unknown Stealer,ThreatFox
+domain,ctsignworks.com,phishing,Unknown Stealer,ThreatFox
+domain,databound.co,phishing,Unknown Stealer,ThreatFox
+domain,dentalmora.com,phishing,Unknown Stealer,ThreatFox
+domain,digitaltigerbd.com,phishing,Unknown Stealer,ThreatFox
+domain,dimveterana.com,phishing,Unknown Stealer,ThreatFox
+domain,dirtywork.media,phishing,Unknown Stealer,ThreatFox
+domain,disciplina.nl,phishing,Unknown Stealer,ThreatFox
+domain,disruptivo.tv,phishing,Unknown Stealer,ThreatFox
+domain,dpfk.com,phishing,Unknown Stealer,ThreatFox
+domain,dr-melanie-horstmann.de,phishing,Unknown Stealer,ThreatFox
+domain,celler-spiesser.de,phishing,Unknown Stealer,ThreatFox
+domain,ceylonictravels.com,phishing,Unknown Stealer,ThreatFox
+domain,chadoichi.com,phishing,Unknown Stealer,ThreatFox
+domain,chateauneuf-du-faou.com,phishing,Unknown Stealer,ThreatFox
+domain,christophburgstedt.de,phishing,Unknown Stealer,ThreatFox
+domain,classicalexcursions.com,phishing,Unknown Stealer,ThreatFox
+domain,cne.paris,phishing,Unknown Stealer,ThreatFox
+domain,colinphillipsfunerals.com,phishing,Unknown Stealer,ThreatFox
+domain,conceptalk.com,phishing,Unknown Stealer,ThreatFox
+domain,confagricolturacuneo.it,phishing,Unknown Stealer,ThreatFox
+domain,corelabs.com.ng,phishing,Unknown Stealer,ThreatFox
+domain,countrysideanimalhealth.com,phishing,Unknown Stealer,ThreatFox
+domain,cristouch.com,phishing,Unknown Stealer,ThreatFox
+domain,arvanstore.com,phishing,Unknown Stealer,ThreatFox
+domain,aryadigitalmarketing.com,phishing,Unknown Stealer,ThreatFox
+domain,astutecopyblogging.com,phishing,Unknown Stealer,ThreatFox
+domain,bedrijfswagensschijndel.nl,phishing,Unknown Stealer,ThreatFox
+domain,boloviuledjima.rs,phishing,Unknown Stealer,ThreatFox
+domain,bonas.nl,phishing,Unknown Stealer,ThreatFox
+domain,brainstorm-events.de,phishing,Unknown Stealer,ThreatFox
+domain,brittner.net,phishing,Unknown Stealer,ThreatFox
+domain,bsv-dinslaken.de,phishing,Unknown Stealer,ThreatFox
+domain,bvvaladares.com,phishing,Unknown Stealer,ThreatFox
+domain,bz-wobi.de,phishing,Unknown Stealer,ThreatFox
+domain,caitlinandcamera.com,phishing,Unknown Stealer,ThreatFox
+domain,care-more-plus.de,phishing,Unknown Stealer,ThreatFox
+domain,cazari-brasov.ro,phishing,Unknown Stealer,ThreatFox
+domain,1connect-software.de,phishing,Unknown Stealer,ThreatFox
+domain,1connect.pl,phishing,Unknown Stealer,ThreatFox
+domain,7raaz.com,phishing,Unknown Stealer,ThreatFox
+domain,agilecircle.de,phishing,Unknown Stealer,ThreatFox
+domain,alchemybeauty.ca,phishing,Unknown Stealer,ThreatFox
+domain,alfabit.hr,phishing,Unknown Stealer,ThreatFox
+domain,alorisk.com,phishing,Unknown Stealer,ThreatFox
+domain,americandreamsfoundation.org,phishing,Unknown Stealer,ThreatFox
+domain,amesf.ac.ir,phishing,Unknown Stealer,ThreatFox
+domain,amoysupply.com,phishing,Unknown Stealer,ThreatFox
+domain,andersonamendments.app,phishing,Unknown Stealer,ThreatFox
+domain,anoesh.nl,phishing,Unknown Stealer,ThreatFox
+domain,apparthub.com,phishing,Unknown Stealer,ThreatFox
+domain,007tg.vip,phishing,Unknown Stealer,ThreatFox
+domain,086bn6e3.prostafene.com,phishing,ClearFake,ThreatFox
+domain,www.sunenergies.fr,phishing,Unknown Loader,ThreatFox
+domain,www.swissvitiligocenter.com,phishing,Unknown Loader,ThreatFox
+domain,www.widewingstiles.co.uk,phishing,Unknown Loader,ThreatFox
+domain,www.krankengymnastik-seibel.de,phishing,Unknown Loader,ThreatFox
+domain,www.kyosk.app,phishing,Unknown Loader,ThreatFox
+domain,www.lenhardtrodgers.net,phishing,Unknown Loader,ThreatFox
+domain,www.loveabowlpets.com,phishing,Unknown Loader,ThreatFox
+domain,www.msbedachungen.de,phishing,Unknown Loader,ThreatFox
+domain,www.msindreni.co.za,phishing,Unknown Loader,ThreatFox
+domain,www.padelitalia.it,phishing,Unknown Loader,ThreatFox
+domain,www.puensinp.com,phishing,Unknown Loader,ThreatFox
+domain,www.sudeepdalela.com,phishing,Unknown Loader,ThreatFox
+domain,ww4mori.com,phishing,Unknown Loader,ThreatFox
+domain,www.abikasrl.com,phishing,Unknown Loader,ThreatFox
+domain,www.agence-immobiliere-nanterre.com,phishing,Unknown Loader,ThreatFox
+domain,www.carismapacific.com,phishing,Unknown Loader,ThreatFox
+domain,www.clinicwiseai.com,phishing,Unknown Loader,ThreatFox
+domain,www.darlingtonstudios.com,phishing,Unknown Loader,ThreatFox
+domain,www.donneandgo.com,phishing,Unknown Loader,ThreatFox
+domain,www.fratellibenini.com,phishing,Unknown Loader,ThreatFox
+domain,www.itscostruzioni.it,phishing,Unknown Loader,ThreatFox
+domain,primobolan.org,phishing,Unknown Loader,ThreatFox
+domain,redpillmt.com,phishing,Unknown Loader,ThreatFox
+domain,sealfit.com,phishing,Unknown Loader,ThreatFox
+domain,seismicguys.co.nz,phishing,Unknown Loader,ThreatFox
+domain,senmixmaster.com,phishing,Unknown Loader,ThreatFox
+domain,terrabrass.com,phishing,Unknown Loader,ThreatFox
+domain,thelegalstuff.co.za,phishing,Unknown Loader,ThreatFox
+domain,thewheelatsteelpier.com,phishing,Unknown Loader,ThreatFox
+domain,trip2balkan.com,phishing,Unknown Loader,ThreatFox
+domain,librocannabismedicinal.com,phishing,Unknown Loader,ThreatFox
+domain,magnetic-websites.com,phishing,Unknown Loader,ThreatFox
+domain,marinaisle.com,phishing,Unknown Loader,ThreatFox
+domain,marvinarrington.com,phishing,Unknown Loader,ThreatFox
+domain,medvitro.com,phishing,Unknown Loader,ThreatFox
+domain,moesbarbershop.com,phishing,Unknown Loader,ThreatFox
+domain,onetrueself.com,phishing,Unknown Loader,ThreatFox
+domain,pedrofrancke.com,phishing,Unknown Loader,ThreatFox
+domain,politicalgastronomica.com,phishing,Unknown Loader,ThreatFox
+domain,getcardfly.com,phishing,Unknown Loader,ThreatFox
+domain,hebediepenmaat.nl,phishing,Unknown Loader,ThreatFox
+domain,hp-bacher.com,phishing,Unknown Loader,ThreatFox
+domain,hulamonkeys.com,phishing,Unknown Loader,ThreatFox
+domain,interba.cz,phishing,Unknown Loader,ThreatFox
+domain,isyapp.de,phishing,Unknown Loader,ThreatFox
+domain,kalpapharm.net,phishing,Unknown Loader,ThreatFox
+domain,kingsdale-estates.com,phishing,Unknown Loader,ThreatFox
+domain,lakeshore-painting.org,phishing,Unknown Loader,ThreatFox
+domain,lat-est.org.il,phishing,Unknown Loader,ThreatFox
+domain,dearestsomeday.com,phishing,Unknown Loader,ThreatFox
+domain,dirigo-edu.com,phishing,Unknown Loader,ThreatFox
+domain,duansungrouphanam.com.vn,phishing,Unknown Loader,ThreatFox
+domain,e-labelqr.com,phishing,Unknown Loader,ThreatFox
+domain,electsojourner.com,phishing,Unknown Loader,ThreatFox
+domain,essencieleste.fr,phishing,Unknown Loader,ThreatFox
+domain,estefaniadamasopsicologa.es,phishing,Unknown Loader,ThreatFox
+domain,ethersolutions.org,phishing,Unknown Loader,ThreatFox
+domain,fr8qu8ncy.com,phishing,Unknown Loader,ThreatFox
+domain,freshpetnutrition.com,phishing,Unknown Loader,ThreatFox
+domain,archive.camerimage.pl,phishing,Unknown Loader,ThreatFox
+domain,avecaume.com,phishing,Unknown Loader,ThreatFox
+domain,billiebates.com,phishing,Unknown Loader,ThreatFox
+domain,chrioseedoflifechurch.org,phishing,Unknown Loader,ThreatFox
+domain,christinegrauer.com,phishing,Unknown Loader,ThreatFox
+domain,citysuitsjersey.co.uk,phishing,Unknown Loader,ThreatFox
+domain,cornercafeatlanta.com,phishing,Unknown Loader,ThreatFox
+domain,craftsbymrandmrs.com,phishing,Unknown Loader,ThreatFox
+domain,dataspoiler.com,phishing,Unknown Loader,ThreatFox
+domain,1010trenchless.net,phishing,Unknown Loader,ThreatFox
+domain,abaylartur.com,phishing,Unknown Loader,ThreatFox
+domain,aleh.org,phishing,Unknown Loader,ThreatFox
+domain,prostafene.com,phishing,ClearFake,ThreatFox
+domain,globalrenovation.ch,phishing,ClearFake,ThreatFox
+domain,zentzbyzee.com.au,phishing,IClickFix,ThreatFox
+domain,zimmerei-ruhland.de,phishing,IClickFix,ThreatFox
+domain,serenespheresph.com,phishing,IClickFix,ThreatFox
+domain,shop.tarela.lt,phishing,IClickFix,ThreatFox
+domain,stpauls.edu.ph,phishing,IClickFix,ThreatFox
+domain,studiokasa.com.br,phishing,IClickFix,ThreatFox
+domain,terporten.nl,phishing,IClickFix,ThreatFox
+domain,themetabolicclinic.id,phishing,IClickFix,ThreatFox
+domain,wellfulli.com,phishing,IClickFix,ThreatFox
+domain,www.immobiliarecatalanotto.it,phishing,IClickFix,ThreatFox
+domain,demyras.nexastrive.uk,phishing,IClickFix,ThreatFox
+domain,devin-industries.de,phishing,IClickFix,ThreatFox
+domain,goldenprowrestling.com,phishing,IClickFix,ThreatFox
+domain,hojemaringa.com.br,phishing,IClickFix,ThreatFox
+domain,kannada.online,phishing,IClickFix,ThreatFox
+domain,nationaldlab.com,phishing,IClickFix,ThreatFox
+domain,rapjuve.com,phishing,IClickFix,ThreatFox
+domain,alpha-inmobiliaria.com,phishing,IClickFix,ThreatFox
+domain,asl-om.online,phishing,IClickFix,ThreatFox
+domain,citizenhomecares.com,phishing,IClickFix,ThreatFox
+domain,cor-sanders.com,phishing,IClickFix,ThreatFox
+domain,daibaodan.com,phishing,IClickFix,ThreatFox
+domain,misty-arc-rook-sleoor.com,phishing,IClickFix,ThreatFox
+ip,199.47.241.52,c2,Remcos,ThreatFox
+domain,delta-grafica.com,phishing,ClearFake,ThreatFox
+domain,carfellas.ch,phishing,ClearFake,ThreatFox
+ip,177.3.88.123,c2,VShell,ThreatFox
+ip,38.242.151.91,c2,Havoc,ThreatFox
+domain,multiculturalpartners.com,phishing,ClearFake,ThreatFox
+domain,dataplaysolutions.com,phishing,ClearFake,ThreatFox
+domain,api-relay.cc,phishing,ClearFake,ThreatFox
+domain,3w9goh27.ummes.store,phishing,ClearFake,ThreatFox
+domain,ummes.store,phishing,ClearFake,ThreatFox
+domain,aucontainertrade.com,phishing,ClearFake,ThreatFox
+ip,103.117.137.230,c2,Cobalt Strike,ThreatFox
+ip,121.43.194.200,c2,Cobalt Strike,ThreatFox
+domain,strongerpi921.life,phishing,IClickFix,ThreatFox
+domain,millionpi66.website,phishing,IClickFix,ThreatFox
+domain,quiet-ridge-slaikdoaen.com,phishing,IClickFix,ThreatFox
+domain,shaltaypi.life,phishing,IClickFix,ThreatFox
+domain,fern-trace-anvil-meoix.live,phishing,IClickFix,ThreatFox
+domain,glacial-sketch-otter-triis.live,phishing,IClickFix,ThreatFox
+domain,9si5pybc.pastinaikwisma.org,phishing,ClearFake,ThreatFox
+domain,pastinaikwisma.org,phishing,ClearFake,ThreatFox
+domain,ldgsn0tc.peuraboost.com,phishing,ClearFake,ThreatFox
+domain,peuraboost.com,phishing,ClearFake,ThreatFox
+url,https://rawcdn.githack.com/19875567137/76738746509856-346/refs/heads/main/3672836642-44,phishing,ClearFake,ThreatFox
+domain,4clablx7.wisma138chiori.net,phishing,ClearFake,ThreatFox
+domain,wisma138chiori.net,phishing,ClearFake,ThreatFox
+ip,47.98.124.244,c2,Cobalt Strike,ThreatFox
+ip,207.89.17.5,c2,Havoc,ThreatFox
+domain,daniel.mevem.ch,phishing,ClearFake,ThreatFox
+ip,38.54.105.102,c2,Jackskid,ThreatFox
+ip,130.94.2.249,c2,Jackskid,ThreatFox
+ip,38.60.208.16,c2,Jackskid,ThreatFox
+ip,38.60.208.249,c2,Jackskid,ThreatFox
+ip,102.220.163.42,c2,Remcos,ThreatFox
+url,http://103.176.16.73:35431/Mozi.m,phishing,Mozi,ThreatFox
+url,http://202.47.44.214:49189/Mozi.m,phishing,Mozi,ThreatFox
+url,http://103.98.37.169:52059/Mozi.m,phishing,Mozi,ThreatFox
+url,http://119.30.117.149:44574/Mozi.m,phishing,Mozi,ThreatFox
+ip,43.155.214.112,c2,Aisuru,ThreatFox
+ip,43.173.38.253,c2,Aisuru,ThreatFox
+url,https://vmi3554101.contaboserver.net/d4ndocs/gateway.php,phishing,Grandoreiro,ThreatFox
+url,https://ssoinfolink.com,phishing,Unknown malware,ThreatFox
+url,https://accountvaulthub.com/get_verify,phishing,Unknown malware,ThreatFox
+url,https://traceropszone.net/js/all.min.js,phishing,Unknown malware,ThreatFox
+url,https://ssoinfolink.com/get_verify,phishing,Unknown malware,ThreatFox
+domain,ssoinfolink.com,phishing,Unknown malware,ThreatFox
+url,https://ssoinfolink.com/first_allow_host,phishing,Unknown malware,ThreatFox
+domain,log-pacer.com,phishing,Unknown malware,ThreatFox
+url,https://accountvaulthub.com/js/all.min.js,phishing,Unknown malware,ThreatFox
+url,https://log-pacer.com,phishing,Unknown malware,ThreatFox
+url,https://traceropszone.net/get_verify,phishing,Unknown malware,ThreatFox
+url,https://traceropszone.net/first_allow_host,phishing,Unknown malware,ThreatFox
+url,https://justlia-en.com,phishing,Unknown malware,ThreatFox
+domain,accountvaulthub.com,phishing,Unknown malware,ThreatFox
+url,https://ssoinfolink.com/js/all.min.js,phishing,Unknown malware,ThreatFox
+domain,traceropszone.net,phishing,Unknown malware,ThreatFox
+url,https://accountvaulthub.com/first_allow_host,phishing,Unknown malware,ThreatFox
+domain,push-api.daibeltrading.com,c2,FAKEUPDATES,ThreatFox
+ip,196.251.107.252,c2,Remcos,ThreatFox
+url,http://153.117.55.1:49473/Mozi.m,phishing,Mozi,ThreatFox
+domain,wlcm.v-panel.asia,c2,Vidar,ThreatFox
+domain,avenix.lol,phishing,Agent Tesla,ThreatFox
+domain,adenpanel.xyz,phishing,Agent Tesla,ThreatFox
+domain,booohop.shop,c2,Remus,ThreatFox
+domain,trwehop.shop,c2,Remus,ThreatFox
+domain,gyadazs.shop,c2,Remus,ThreatFox
+domain,cruahop.shop,c2,Remus,ThreatFox
+domain,staxta.click,c2,Remus,ThreatFox
+ip,2.25.222.233,c2,Remcos,ThreatFox
+domain,justlia-en.com,phishing,Unknown malware,ThreatFox
+url,https://auth-thomsonreuters.com,phishing,Unknown malware,ThreatFox
+domain,auth-thomsonreuters.com,phishing,Unknown malware,ThreatFox
+ip,103.67.163.201,c2,Remcos,ThreatFox
+ip,85.137.252.40,c2,Unknown Stealer,ThreatFox
+url,https://github.com/Siphodhl1980/nbew/releases/download/new/release-project.zip,phishing,Unknown Stealer,ThreatFox
+url,https://github.com/Siphodhl1980/nbew/releases/download/new/clip.exe,phishing,Unknown Stealer,ThreatFox
+url,https://github.com/Siphodhl1980/nbew/releases/download/new/main_kah.exe,phishing,Unknown Stealer,ThreatFox
+url,https://github.com/Siphodhl1980/nbew/releases/download/new/main.exe,phishing,Unknown Stealer,ThreatFox
+url,http://123.185.245.118:47609/Mozi.a,phishing,Mozi,ThreatFox
+url,http://103.82.121.157:59671/Mozi.m,phishing,Mozi,ThreatFox
+ip,217.60.195.6,c2,CECbot,ThreatFox
+ip,130.94.0.245,c2,Jackskid,ThreatFox
+ip,130.94.1.139,c2,Jackskid,ThreatFox
+ip,38.54.105.72,c2,Jackskid,ThreatFox
+ip,38.60.255.183,c2,Jackskid,ThreatFox
+ip,38.60.255.37,c2,Jackskid,ThreatFox
+domain,fog.beatdropkec.com,c2,ClearFake,ThreatFox
+ip,31.56.209.74,c2,Remcos,ThreatFox
+domain,09xadksl.wismajoko.net,phishing,ClearFake,ThreatFox
+domain,wismajoko.net,phishing,ClearFake,ThreatFox
+domain,wisma138albedo.com,phishing,ClearFake,ThreatFox
+url,https://testingcf.jsdelivr.net/gh/19875567137/76738746509856-346/rty4657293847,phishing,ClearFake,ThreatFox
+domain,learningworld.in,phishing,ClearFake,ThreatFox
+domain,www.boutiques-decoration.fr,phishing,ClearFake,ThreatFox
+ip,188.227.14.105,c2,Cobalt Strike,ThreatFox
+ip,123.60.142.164,c2,Cobalt Strike,ThreatFox
+domain,5o1lb12w.toxyk.store,phishing,ClearFake,ThreatFox
+domain,toxyk.store,phishing,ClearFake,ThreatFox
+ip,123.56.124.3,c2,Cobalt Strike,ThreatFox
+ip,43.138.153.161,c2,Cobalt Strike,ThreatFox
+domain,candxai.com,c2,Cobalt Strike,ThreatFox
+domain,1328750890-eja72jp2s9.ap-guangzhou.tencentscf.com,c2,Cobalt Strike,ThreatFox
+domain,k5iyfsce.wisma138paimon.org,phishing,ClearFake,ThreatFox
+domain,wisma138paimon.org,phishing,ClearFake,ThreatFox
+domain,wisma138keqing.org,phishing,ClearFake,ThreatFox
+domain,7ejuc66d.hidupwisma.com,phishing,ClearFake,ThreatFox
+domain,hidupwisma.com,phishing,ClearFake,ThreatFox
+domain,a07uacwz.smity.store,phishing,ClearFake,ThreatFox
+domain,smity.store,phishing,ClearFake,ThreatFox
+ip,49.235.130.208,c2,Unknown malware,ThreatFox
+ip,47.238.116.190,c2,Unknown malware,ThreatFox
+domain,ze.zk89.net,c2,Vidar,ThreatFox
+domain,ze.188wbtoto.org,c2,Vidar,ThreatFox
+domain,1g5uv0u1.wisma138eula.org,phishing,ClearFake,ThreatFox
+domain,wisma138eula.org,phishing,ClearFake,ThreatFox
+url,https://netnet-capital.com/,phishing,Unknown malware,ThreatFox
+domain,bonsaitheme.com,phishing,ClearFake,ThreatFox
+domain,l0jpgk5p.tapl.store,phishing,ClearFake,ThreatFox
+domain,tapl.store,phishing,ClearFake,ThreatFox
+ip,211.159.178.25,c2,VShell,ThreatFox
+ip,154.36.161.180,c2,Havoc,ThreatFox
+ip,198.46.159.243,c2,VShell,ThreatFox
+domain,tw77v76h.wisma138diluc.net,phishing,ClearFake,ThreatFox
+domain,wisma138diluc.net,phishing,ClearFake,ThreatFox
+domain,rc.vpix.top,c2,Remcos,ThreatFox
+domain,rc.zpix.info,c2,Remcos,ThreatFox
+domain,rc.szpd.info,c2,Remcos,ThreatFox
+domain,rc.vxpd.info,c2,Remcos,ThreatFox
+domain,rc.xlit.top,c2,Remcos,ThreatFox
+domain,rc.svtt.top,c2,Remcos,ThreatFox
+ip,139.155.138.221,c2,VShell,ThreatFox
+ip,155.94.157.212,c2,VShell,ThreatFox
+ip,123.60.80.177,c2,VShell,ThreatFox
+domain,oakandstoneproperty.com,phishing,ClearFake,ThreatFox
+ip,123.57.30.209,c2,VShell,ThreatFox
+ip,49.234.47.190,c2,VShell,ThreatFox
+ip,107.150.25.65,c2,VShell,ThreatFox
+ip,47.120.46.170,c2,VShell,ThreatFox
+ip,45.77.220.145,c2,VShell,ThreatFox
+domain,icicxv0c.guswisma.net,phishing,ClearFake,ThreatFox
+domain,guswisma.net,phishing,ClearFake,ThreatFox
+domain,actfb6qo.zoyza.store,phishing,ClearFake,ThreatFox
+domain,zoyza.store,phishing,ClearFake,ThreatFox
+domain,rg33qflb.slov.store,phishing,ClearFake,ThreatFox
+domain,slov.store,phishing,ClearFake,ThreatFox
+ip,38.54.42.246,c2,VShell,ThreatFox
+ip,130.94.30.168,c2,VShell,ThreatFox
+ip,43.167.253.129,c2,DCRat,ThreatFox
+ip,8.137.148.233,c2,DCRat,ThreatFox
+ip,158.247.202.60,c2,Havoc,ThreatFox
+url,https://testingcf.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/1859294348L,phishing,ClearFake,ThreatFox
+domain,andrewsenterprises.org,phishing,ClearFake,ThreatFox
+url,https://cdn.statically.io/gh/19875567137/1267216556227698235249@main/73779326,phishing,ClearFake,ThreatFox
+ip,111.170.148.177,c2,VShell,ThreatFox
+ip,124.222.76.224,c2,VShell,ThreatFox
+domain,iaap.iscte-iul.pt,phishing,ClearFake,ThreatFox
+domain,563f1gxt.spom.store,phishing,ClearFake,ThreatFox
+domain,spom.store,phishing,ClearFake,ThreatFox
+ip,89.147.108.137,c2,Unknown malware,ThreatFox
+ip,68.64.177.24,c2,AdaptixC2,ThreatFox
+ip,45.202.0.111,c2,DCRat,ThreatFox
+ip,45.150.109.209,c2,Unknown malware,ThreatFox
+ip,31.76.125.14,c2,PureRAT,ThreatFox
+ip,31.57.38.139,c2,PureRAT,ThreatFox
+ip,23.171.176.253,c2,PureRAT,ThreatFox
+domain,benaditahd.duckdns.org,c2,AsyncRAT,ThreatFox
+ip,185.212.128.32,c2,Evilginx,ThreatFox
+ip,172.94.18.103,c2,AsyncRAT,ThreatFox
+ip,172.86.112.104,c2,AsyncRAT,ThreatFox
+ip,154.18.238.18,c2,DCRat,ThreatFox
+ip,150.241.203.12,c2,PureRAT,ThreatFox
+ip,144.31.25.62,c2,PureRAT,ThreatFox
+ip,143.20.185.213,c2,Mirai,ThreatFox
+ip,128.90.141.49,c2,AsyncRAT,ThreatFox
+ip,108.187.4.123,c2,PureRAT,ThreatFox
+ip,103.97.131.179,c2,PureRAT,ThreatFox
+ip,102.117.165.131,c2,Unknown malware,ThreatFox
+domain,9arwza9k.zenfa.store,phishing,ClearFake,ThreatFox
+domain,zenfa.store,phishing,ClearFake,ThreatFox
+url,https://cdn.statically.io/gh/19875567137/1267216556227698235249@main/B89737793262FB-01,phishing,ClearFake,ThreatFox
+ip,114.215.188.153,c2,Cobalt Strike,ThreatFox
+ip,139.196.174.152,c2,Cobalt Strike,ThreatFox
+domain,derpetuals.com,phishing,ClearFake,ThreatFox
+domain,ganyangwisma.com,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/1267216556227698235249/994881017F1-EC,phishing,ClearFake,ThreatFox
+domain,grand-atlas.ch,phishing,ClearFake,ThreatFox
+ip,192.3.199.18,c2,Cobalt Strike,ThreatFox
+domain,containerhomesbc.ca,phishing,ClearFake,ThreatFox
+domain,alsa-sicherheitsdienst.de,phishing,ClearFake,ThreatFox
+ip,82.47.101.153,c2,XWorm,ThreatFox
+ip,188.52.56.123,c2,XWorm,ThreatFox
+domain,ao88mi.com,c2,Quasar RAT,ThreatFox
+domain,kuy88.xyz,c2,Quasar RAT,ThreatFox
+domain,www.x88mi.com,c2,Quasar RAT,ThreatFox
+domain,ga888vnd.com,c2,Quasar RAT,ThreatFox
+domain,mb66.uk.net,c2,Quasar RAT,ThreatFox
+domain,ccz.us.com,c2,Quasar RAT,ThreatFox
+domain,mb66-okvip.com,c2,Quasar RAT,ThreatFox
+domain,glossysquid.pro,c2,Quasar RAT,ThreatFox
+domain,f168s.best,c2,Quasar RAT,ThreatFox
+domain,mb66s.club,c2,Quasar RAT,ThreatFox
+domain,mb66online.com,c2,Quasar RAT,ThreatFox
+domain,f8bet-k2.buzz,c2,Quasar RAT,ThreatFox
+domain,ok99.io,c2,Quasar RAT,ThreatFox
+domain,ok9.rip,c2,Quasar RAT,ThreatFox
+domain,789bet.cafe,c2,Quasar RAT,ThreatFox
+domain,mb66.property,c2,Quasar RAT,ThreatFox
+domain,jun88.esq,c2,Quasar RAT,ThreatFox
+domain,mb66.ooo,c2,Quasar RAT,ThreatFox
+domain,mb66.lifestyle,c2,Quasar RAT,ThreatFox
+domain,mb66.download,c2,Quasar RAT,ThreatFox
+domain,luck8.webcam,c2,Quasar RAT,ThreatFox
+domain,ok8386.video,c2,Quasar RAT,ThreatFox
+ip,169.58.227.69,c2,Quasar RAT,ThreatFox
+domain,cashicash.workablegoods.com,c2,Remcos,ThreatFox
+domain,coachile.monimachirismanu.com,c2,Remcos,ThreatFox
+domain,mastama.akijinkuu.com,c2,Remcos,ThreatFox
+domain,monjiso.v6.army,c2,Remcos,ThreatFox
+domain,puremoni.weydneycross.com,c2,Remcos,ThreatFox
+domain,newjosmoo.ddns.net,c2,Remcos,ThreatFox
+domain,68gbsg.com,c2,Remcos,ThreatFox
+domain,f5tech.in,c2,Remcos,ThreatFox
+domain,trcasinobets.com,c2,Remcos,ThreatFox
+domain,u88.mex.com,c2,Remcos,ThreatFox
+domain,u88.run,c2,Remcos,ThreatFox
+domain,u888bet.pro,c2,Remcos,ThreatFox
+domain,u888casino.vip,c2,Remcos,ThreatFox
+domain,ug8828.com,c2,Remcos,ThreatFox
+domain,ajaib168slot.com,c2,Remcos,ThreatFox
+domain,bj38-top.online,c2,Remcos,ThreatFox
+domain,bj38.jpn.com,c2,Remcos,ThreatFox
+domain,bj38.nl,c2,Remcos,ThreatFox
+domain,bj88-vnd.com,c2,Remcos,ThreatFox
+domain,bj88.fifa55we.com,c2,Remcos,ThreatFox
+domain,bj884.com,c2,Remcos,ThreatFox
+domain,bj88g.com,c2,Remcos,ThreatFox
+domain,cravenw.tv,c2,Remcos,ThreatFox
+domain,damac-suncity.in.net,c2,Remcos,ThreatFox
+domain,e2bet.technology,c2,Remcos,ThreatFox
+domain,ebet188.co,c2,Remcos,ThreatFox
+domain,fifa55dd.com,c2,Remcos,ThreatFox
+domain,fifa55n.com,c2,Remcos,ThreatFox
+domain,gama-casino-rzb.buzz,c2,Remcos,ThreatFox
+domain,ratu88hoki.com,c2,Remcos,ThreatFox
+domain,sifang.buzz,c2,Remcos,ThreatFox
+domain,188toto.co,c2,Remcos,ThreatFox
+domain,samara2026.duckdns.org,c2,Remcos,ThreatFox
+domain,mikosmtmiaomu.ddns.net,c2,Remcos,ThreatFox
+domain,aq5tnc6p.ytec.store,phishing,ClearFake,ThreatFox
+domain,ytec.store,phishing,ClearFake,ThreatFox
+ip,160.30.231.215,c2,VShell,ThreatFox
+ip,68.64.177.32,c2,VShell,ThreatFox
+ip,207.57.123.129,c2,AdaptixC2,ThreatFox
+ip,102.220.88.241,c2,VShell,ThreatFox
+domain,mpgowpnw.pesas.store,phishing,ClearFake,ThreatFox
+url,https://yewanthology.co/rate/settings-compiler.js,phishing,SmartApeSG,ThreatFox
+domain,larchfable.cloud,phishing,SmartApeSG,ThreatFox
+url,https://larchfable.cloud/verify/api-theme.js,phishing,SmartApeSG,ThreatFox
+domain,k3.zk89.net,c2,Vidar,ThreatFox
+domain,8mbpoymu.sigosa.store,phishing,ClearFake,ThreatFox
+domain,sigosa.store,phishing,ClearFake,ThreatFox
+domain,k3.188wbtoto.org,c2,Vidar,ThreatFox
+domain,store.purestack.lol,c2,Unknown malware,ThreatFox
+ip,47.243.191.83,c2,Cobalt Strike,ThreatFox
+domain,yb0sm6rr.navv.store,phishing,ClearFake,ThreatFox
+domain,02eiya9o.xn--ndux-kza.store,phishing,ClearFake,ThreatFox
+domain,xn--ndux-kza.store,phishing,ClearFake,ThreatFox
+ip,130.94.65.192,c2,Jackskid,ThreatFox
+ip,130.94.88.159,c2,Jackskid,ThreatFox
+ip,38.54.108.219,c2,Jackskid,ThreatFox
+ip,38.60.179.212,c2,Jackskid,ThreatFox
+ip,38.60.196.200,c2,Jackskid,ThreatFox
+ip,143.244.141.187,c2,Remus,ThreatFox
+domain,anarchy10.duckdns.org,c2,AsyncRAT,ThreatFox
+ip,45.61.170.191,c2,Cobalt Strike,ThreatFox
+domain,6al7ob99.xcat.store,phishing,ClearFake,ThreatFox
+domain,xcat.store,phishing,ClearFake,ThreatFox
+url,https://www.piccadillybistrot.it/,phishing,Unknown malware,ThreatFox
+ip,1.14.100.25,c2,VShell,ThreatFox
+ip,106.15.104.224,c2,VShell,ThreatFox
+ip,125.75.36.126,c2,Unknown malware,ThreatFox
+url,https://prontohandymanllc.com/,phishing,Unknown malware,ThreatFox
+url,https://fullynsure.com/,phishing,Unknown malware,ThreatFox
+url,https://davariyabrothers.com/,phishing,Unknown malware,ThreatFox
+domain,somageneva.ch,phishing,ClearFake,ThreatFox
+domain,docucentercentral.live,c2,Unknown malware,ThreatFox
+url,http://103.174.243.207:53259/Mozi.m,phishing,Mozi,ThreatFox
+url,http://110.38.8.126:39702/Mozi.a,phishing,Mozi,ThreatFox
+url,http://103.162.41.140:51170/Mozi.m,phishing,Mozi,ThreatFox
+url,http://222.127.55.224:51117/Mozi.a,phishing,Mozi,ThreatFox
+ip,47.94.143.231,c2,VShell,ThreatFox
+ip,130.94.66.82,c2,VShell,ThreatFox
+ip,162.243.73.157,c2,VShell,ThreatFox
+domain,248labs.ch,phishing,Unknown malware,ThreatFox
+domain,r9zhnj8a.palso.store,phishing,ClearFake,ThreatFox
+domain,windowsdiagnostics.st,c2,Unknown malware,ThreatFox
+domain,debug.windowsdiagnostics.st,c2,Unknown malware,ThreatFox
+url,https://windowsdiagnostics.st/api/static/loading,phishing,Unknown malware,ThreatFox
+url,https://windowsdiagnostics.st/api/static/exodus.asar,phishing,Unknown malware,ThreatFox
+url,https://windowsdiagnostics.st/api/static/python,phishing,Unknown malware,ThreatFox
+url,https://windowsdiagnostics.st/api/static/index.js,phishing,Unknown malware,ThreatFox
+url,http://debug.windowsdiagnostics.st:8080/resources/xmrig,phishing,Unknown malware,ThreatFox
+url,http://debug.windowsdiagnostics.st:8080/resources/gminer,phishing,Unknown malware,ThreatFox
+ip,103.83.86.147,c2,Remcos,ThreatFox
+ip,161.35.166.196,c2,Aisuru,ThreatFox
+domain,48ex7rbv.moren.store,phishing,ClearFake,ThreatFox
+domain,mcreu5e7.heroe.store,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/4756211933kfd/gfd65848765,phishing,ClearFake,ThreatFox
+domain,uo2vv3xp.segaup.store,phishing,ClearFake,ThreatFox
+domain,segaup.store,phishing,ClearFake,ThreatFox
+domain,updates.rootwave.cc,c2,AnimateClipper,ThreatFox
+domain,stream.echovale.cc,c2,AnimateClipper,ThreatFox
+ip,114.215.190.164,c2,VShell,ThreatFox
+ip,117.72.222.49,c2,VShell,ThreatFox
+domain,www.snmechanicalhvac.com,phishing,IClickFix,ThreatFox
+domain,www.teczkibezkwasowe.com,phishing,IClickFix,ThreatFox
+domain,www.weilaizhijiao.com,phishing,IClickFix,ThreatFox
+domain,www.wilsondrugs.com,phishing,IClickFix,ThreatFox
+domain,www.wrongside.it,phishing,IClickFix,ThreatFox
+domain,talatatilla.com,phishing,IClickFix,ThreatFox
+domain,trueform.cn,phishing,IClickFix,ThreatFox
+domain,tvrepair.ae,phishing,IClickFix,ThreatFox
+domain,walterwaygood.com,phishing,IClickFix,ThreatFox
+domain,www.bildhochdrei.at,phishing,IClickFix,ThreatFox
+domain,www.eliterisk.com,phishing,IClickFix,ThreatFox
+domain,www.fairmounthomestaging.com,phishing,IClickFix,ThreatFox
+domain,www.lambayecano.com,phishing,IClickFix,ThreatFox
+domain,www.nanofotonica.it,phishing,IClickFix,ThreatFox
+domain,www.pharmafranchisemart.com,phishing,IClickFix,ThreatFox
+domain,www.piccadillybistrot.it,phishing,IClickFix,ThreatFox
+domain,www.smartlc.it,phishing,IClickFix,ThreatFox
+domain,muninn.nl,phishing,IClickFix,ThreatFox
+domain,ncoeorg.in,phishing,IClickFix,ThreatFox
+domain,pachocreate.com,phishing,IClickFix,ThreatFox
+domain,plasis-em.com,phishing,IClickFix,ThreatFox
+domain,prontohandymanllc.com,phishing,IClickFix,ThreatFox
+domain,skill-cert.com,phishing,IClickFix,ThreatFox
+domain,spairobeauty.com,phishing,IClickFix,ThreatFox
+domain,stepplumbing.com.au,phishing,IClickFix,ThreatFox
+domain,sudewi.com,phishing,IClickFix,ThreatFox
+domain,supwithwade.com,phishing,IClickFix,ThreatFox
+domain,taazaproducts.com,phishing,IClickFix,ThreatFox
+domain,hoshizouen.co.jp,phishing,IClickFix,ThreatFox
+domain,innoventservices.com,phishing,IClickFix,ThreatFox
+domain,iocky.com,phishing,IClickFix,ThreatFox
+domain,klanbaatnagger.dk,phishing,IClickFix,ThreatFox
+domain,latacoyota.com,phishing,IClickFix,ThreatFox
+domain,lms-teckpia.com,phishing,IClickFix,ThreatFox
+domain,lomboktourbooking.com,phishing,IClickFix,ThreatFox
+domain,makerman.in,phishing,IClickFix,ThreatFox
+domain,mordemsanat.com.tr,phishing,IClickFix,ThreatFox
+domain,mrpiccam.com,phishing,IClickFix,ThreatFox
+domain,mrusinagem.com,phishing,IClickFix,ThreatFox
+domain,bucaramanga.consulado.gob.ve,phishing,IClickFix,ThreatFox
+domain,bunnybathco.com,phishing,IClickFix,ThreatFox
+domain,ckquilting.com,phishing,IClickFix,ThreatFox
+domain,cutfromvalor.com,phishing,IClickFix,ThreatFox
+domain,davariyabrothers.com,phishing,IClickFix,ThreatFox
+domain,elipse.health,phishing,IClickFix,ThreatFox
+domain,evisa-e-govkg.com,phishing,IClickFix,ThreatFox
+domain,flyersholding.com,phishing,IClickFix,ThreatFox
+domain,fullynsure.com,phishing,IClickFix,ThreatFox
+domain,geneparks.com,phishing,IClickFix,ThreatFox
+domain,greendrive.bg,phishing,IClickFix,ThreatFox
+domain,1stchoicestaffing.co.uk,phishing,IClickFix,ThreatFox
+domain,allc.asia,phishing,IClickFix,ThreatFox
+domain,angels-of-god.com,phishing,IClickFix,ThreatFox
+domain,anukunj.com,phishing,IClickFix,ThreatFox
+domain,aprendec.cl,phishing,IClickFix,ThreatFox
+domain,banvenhadep.net,phishing,IClickFix,ThreatFox
+domain,bcvt.edu.vn,phishing,IClickFix,ThreatFox
+domain,brandscollectionbyrizwan.com,phishing,IClickFix,ThreatFox
+domain,speedpi12321.xyz,phishing,IClickFix,ThreatFox
+domain,trombler312.life,phishing,IClickFix,ThreatFox
+domain,viorsoonlucid.life,phishing,IClickFix,ThreatFox
+domain,nickylody124.life,phishing,IClickFix,ThreatFox
+ip,95.158.131.149,c2,Unknown malware,ThreatFox
+ip,66.29.134.188,c2,Evilginx,ThreatFox
+ip,5.56.25.180,c2,PureRAT,ThreatFox
+ip,46.225.119.0,c2,AdaptixC2,ThreatFox
+ip,45.249.89.172,c2,AdaptixC2,ThreatFox
+ip,45.202.0.116,c2,DCRat,ThreatFox
+ip,217.60.76.250,c2,AsyncRAT,ThreatFox
+ip,206.206.103.203,c2,AdaptixC2,ThreatFox
+ip,94.154.43.217,c2,Mirai,ThreatFox
+ip,144.91.78.57,c2,PureRAT,ThreatFox
+ip,139.180.153.29,c2,PureRAT,ThreatFox
+ip,121.200.216.74,c2,AsyncRAT,ThreatFox
+ip,102.220.160.198,c2,AsyncRAT,ThreatFox
+domain,kvoxeozq.ghadi.store,phishing,ClearFake,ThreatFox
+ip,178.128.253.92,c2,MacSync,ThreatFox
+domain,rerrioara.live,phishing,IClickFix,ThreatFox
+ip,167.233.139.3,c2,Vidar,ThreatFox
+ip,5.9.73.173,c2,Vidar,ThreatFox
+ip,46.29.26.67,c2,Vidar,ThreatFox
+ip,2.28.34.186,c2,Vidar,ThreatFox
+ip,124.221.92.3,c2,VShell,ThreatFox
+ip,47.239.223.39,c2,VShell,ThreatFox
+url,https://casagrooming.com.co/,phishing,magecart,ThreatFox
+url,https://sohoul-alkarak.com/,phishing,magecart,ThreatFox
+url,https://gesundheitsnachweis24.de/,phishing,magecart,ThreatFox
+url,https://sarialarm.com/,phishing,magecart,ThreatFox
+ip,144.225.246.14,c2,Cobalt Strike,ThreatFox
+domain,gesundheitsnachweis24.de,phishing,ClearFake,ThreatFox
+domain,s6qvly4b.fews.store,phishing,ClearFake,ThreatFox
+domain,eqngjv6s.moltem.store,phishing,ClearFake,ThreatFox
+domain,occidentalconstruction.com,phishing,ClearFake,ThreatFox
+domain,labioforneria.ch,phishing,ClearFake,ThreatFox
+ip,8.146.227.247,c2,Cobalt Strike,ThreatFox
+domain,v6sjo9pv.omec.store,phishing,ClearFake,ThreatFox
+domain,yewanthology.co,phishing,SmartApeSG,ThreatFox
+ip,202.61.85.153,c2,ValleyRAT,ThreatFox
+ip,46.101.169.198,c2,Aisuru,ThreatFox
+domain,time.austriaeast.cloudapp.azure.com,c2,EtherRAT,ThreatFox
+domain,timesync.westus2.cloudapp.azure.com,c2,EtherRAT,ThreatFox
+domain,zigbee.eastus.cloudapp.azure.com,c2,EtherRAT,ThreatFox
+domain,zigfree.eastus.cloudapp.azure.com,c2,EtherRAT,ThreatFox
+domain,welcome.v-panel.asia,c2,Vidar,ThreatFox
+ip,204.44.69.231,c2,Remcos,ThreatFox
+domain,isomnia.pl,phishing,IClickFix,ThreatFox
+domain,babullies.live,c2,Unknown RAT,ThreatFox
+domain,nelson47.com,c2,Unknown RAT,ThreatFox
+domain,jackiewhitfield.com,c2,Unknown RAT,ThreatFox
+domain,mrsls88.com,c2,Unknown RAT,ThreatFox
+domain,bjfox2005.com,c2,Unknown RAT,ThreatFox
+domain,babullies.app,c2,Unknown RAT,ThreatFox
+domain,krisannly.com,c2,Unknown RAT,ThreatFox
+url,https://statpipeplus.com/get_verify,phishing,Unknown malware,ThreatFox
+domain,statpipeplus.com,phishing,Unknown malware,ThreatFox
+domain,tracewaytech.com,phishing,Unknown malware,ThreatFox
+domain,ingestdot.net,phishing,Unknown malware,ThreatFox
+url,https://ingestdot.net,phishing,Unknown malware,ThreatFox
+url,https://tracewaytech.com/get_verify,phishing,Unknown malware,ThreatFox
+url,https://ingestdot.net/first_allow_host,phishing,Unknown malware,ThreatFox
+url,https://tracewaytech.com/first_allow_host,phishing,Unknown malware,ThreatFox
+domain,pacer-gov.com,phishing,Unknown malware,ThreatFox
+url,https://ingestdot.net/get_verify,phishing,Unknown malware,ThreatFox
+url,https://ingestdot.net/js/all.min.js,phishing,Unknown malware,ThreatFox
+url,https://tracewaytech.com/js/all.min.js,phishing,Unknown malware,ThreatFox
+url,https://pacer-gov.com,phishing,Unknown malware,ThreatFox
+url,https://statpipeplus.com/js/all.min.js,phishing,Unknown malware,ThreatFox
+url,https://statpipeplus.com/first_allow_host,phishing,Unknown malware,ThreatFox
+url,http://36.255.33.120:57274/Mozi.m,phishing,Mozi,ThreatFox
+ip,45.77.68.157,c2,Remus,ThreatFox
+ip,134.209.223.192,c2,Aisuru,ThreatFox
+domain,tftp2.sh,c2,Mirai,ThreatFox
+url,http://153.117.13.0:59969/Mozi.a,phishing,Mozi,ThreatFox
+url,http://59.103.100.4:41691/Mozi.m,phishing,Mozi,ThreatFox
+url,http://153.117.55.4:52319/Mozi.m,phishing,Mozi,ThreatFox
+url,http://223.123.41.70:38519/Mozi.m,phishing,Mozi,ThreatFox
+url,http://153.117.32.196:50508/Mozi.m,phishing,Mozi,ThreatFox
+domain,ega6j3lp.royar.store,phishing,ClearFake,ThreatFox
+domain,royar.store,phishing,ClearFake,ThreatFox
+ip,202.61.85.168,c2,ValleyRAT,ThreatFox
+domain,fufuwisma.com,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/4756211933kfd/hdfe847299432,phishing,ClearFake,ThreatFox
+domain,ww.qq1x.org,c2,Vidar,ThreatFox
+domain,ww.177betwin.org,c2,Vidar,ThreatFox
+domain,l9bwp7kn.farmf.store,phishing,ClearFake,ThreatFox
+domain,fafawisma.com,phishing,ClearFake,ThreatFox
+ip,47.109.23.77,c2,Cobalt Strike,ThreatFox
+ip,120.53.19.157,c2,Cobalt Strike,ThreatFox
+ip,18.228.80.130,c2,WhiteSnake Stealer,ThreatFox
+ip,45.76.191.22,c2,AdaptixC2,ThreatFox
+ip,42.193.239.217,c2,Cobalt Strike,ThreatFox
+domain,xtvaj64i.enus-zensulin.com,phishing,ClearFake,ThreatFox
+domain,f6gn33i6.mard.store,phishing,ClearFake,ThreatFox
+ip,172.245.136.97,c2,DCRat,ThreatFox
+ip,129.204.196.251,c2,VShell,ThreatFox
+ip,175.43.223.203,c2,Unknown malware,ThreatFox
+ip,111.228.26.26,c2,VShell,ThreatFox
+domain,id.qq1x.org,c2,Vidar,ThreatFox
+domain,id.177betwin.org,c2,Vidar,ThreatFox
+domain,ggao4r0b.omars.store,phishing,ClearFake,ThreatFox
+domain,91cwlqu1.enus-theeloncode.com,phishing,ClearFake,ThreatFox
+domain,me23z6yn.reneck.store,phishing,ClearFake,ThreatFox
+ip,5.104.86.108,c2,Cobalt Strike,ThreatFox
+domain,w701gr9l.eng-us-zensulin.com,phishing,ClearFake,ThreatFox
+domain,winefolie.ch,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/1859294348L,phishing,ClearFake,ThreatFox
+domain,yozmrkyl.leswap.store,phishing,ClearFake,ThreatFox
+ip,47.81.57.227,c2,Cobalt Strike,ThreatFox
+domain,townofmainbrook.ca,phishing,Unknown Loader,ThreatFox
+domain,tpglighting.com,phishing,Unknown Loader,ThreatFox
+domain,trdemo.com.au,phishing,Unknown Loader,ThreatFox
+domain,tusbothfeld.de,phishing,Unknown Loader,ThreatFox
+domain,urgenteyecarefl.com,phishing,Unknown Loader,ThreatFox
+domain,vibrant-digitals.com,phishing,Unknown Loader,ThreatFox
+domain,vinfast-vf9.com,phishing,Unknown Loader,ThreatFox
+domain,vorsorgerecht.eu,phishing,Unknown Loader,ThreatFox
+domain,wazaandact.org,phishing,Unknown Loader,ThreatFox
+domain,webde-ph.com,phishing,Unknown Loader,ThreatFox
+domain,xtrappliances.com,phishing,Unknown Loader,ThreatFox
+domain,zkstudio.pl,phishing,Unknown Loader,ThreatFox
+domain,rastakhabar.ir,phishing,Unknown Loader,ThreatFox
+domain,redx.club,phishing,Unknown Loader,ThreatFox
+domain,reedswitchcn.com,phishing,Unknown Loader,ThreatFox
+domain,reitstall-klein-raden.de,phishing,Unknown Loader,ThreatFox
+domain,rescuetraining.cz,phishing,Unknown Loader,ThreatFox
+domain,shades-tours.com,phishing,Unknown Loader,ThreatFox
+domain,shop.bleibtreu-catering.de,phishing,Unknown Loader,ThreatFox
+domain,simplamo.com,phishing,Unknown Loader,ThreatFox
+domain,solatiumptyltd.com,phishing,Unknown Loader,ThreatFox
+domain,spd-kalkar.de,phishing,Unknown Loader,ThreatFox
+domain,supernovacrm.com,phishing,Unknown Loader,ThreatFox
+domain,thoitrangtrungnien.net,phishing,Unknown Loader,ThreatFox
+domain,mimiraml.com,phishing,Unknown Loader,ThreatFox
+domain,moringa-tulear.mg,phishing,Unknown Loader,ThreatFox
+domain,neuraledge.digital,phishing,Unknown Loader,ThreatFox
+domain,norisknorewardblog.com,phishing,Unknown Loader,ThreatFox
+domain,np-cyber.com,phishing,Unknown Loader,ThreatFox
+domain,nujlmb.org.uk,phishing,Unknown Loader,ThreatFox
+domain,omda-info.de,phishing,Unknown Loader,ThreatFox
+domain,pelnykolor.eu,phishing,Unknown Loader,ThreatFox
+domain,pizzeriatiodan.com,phishing,Unknown Loader,ThreatFox
+domain,pro-welding.eu,phishing,Unknown Loader,ThreatFox
+domain,itelkom.net,phishing,Unknown Loader,ThreatFox
+domain,janssensteijlen.nl,phishing,Unknown Loader,ThreatFox
+domain,kajmunk.nl,phishing,Unknown Loader,ThreatFox
+domain,kolme-k.de,phishing,Unknown Loader,ThreatFox
+domain,landshuter-kurzfilmfestival.de,phishing,Unknown Loader,ThreatFox
+domain,litterateuronline.com,phishing,Unknown Loader,ThreatFox
+domain,living-b.it,phishing,Unknown Loader,ThreatFox
+domain,maerkische-kartonagenfabrik.de,phishing,Unknown Loader,ThreatFox
+domain,markgoldman.com,phishing,Unknown Loader,ThreatFox
+domain,maschiettomusic.com,phishing,Unknown Loader,ThreatFox
+domain,midnightoman-travel.com,phishing,Unknown Loader,ThreatFox
+domain,fruitcity.africa,phishing,Unknown Loader,ThreatFox
+domain,gack-moebel.de,phishing,Unknown Loader,ThreatFox
+domain,gd-kcmco.com,phishing,Unknown Loader,ThreatFox
+domain,gitarrlektioner-online.se,phishing,Unknown Loader,ThreatFox
+domain,graymurray.com,phishing,Unknown Loader,ThreatFox
+domain,growthboks.com,phishing,Unknown Loader,ThreatFox
+domain,hanniedijk.nl,phishing,Unknown Loader,ThreatFox
+domain,hhsta.com,phishing,Unknown Loader,ThreatFox
+domain,idiomashuelva.es,phishing,Unknown Loader,ThreatFox
+domain,ifamt.de,phishing,Unknown Loader,ThreatFox
+domain,impactfinances.be,phishing,Unknown Loader,ThreatFox
+domain,chasingrainbowsacademy.com,phishing,Unknown Loader,ThreatFox
+domain,cinemart.co.il,phishing,Unknown Loader,ThreatFox
+domain,clinicaeusalud.com.co,phishing,Unknown Loader,ThreatFox
+domain,cocaroman.com,phishing,Unknown Loader,ThreatFox
+domain,conde-folie.fr,phishing,Unknown Loader,ThreatFox
+domain,damazyncars.com,phishing,Unknown Loader,ThreatFox
+domain,dcowebify.com,phishing,Unknown Loader,ThreatFox
+domain,desireeleighh.com,phishing,Unknown Loader,ThreatFox
+domain,feuerwehr-rieblingen.de,phishing,Unknown Loader,ThreatFox
+domain,foundersmind.pl,phishing,Unknown Loader,ThreatFox
+domain,frozenalien.de,phishing,Unknown Loader,ThreatFox
+domain,ascenddigital.com.au,phishing,Unknown Loader,ThreatFox
+domain,avantgardefr.com,phishing,Unknown Loader,ThreatFox
+domain,bacsihungthanh.com,phishing,Unknown Loader,ThreatFox
+domain,boxencheck.de,phishing,Unknown Loader,ThreatFox
+domain,brasilianart.com,phishing,Unknown Loader,ThreatFox
+domain,bvgborenzagen.nl,phishing,Unknown Loader,ThreatFox
+domain,byvosje.nl,phishing,Unknown Loader,ThreatFox
+domain,carefield-zorg.nl,phishing,Unknown Loader,ThreatFox
+domain,catamaranholidays.gr,phishing,Unknown Loader,ThreatFox
+domain,centrocomercialmiramadrid.es,phishing,Unknown Loader,ThreatFox
+domain,abeandasotie.com,phishing,Unknown Loader,ThreatFox
+domain,acp-shop.com,phishing,Unknown Loader,ThreatFox
+domain,allok.uk,phishing,Unknown Loader,ThreatFox
+domain,anytime-for-animals.de,phishing,Unknown Loader,ThreatFox
+domain,120hotelboutique.com.br,phishing,Unknown Loader,ThreatFox
+domain,dar-almahi.com,phishing,ClearFake,ThreatFox
+domain,sslazio.world,phishing,ClearFake,ThreatFox
+domain,wpequipmentugltd.com,phishing,ClearFake,ThreatFox
+domain,meetra.site,phishing,ClearFake,ThreatFox
+domain,woodangelsportugal.pt,phishing,ClearFake,ThreatFox
+domain,tools.malikzehnder.com,phishing,ClearFake,ThreatFox
+domain,jo2lab.com,phishing,ClearFake,ThreatFox
+domain,tradeshowguy.net,phishing,ClearFake,ThreatFox
+url,https://agapehomechoice.com/,phishing,Unknown malware,ThreatFox
+domain,z0mvmrtr.eng-us-puraboost.us,phishing,ClearFake,ThreatFox
+domain,scandia-express.com,phishing,ClearFake,ThreatFox
+domain,www.dualmont.com,phishing,ClearFake,ThreatFox
+ip,105.72.55.52,c2,NjRAT,ThreatFox
+ip,178.16.53.91,c2,VShell,ThreatFox
+domain,1yyhju9i.noug.store,phishing,ClearFake,ThreatFox
+domain,www.briannacrawford.com,phishing,IClickFix,ThreatFox
+domain,www.debrancheexpert.tv,phishing,IClickFix,ThreatFox
+domain,www.duegolficharter.com,phishing,IClickFix,ThreatFox
+domain,www.epokaere.com,phishing,IClickFix,ThreatFox
+domain,www.mechenene.com,phishing,IClickFix,ThreatFox
+domain,www.newvillarental.com,phishing,IClickFix,ThreatFox
+domain,www.norbagolf.com,phishing,IClickFix,ThreatFox
+domain,www.thekindleaderpodcast.com,phishing,IClickFix,ThreatFox
+domain,www.visionsite.it,phishing,IClickFix,ThreatFox
+domain,xn--q3cxt4bxc8b.com,phishing,IClickFix,ThreatFox
+domain,ravsatexim.com,phishing,IClickFix,ThreatFox
+domain,reallifecommunityservices.com,phishing,IClickFix,ThreatFox
+domain,sakugavarskeks.ee,phishing,IClickFix,ThreatFox
+domain,sharjahtodip.com,phishing,IClickFix,ThreatFox
+domain,softgenics.net,phishing,IClickFix,ThreatFox
+domain,sonaxconsultancy.com,phishing,IClickFix,ThreatFox
+domain,styleperu.com,phishing,IClickFix,ThreatFox
+domain,talentslink.org,phishing,IClickFix,ThreatFox
+domain,truehealth.com.hk,phishing,IClickFix,ThreatFox
+domain,uni-ae.com,phishing,IClickFix,ThreatFox
+domain,upla.es,phishing,IClickFix,ThreatFox
+domain,vectorsofmassdestruction.com,phishing,IClickFix,ThreatFox
+domain,waahidtrading.com,phishing,IClickFix,ThreatFox
+domain,webkul.design,phishing,IClickFix,ThreatFox
+domain,www.adamabraham.co.uk,phishing,IClickFix,ThreatFox
+domain,www.arthholidays.com,phishing,IClickFix,ThreatFox
+domain,kuciel.com.pl,phishing,IClickFix,ThreatFox
+domain,ledys-architecte.com,phishing,IClickFix,ThreatFox
+domain,leezainternational.com,phishing,IClickFix,ThreatFox
+domain,macroautos.com.mx,phishing,IClickFix,ThreatFox
+domain,manhthang.net,phishing,IClickFix,ThreatFox
+domain,mesacontractingpa.com,phishing,IClickFix,ThreatFox
+domain,mizi.in,phishing,IClickFix,ThreatFox
+domain,mypaytech.de,phishing,IClickFix,ThreatFox
+domain,otoboyasizgocukduzeltme.com,phishing,IClickFix,ThreatFox
+domain,pepguides.com,phishing,IClickFix,ThreatFox
+domain,pmdmangoes.com,phishing,IClickFix,ThreatFox
+domain,positiveawards.co.uk,phishing,IClickFix,ThreatFox
+domain,pulsedocreliefcentre.com,phishing,IClickFix,ThreatFox
+domain,qualytecbrasil.com.br,phishing,IClickFix,ThreatFox
+domain,raolite.com,phishing,IClickFix,ThreatFox
+domain,dellacred.com.br,phishing,IClickFix,ThreatFox
+domain,designbrains.be,phishing,IClickFix,ThreatFox
+domain,drjanetlittlespeaks.com,phishing,IClickFix,ThreatFox
+domain,edwinlimclinic.sg,phishing,IClickFix,ThreatFox
+domain,enviroforest.com,phishing,IClickFix,ThreatFox
+domain,estacaoideia.com.br,phishing,IClickFix,ThreatFox
+domain,evobeaute.eu,phishing,IClickFix,ThreatFox
+domain,francismclaren.co.uk,phishing,IClickFix,ThreatFox
+domain,fresh-rx.com,phishing,IClickFix,ThreatFox
+domain,gbtestingservice.com,phishing,IClickFix,ThreatFox
+domain,harleybikesmall.com,phishing,IClickFix,ThreatFox
+domain,homebleachers.com,phishing,IClickFix,ThreatFox
+domain,jaikashop.com,phishing,IClickFix,ThreatFox
+domain,jpshio777.vip,phishing,IClickFix,ThreatFox
+domain,kebabhondarribia.es,phishing,IClickFix,ThreatFox
+domain,agapehomechoice.com,phishing,IClickFix,ThreatFox
+domain,airductcleaninganddryerventcleaning.com,phishing,IClickFix,ThreatFox
+domain,asturianademarketing.es,phishing,IClickFix,ThreatFox
+domain,atut.co,phishing,IClickFix,ThreatFox
+domain,azmarketingdn.com,phishing,IClickFix,ThreatFox
+domain,bdgplaying.com,phishing,IClickFix,ThreatFox
+domain,bettina-pittaluga.com,phishing,IClickFix,ThreatFox
+domain,blackwolfagency.com,phishing,IClickFix,ThreatFox
+domain,bragpc.com,phishing,IClickFix,ThreatFox
+domain,btdesigns.nl,phishing,IClickFix,ThreatFox
+domain,buanaeaglegroup.com,phishing,IClickFix,ThreatFox
+domain,cartagena.consulado.gob.ve,phishing,IClickFix,ThreatFox
+domain,chandlerscharts.com,phishing,IClickFix,ThreatFox
+domain,clarity-photobooth.com,phishing,IClickFix,ThreatFox
+domain,concept2project.com,phishing,IClickFix,ThreatFox
+domain,97k.com.br,phishing,IClickFix,ThreatFox
+domain,portmapper222-61558.portmap.host,c2,XWorm,ThreatFox
+domain,HamoHas-46035.portmap.host,c2,XWorm,ThreatFox
+domain,3.tcp.cpolar.top,c2,XWorm,ThreatFox
+domain,ljxyfapr71.localto.net,c2,XWorm,ThreatFox
+domain,camicamicmai0390393.duckdns.org,c2,XWorm,ThreatFox
+ip,89.190.158.37,c2,XWorm,ThreatFox
+domain,thunderstopui912.life,phishing,IClickFix,ThreatFox
+domain,ashen-arc-badger-maie.life,phishing,IClickFix,ThreatFox
+domain,buysypi831.life,phishing,IClickFix,ThreatFox
+domain,coral-zephyr-koarseara.xyz,phishing,IClickFix,ThreatFox
+domain,Modyhoba-57738.portmap.host,c2,XWorm,ThreatFox
+domain,kkjjjytvfdfd4534-41452.portmap.host,c2,XWorm,ThreatFox
+ip,2.56.165.152,c2,XWorm,ThreatFox
+ip,92.24.51.238,c2,XWorm,ThreatFox
+ip,97.104.107.190,c2,XWorm,ThreatFox
+domain,AnonKrnl-47127.portmap.io,c2,XWorm,ThreatFox
+domain,Baaptyst-25027.portmap.host,c2,XWorm,ThreatFox
+domain,america-surrey.gl.at.ply.gg,c2,XWorm,ThreatFox
+ip,197.83.232.19,c2,XWorm,ThreatFox
+ip,182.187.139.200,c2,XWorm,ThreatFox
+domain,kissmyaster.co,c2,Quasar RAT,ThreatFox
+domain,mb66b5.com,c2,Quasar RAT,ThreatFox
+domain,cupfee.me,c2,Quasar RAT,ThreatFox
+domain,bigjackpot.casino,c2,Quasar RAT,ThreatFox
+domain,mb6606.org,c2,Quasar RAT,ThreatFox
+domain,789betpg.bet,c2,Quasar RAT,ThreatFox
+domain,98win.army,c2,Quasar RAT,ThreatFox
+ip,85.204.125.75,c2,Quasar RAT,ThreatFox
+domain,mb66i.net,c2,Quasar RAT,ThreatFox
+domain,pc168.com.tw,c2,Quasar RAT,ThreatFox
+domain,cloudzync.me,c2,Quasar RAT,ThreatFox
+domain,789betpg.one,c2,Quasar RAT,ThreatFox
+domain,88clb8.io,c2,Quasar RAT,ThreatFox
+domain,malware.88clb8.io,c2,Quasar RAT,ThreatFox
+domain,ddrv6-33454.portmap.host,c2,Quasar RAT,ThreatFox
+domain,buildthework.theworkpc.com,c2,Quasar RAT,ThreatFox
+ip,90.8.202.45,c2,Remcos,ThreatFox
+domain,backdoor.hay88.london,c2,Remcos,ThreatFox
+domain,backdoor.imo88slot.co,c2,Remcos,ThreatFox
+domain,backdoor.jilicasinos.net,c2,Remcos,ThreatFox
+domain,backdoor.jinyazhou888.net,c2,Remcos,ThreatFox
+domain,backdoor.liman3d.com,c2,Remcos,ThreatFox
+domain,backdoor.nohu90.com,c2,Remcos,ThreatFox
+domain,backdoor.profitness.in.net,c2,Remcos,ThreatFox
+domain,backdoor.slotmachinesoldiveri.com,c2,Remcos,ThreatFox
+domain,backdoor.u888d9.com,c2,Remcos,ThreatFox
+domain,backdoor.yakuza88.co,c2,Remcos,ThreatFox
+domain,backdoor.106nk88.com,c2,Remcos,ThreatFox
+domain,backdoor.33win.com,c2,Remcos,ThreatFox
+domain,backdoor.appgo88.company,c2,Remcos,ThreatFox
+domain,backdoor.daksh.in.net,c2,Remcos,ThreatFox
+domain,backdoor.digitalwala.in.net,c2,Remcos,ThreatFox
+domain,backdoor.ee88-com.asia,c2,Remcos,ThreatFox
+domain,c2.profitness.in.net,c2,Remcos,ThreatFox
+domain,c2.slotmachinesoldiveri.com,c2,Remcos,ThreatFox
+domain,slotmachinesoldiveri.com,c2,Remcos,ThreatFox
+domain,c2.daksh.in.net,c2,Remcos,ThreatFox
+domain,c2.digitalwala.in.net,c2,Remcos,ThreatFox
+domain,c2.ee88-com.asia,c2,Remcos,ThreatFox
+domain,c2.hay88.london,c2,Remcos,ThreatFox
+domain,c2.imo88slot.co,c2,Remcos,ThreatFox
+domain,c2.jilicasinos.net,c2,Remcos,ThreatFox
+domain,c2.jinyazhou888.net,c2,Remcos,ThreatFox
+domain,c2.liman3d.com,c2,Remcos,ThreatFox
+domain,c2.nohu90.com,c2,Remcos,ThreatFox
+domain,c2.u888d9.com,c2,Remcos,ThreatFox
+domain,c2.yakuza88.co,c2,Remcos,ThreatFox
+domain,appgo88.company,c2,Remcos,ThreatFox
+domain,c2.106nk88.com,c2,Remcos,ThreatFox
+domain,c2.33win.com,c2,Remcos,ThreatFox
+domain,c2.appgo88.company,c2,Remcos,ThreatFox
+domain,qcaeb65f.remarq.store,phishing,ClearFake,ThreatFox
+domain,bisamaxwindiwisma.org,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/465636664593hfgd/475333927k,phishing,ClearFake,ThreatFox
+ip,83.229.123.249,c2,Cobalt Strike,ThreatFox
+ip,47.108.225.4,c2,Cobalt Strike,ThreatFox
+ip,95.158.131.141,c2,Unknown malware,ThreatFox
+ip,95.158.131.142,c2,Unknown malware,ThreatFox
+ip,95.158.131.147,c2,Unknown malware,ThreatFox
+ip,94.26.81.135,c2,PureRAT,ThreatFox
+ip,95.158.131.135,c2,Unknown malware,ThreatFox
+ip,95.158.131.139,c2,Unknown malware,ThreatFox
+ip,93.152.224.238,c2,Tsundere,ThreatFox
+ip,85.137.252.195,c2,Unknown malware,ThreatFox
+ip,85.239.149.73,c2,Tsundere,ThreatFox
+ip,82.26.66.136,c2,AsyncRAT,ThreatFox
+ip,82.146.37.83,c2,Evilginx,ThreatFox
+ip,80.76.49.129,c2,PureRAT,ThreatFox
+ip,77.90.14.60,c2,Mirai,ThreatFox
+ip,67.205.148.159,c2,Unknown malware,ThreatFox
+ip,31.76.125.3,c2,PureRAT,ThreatFox
+ip,31.57.147.246,c2,PureRAT,ThreatFox
+ip,213.111.149.141,c2,Evilginx,ThreatFox
+ip,208.84.103.159,c2,Havoc,ThreatFox
+ip,195.177.94.94,c2,PureRAT,ThreatFox
+ip,195.177.94.4,c2,PureRAT,ThreatFox
+ip,193.25.215.83,c2,PureRAT,ThreatFox
+ip,118.107.1.203,c2,PureRAT,ThreatFox
+ip,102.117.167.205,c2,Unknown malware,ThreatFox
+url,https://chordapple.com/SGct2K,phishing,ClearFake,ThreatFox
+url,https://rehearsal-b.com/SGct2K,phishing,ClearFake,ThreatFox
+domain,d1zih0uv.en-us-zen-sulin.com,phishing,ClearFake,ThreatFox
+domain,bisajepediwisma.org,phishing,ClearFake,ThreatFox
+domain,jomy.store,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/0x546E8694L,phishing,ClearFake,ThreatFox
+ip,198.23.137.75,c2,VShell,ThreatFox
+ip,118.253.150.244,c2,VShell,ThreatFox
+domain,weqrd1z4.lazici.store,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/465636664593hfgd/65646683-hgfj,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/1797L,phishing,ClearFake,ThreatFox
+ip,8.148.27.183,c2,NjRAT,ThreatFox
+url,http://103.162.159.189:33238/Mozi.m,phishing,Mozi,ThreatFox
+url,http://117.89.249.214:37833/Mozi.m,phishing,Mozi,ThreatFox
+url,http://72.255.3.136:50106/Mozi.m,phishing,Mozi,ThreatFox
+ip,81.70.169.229,c2,VShell,ThreatFox
+url,https://cdn.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/5B2-0F-C-3,phishing,ClearFake,ThreatFox
+domain,lrnvtw2a.en-en-us-zensulin.com,phishing,ClearFake,ThreatFox
+domain,di-il.com,phishing,ClearFake,ThreatFox
+ip,141.164.55.101,c2,Aisuru,ThreatFox
+ip,159.203.178.139,c2,Aisuru,ThreatFox
+domain,fa.qq1x.org,c2,Vidar,ThreatFox
+domain,fa.177betwin.org,c2,Vidar,ThreatFox
+ip,137.220.205.196,c2,Cobalt Strike,ThreatFox
+ip,45.86.64.228,c2,Cobalt Strike,ThreatFox
+domain,job4u.store,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/19875567137/dhr4563956664/orcahub34-12,phishing,ClearFake,ThreatFox
+url,https://correspondabb.com/SGct2K,phishing,ClearFake,ThreatFox
+domain,stonestation.cfd,c2,Unknown Loader,ThreatFox
+domain,sse0tbwo.niaa.store,phishing,ClearFake,ThreatFox
+url,https://cdn.jsdelivr.net/gh/F819-39-A/764-D-A148-B414/D087F-D-AB-26,phishing,ClearFake,ThreatFox
+ip,128.90.122.253,c2,Remcos,ThreatFox
+domain,f3grdcpf.dyar.store,phishing,ClearFake,ThreatFox
+sha256,aeedfc2ccefd82ddb3854277e0dac4839e260bd380871f1c30ace052c4b80ee9,malware,WannaCry,MalwareBazaar
+md5,b000bf75dea341762cae37ba3cad28cf,malware,WannaCry,MalwareBazaar
+sha256,63b0475bd58c48b4fe32f23515816550b6bb20455725b703e12d3428b3e7bedf,malware,VShell,MalwareBazaar
+md5,9ca3e03fd11b0fa819a8bbd2446eb190,malware,VShell,MalwareBazaar
+sha256,fa0dcaa524daeac2f1a5957dad8ac961879002776381e3b6bc3f0baf0068805f,malware,MeshAgent,MalwareBazaar
+md5,5ed2a74f9403204d5be840359b376408,malware,MeshAgent,MalwareBazaar
+sha256,77a90a2dd2aeef925b0198b39a788c9ff5183044bdfa398c75889c74750fe407,malware,VShell,MalwareBazaar
+md5,667f059cf22e7a4f6c26ba015dfe0229,malware,VShell,MalwareBazaar
+sha256,a6b9e11dd7457c49ef440964ef625cb34762d94b894e05925f92fc14d1e2b714,malware,VShell,MalwareBazaar
+md5,6c668caae7b26fc11c9ad16fea31c44b,malware,VShell,MalwareBazaar
+sha256,bf22312e3e995c77f4f8234f230bf5bb4ba5c609d9e8f68c303d5a5cd0503cce,malware,VShell,MalwareBazaar
+md5,bfde4ce59c001e81285fa47894d33c9c,malware,VShell,MalwareBazaar
+sha256,e2203289b4c2d77db4ef3adbf25195316b89f77ec8c43f0262361f065e8bf0ce,malware,VShell,MalwareBazaar
+md5,6269801c765a900ba0678162abff0927,malware,VShell,MalwareBazaar
+sha256,c66096943a9082373e478a0e8743f44c090fbc5172e160cd9c9f35dc004314a1,malware,VShell,MalwareBazaar
+md5,7e4a84e95d63b37384ed8206c941c1db,malware,VShell,MalwareBazaar
+sha256,0242e4675a8c55d179341a617c074e6d8c5752ac4158f73cdbec8a400a9e306a,malware,VShell,MalwareBazaar
+md5,fdd144d91afd66526f7ec1de3444241e,malware,VShell,MalwareBazaar
+sha256,6f102146c656ffdc9a31fbbbeb8e319b00898e485f93b76c5ad04a964bfd4fdc,malware,VShell,MalwareBazaar
+md5,e4af26495ed4dcd0aeaffeab4ef41cd0,malware,VShell,MalwareBazaar
+sha256,011cdd15e68b1c3b2c346bf52193081a518b92a68c588d7fbc238f08c2c9b3b9,malware,VShell,MalwareBazaar
+md5,1b715ec1eeee448293ed01ce8a347588,malware,VShell,MalwareBazaar
+sha256,75442883389d98c60504f7b837d4fae3734b8f296b62139aad3e1a77d4d08a8b,malware,ConnectWise,MalwareBazaar
+md5,9648b44d2e16e588e27daf5e0dcc4e3a,malware,ConnectWise,MalwareBazaar
+sha256,e401bb0221be358e9639b552e367cf7cc2d6ce9b9c8cf2721a0ac877fbd2ecaa,malware,VShell,MalwareBazaar
+md5,7f914bc68837c62d4491bef8a9571686,malware,VShell,MalwareBazaar
+sha256,beccb2cbc29a0c839af07e7f6e29473f6aa9b162960447a5c19733e19757e0b8,malware,VShell,MalwareBazaar
+md5,353637292a6e6533a1fccfe2f4ddc6b7,malware,VShell,MalwareBazaar
+ip,154.91.57.118,exfil,VShell,ThreatFox
+ip,154.91.57.115,exfil,VShell,ThreatFox
+ip,154.91.57.110,exfil,VShell,ThreatFox
+ip,154.91.56.116,exfil,VShell,ThreatFox
+ip,154.91.57.105,exfil,VShell,ThreatFox
+ip,46.151.182.200,exfil,Bashlite,ThreatFox
+ip,154.91.56.113,exfil,VShell,ThreatFox
+ip,154.91.56.106,exfil,VShell,ThreatFox
+ip,154.91.56.100,exfil,VShell,ThreatFox
+ip,134.122.202.217,exfil,Unknown malware,ThreatFox

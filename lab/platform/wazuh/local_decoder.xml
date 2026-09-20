@@ -1,0 +1,77 @@
+<!--
+  Custom decoders for the target web app's two log files. The formats are fixed by the
+  app that writes them (services/bank-web/app.py), so these regexes never drift.
+  Auto-loaded from /var/ossec/etc/decoders/local_decoder.xml.
+
+  access.log:  bankweb srcip=<client_ip> method=<method> url=<path> status=<code> bytes=<n> ua="<ua>"
+  auth.log:    <ts> authresult=<success|failure> user=<user> src_ip=<client_ip>
+
+  The access line uses key=value fields, not Combined Log Format. Wazuh's built-in
+  web-accesslog decoder only claims lines that carry a CLF request-line
+  ("<method> <path> HTTP/x"); this shape has none, so the built-in prematch misses and
+  this decoder owns the line and every field (srcip ... user_agent) parses. <id> holds
+  the HTTP status so rule 100090 can match <id>404</id>.
+-->
+
+<decoder name="bankweb-access">
+  <prematch type="pcre2">^bankweb srcip=</prematch>
+</decoder>
+
+<decoder name="bankweb-access-fields">
+  <parent>bankweb-access</parent>
+  <regex type="pcre2">^bankweb srcip=(\d+\.\d+\.\d+\.\d+) method=(\w+) url=(\S+) status=(\d+) bytes=(\d+) ua="([^"]*)"</regex>
+  <order>srcip, method, url, id, bytes, user_agent</order>
+</decoder>
+
+<decoder name="bankweb-auth">
+  <prematch type="pcre2"> authresult=</prematch>
+</decoder>
+
+<decoder name="bankweb-auth-fields">
+  <parent>bankweb-auth</parent>
+  <regex type="pcre2">authresult=(\w+) user=(\S+) src_ip=(\d+\.\d+\.\d+\.\d+)</regex>
+  <order>authresult, user, srcip</order>
+</decoder>
+
+<!--
+  Mail-gateway scan lines written by the console (SSH auth.log uses Wazuh's built-in
+  sshd decoder, so only the mail format needs a custom decoder here).
+  maillog:  <ts> <host> mailscan[<pid>]: from=<sender> ip=<ip> to=<rcpt> verdict=<v> url=<u> attachment=<a> sha256=<h> subject="<s>"
+-->
+<decoder name="mailscan">
+  <program_name>mailscan</program_name>
+</decoder>
+
+<decoder name="mailscan-fields">
+  <parent>mailscan</parent>
+  <regex type="pcre2">from=(\S+) ip=(\d+\.\d+\.\d+\.\d+) to=(\S+) verdict=(\w+) url=(\S+) attachment=(\S+) sha256=(\S+)</regex>
+  <order>mail_from, srcip, mail_to, verdict, url, attachment, sha256</order>
+</decoder>
+
+<!--
+  Data-transfer log written by the console (host-to-host transfers: nightly backup / exfil).
+  dataxfer:  <ts> <host> dataxfer[<pid>]: src=<ip> dst=<ip> dst_host=<name> bytes=<n> agent="<a>" status=<s>
+-->
+<decoder name="dataxfer">
+  <program_name>dataxfer</program_name>
+</decoder>
+
+<decoder name="dataxfer-fields">
+  <parent>dataxfer</parent>
+  <regex type="pcre2">src=(\S+) dst=(\S+) dst_host=(\S+) bytes=(\d+) agent="([^"]*)"</regex>
+  <order>srcip, dstip, dst_host, bytes, user_agent</order>
+</decoder>
+
+<!--
+  Proxy egress log written by the console (outbound web connections from the compromised host).
+  proxy:  <ts> <host> proxy[<pid>]: src=<ip> dst=<ip> dst_host=<h> port=<n> method=<m> bytes=<n> ua="<ua>" cat=<c> action=<a>
+-->
+<decoder name="proxy">
+  <program_name>proxy</program_name>
+</decoder>
+
+<decoder name="proxy-fields">
+  <parent>proxy</parent>
+  <regex type="pcre2">src=(\S+) dst=(\S+) dst_host=(\S+) port=(\d+) method=(\w+) bytes=(\d+) ua="([^"]*)" cat=(\S+) action=(\S+)</regex>
+  <order>srcip, dstip, dst_host, port, method, bytes, user_agent, cat, action</order>
+</decoder>

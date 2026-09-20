@@ -1,0 +1,13 @@
+# Node list for wazuh-certs-generator (single-node lab). The cert tool rejects
+# single-label names, so use Wazuh's dotted convention; these must match the
+# compose service/hostnames exactly for TLS SAN validation.
+nodes:
+  indexer:
+    - name: wazuh.indexer
+      ip: wazuh.indexer
+  server:
+    - name: wazuh.manager
+      ip: wazuh.manager
+  dashboard:
+    - name: wazuh.dashboard
+      ip: wazuh.dashboard

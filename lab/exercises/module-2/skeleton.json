@@ -1,0 +1,81 @@
+{
+  "id": "soctriageskel001",
+  "name": "SOC triage, build here (skeleton)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "thehive-alert",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "c0000042-0000-4000-8000-000000000042",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        300
+      ],
+      "webhookId": "thehive-alert"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://thehive:9000/api/v1/case/{{ $json.caseId }}/comment",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $json.verdict }) }}",
+        "options": {}
+      },
+      "id": "c0000043-0000-4000-8000-000000000043",
+      "name": "Write verdict to TheHive",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        300
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Build between these two nodes. The write-back reads two fields from the item it receives: `caseId` (the TheHive case id) and `verdict` (Markdown). The trigger's payload arrives at `$json.body`. Only one workflow with the path `thehive-alert` can be active at a time: deactivate the checkpoints while this one is active.",
+        "width": 600,
+        "height": 200
+      },
+      "id": "c0000041-0000-4000-8000-000000000041",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        40
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Write verdict to TheHive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

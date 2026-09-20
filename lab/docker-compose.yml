@@ -1,0 +1,417 @@
+# SOC AI Automation lab — full stack, one compose project.
+# Per ADR-0006: TheHive runs embedded (no Cassandra, no Elasticsearch); Wazuh is
+# single-node; the target and the range control panel are built locally.
+#
+# First run generates Wazuh certs (the `wazuh-certs-generator` one-shot), then the
+# stack comes up. The indexer needs `sysctl -w vm.max_map_count=262144` on the host.
+
+name: soclab
+
+services:
+
+  # --- Reverse proxy: friendly *.localhost names instead of ports -----------
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: unless-stopped
+    depends_on:
+      bank-web:
+        condition: service_healthy
+      range-control:
+        condition: service_healthy
+      thehive:
+        condition: service_healthy
+      n8n:
+        condition: service_healthy
+    volumes:
+      - ./platform/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    ports:
+      - "80:80"
+    networks:
+      - soclab
+
+  # --- Fix volume ownership for TheHive (runs as uid 1000) ------------------
+  # Docker named volumes are created root-owned; TheHive's embedded BerkeleyJE
+  # store cannot write to them as uid 1000 without this. One-shot, exits.
+  thehive-init:
+    image: alpine:latest
+    container_name: thehive-init
+    command: sh -c "mkdir -p /db /index /files && chown -R 1000:1000 /db /index /files"
+    volumes:
+      - thehive-data:/db
+      - thehive-index:/index
+      - thehive-files:/files
+    networks:
+      - soclab
+
+  # --- Case system: TheHive in embedded mode (1 container) ------------------
+  thehive:
+    image: strangebee/thehive:5.7.5
+    container_name: thehive
+    restart: unless-stopped
+    depends_on:
+      n8n:
+        condition: service_healthy
+      thehive-init:
+        condition: service_completed_successfully
+    environment:
+      # Heap capped for the tiny single-user dataset. Verify the image honours this.
+      JAVA_OPTS: "-Xms1g -Xmx1g"
+    # Embedded mode: use our config file, and stop the entrypoint auto-configuring
+    # Cassandra/Elasticsearch/Cortex over the top of it.
+    command:
+      - --secret
+      - ${THEHIVE_SECRET}
+      - --config-file
+      - /etc/thehive/application.conf
+      - --no-config-db
+      - --no-config-storage
+      - --no-config-cortex
+      - --index-backend
+      - lucene
+    volumes:
+      - ./platform/thehive/application.conf:/etc/thehive/application.conf:ro
+      - thehive-data:/opt/thp/thehive/db
+      - thehive-index:/opt/thp/thehive/index
+      - thehive-files:/opt/thp/thehive/files
+    ports:
+      - "9000:9000"
+    # TheHive image ships bash but not necessarily curl; a bash /dev/tcp port probe is
+    # the most portable readiness check here.
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/9000'"]
+      interval: 15s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
+    networks:
+      - soclab
+
+  # --- Agent substrate: n8n -------------------------------------------------
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    environment:
+      N8N_HOST: n8n.localhost
+      N8N_PORT: "5678"
+      N8N_PROTOCOL: http
+      N8N_EDITOR_BASE_URL: http://n8n.localhost/
+      WEBHOOK_URL: http://n8n.localhost/
+      # n8n 2.x cannot disable auth; the owner is pre-seeded post-boot instead
+      # (admin@brucon.local / Brucon2026) so there is no setup wizard, just a login.
+      # secure_cookie off so the login works over plain http.
+      N8N_SECURE_COOKIE: "false"
+      # Let workflow expressions read $env — the triage workflow pulls its secrets (gateway key,
+      # TheHive key) from environment variables rather than hand-created credentials.
+      GENERIC_TIMEZONE: Europe/Brussels
+      # Surfaced to the workflow nodes via $env. n8n 2.x blocks $env in nodes by
+      # default; the checkpoints read MODEL_* and OSINT_API_KEY through it, so allow it.
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+      GATEWAY_BASE_URL: ${GATEWAY_BASE_URL}
+      GATEWAY_API_KEY: ${GATEWAY_API_KEY}
+      MODEL_WEAK: ${MODEL_WEAK}
+      MODEL_FRONTIER: ${MODEL_FRONTIER}
+      THEHIVE_N8N_APIKEY: ${THEHIVE_N8N_APIKEY}
+      OSINT_API_KEY: ${OSINT_API_KEY:-}
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    volumes:
+      - n8n-data:/home/node/.n8n
+      - ./platform/n8n:/import:ro
+      - ./checkpoints:/import-checkpoints:ro
+      - ./exercises:/import-exercises:ro
+    ports:
+      - "5678:5678"
+    # node is guaranteed present in the n8n image (works whether the base is alpine or debian).
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5678/healthz',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 15s
+      timeout: 8s
+      retries: 20
+      start_period: 30s
+    networks:
+      - soclab
+
+  # --- Vulnerable target ----------------------------------------------------
+  bank-web:
+    build: ./services/bank-web
+    container_name: bank-web
+    restart: unless-stopped
+    environment:
+      TARGET_PORT: "8080"
+    volumes:
+      - weblogs:/var/log/bank-web
+      - webuploads:/uploads
+    ports:
+      - "8080:8080"
+    # python is guaranteed in the image; hits the log-excluded /healthz route.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/healthz', timeout=3)"]
+      interval: 15s
+      timeout: 8s
+      retries: 10
+      start_period: 15s
+    networks:
+      - soclab
+
+  # --- Attack / benign button UI -------------------------------------------
+  range-control:
+    build: ./services/range-control
+    container_name: range-control
+    restart: unless-stopped
+    environment:
+      TARGET_BASE_URL: http://bank-web:8080
+      PANEL_PORT: "8000"
+      ATTACKER_IP: ${ATTACKER_IP}
+      BENIGN_IP: ${BENIGN_IP}
+      # Best-effort indexer write for incident breadcrumbs (see breadcrumbs.py). Matches
+      # the credentials soc-noise and the manager use; range-control is on the same network.
+      INDEXER_URL: https://wazuh.indexer:9200
+      INDEXER_USER: admin
+      INDEXER_PASS: brucon2026
+    depends_on:
+      bank-web:
+        condition: service_healthy
+    volumes:
+      - ./threat-intel:/app/threat-intel:ro
+      # SSH + mail "hosts": the console writes authored auth.log / maillog lines here
+      # (with the pinned attacker/benign IPs) and Wazuh reads them read-only.
+      - hostlogs:/var/log/host
+      # Durable record of every fired action, readable on the host at lab/logs/actions.log.
+      - ./logs:/var/log/range
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz', timeout=3)"]
+      interval: 15s
+      timeout: 8s
+      retries: 10
+      start_period: 15s
+    networks:
+      - soclab
+
+  # --- Background noise: keeps the SIEM looking like a busy public site -----
+  # Writes benign public-web events straight into the indexer (not through the
+  # detection rules), so it never creates cases. Backfills a few hours of history
+  # on start, then trickles live events.
+  soc-noise:
+    build: ./services/soc-noise
+    container_name: soc-noise
+    restart: unless-stopped
+    depends_on:
+      wazuh.indexer:
+        condition: service_healthy
+    environment:
+      INDEXER_URL: https://wazuh.indexer:9200
+      INDEXER_USER: admin
+      INDEXER_PASS: brucon2026
+      BACKFILL_HOURS: "24"
+      BACKFILL_COUNT: "5400"
+      TRICKLE_SECONDS: "3"
+      # Never let background noise use the console's attacker/benign IPs — those must
+      # only ever appear from the student's own actions.
+      EXCLUDE_IPS: ${ATTACKER_IP},${BENIGN_IP}
+    volumes:
+      - ./threat-intel:/app/threat-intel:ro
+      # Applied before the first write so wazuh-alerts-* indices get keyword mappings
+      # (otherwise the dashboard's aggregations on manager.name etc. fail).
+      - ./platform/wazuh/wazuh-template.json:/app/wazuh-template.json:ro
+    networks:
+      - soclab
+
+  # --- Wazuh single-node ----------------------------------------------------
+  # Wired from Wazuh's official single-node compose (v4.9.2): per-file cert mounts,
+  # the OpenSearch security config, and internal_users. Images are amd64-only, so on
+  # arm64 they run under emulation. Demo passwords (SecretPassword / MyS3cr37P450r.*-
+  # / kibanaserver) must match the bcrypt hashes in wazuh/config/wazuh_indexer/
+  # internal_users.yml; harden both together, not one alone.
+  wazuh-certs-generator:
+    image: wazuh/wazuh-certs-generator:0.0.2
+    container_name: wazuh-certs-generator
+    hostname: wazuh-certs-generator
+    entrypoint: sh -c "if [ ! -f /certificates/root-ca.pem ]; then /entrypoint.sh; fi"
+    volumes:
+      - ./platform/wazuh/certs/config.yml:/config/certs.yml:ro
+      - ./platform/wazuh/certs/generated:/certificates
+    networks:
+      - soclab
+
+  wazuh.indexer:
+    image: wazuh/wazuh-indexer:4.9.2
+    container_name: wazuh.indexer
+    hostname: wazuh.indexer
+    restart: unless-stopped
+    depends_on:
+      wazuh-certs-generator:
+        condition: service_completed_successfully
+    environment:
+      OPENSEARCH_JAVA_OPTS: "-Xms1g -Xmx1g"
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 65536, hard: 65536 }
+    volumes:
+      - wazuh-indexer-data:/var/lib/wazuh-indexer
+      - ./platform/wazuh/certs/generated/root-ca.pem:/usr/share/wazuh-indexer/certs/root-ca.pem:ro
+      - ./platform/wazuh/certs/generated/wazuh.indexer-key.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.key:ro
+      - ./platform/wazuh/certs/generated/wazuh.indexer.pem:/usr/share/wazuh-indexer/certs/wazuh.indexer.pem:ro
+      - ./platform/wazuh/certs/generated/admin.pem:/usr/share/wazuh-indexer/certs/admin.pem:ro
+      - ./platform/wazuh/certs/generated/admin-key.pem:/usr/share/wazuh-indexer/certs/admin-key.pem:ro
+      - ./platform/wazuh/config/wazuh_indexer/wazuh.indexer.yml:/usr/share/wazuh-indexer/opensearch.yml:ro
+      - ./platform/wazuh/config/wazuh_indexer/internal_users.yml:/usr/share/wazuh-indexer/opensearch-security/internal_users.yml:ro
+    ports:
+      - "9200:9200"
+    # curl ships in the Wazuh (Amazon Linux) images. wait_for_status=yellow means "ready
+    # to accept writes", not just "port open".
+    healthcheck:
+      test: ["CMD", "curl", "-fsk", "-u", "admin:brucon2026", "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 60s
+    networks:
+      - soclab
+
+  wazuh.manager:
+    image: wazuh/wazuh-manager:4.9.2
+    container_name: wazuh.manager
+    hostname: wazuh.manager
+    restart: unless-stopped
+    depends_on:
+      wazuh.indexer:
+        condition: service_healthy
+    environment:
+      INDEXER_URL: https://wazuh.indexer:9200
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: brucon2026
+      FILEBEAT_SSL_VERIFICATION_MODE: full
+      SSL_CERTIFICATE_AUTHORITIES: /etc/ssl/root-ca.pem
+      SSL_CERTIFICATE: /etc/ssl/filebeat.pem
+      SSL_KEY: /etc/ssl/filebeat.key
+      API_USERNAME: wazuh-wui
+      API_PASSWORD: MyS3cr37P450r.*-
+      # Consumed by the custom TheHive integrator (wazuh/integrations).
+      THEHIVE_URL: http://thehive:9000
+      THEHIVE_ORG: ${THEHIVE_ORG}
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+      nofile: { soft: 655360, hard: 655360 }
+    volumes:
+      - wazuh_api_configuration:/var/ossec/api/configuration
+      - wazuh_etc:/var/ossec/etc
+      - wazuh_logs:/var/ossec/logs
+      - wazuh_queue:/var/ossec/queue
+      - wazuh_var_multigroups:/var/ossec/var/multigroups
+      - wazuh_integrations:/var/ossec/integrations
+      - wazuh_active_response:/var/ossec/active-response/bin
+      - wazuh_agentless:/var/ossec/agentless
+      - wazuh_wodles:/var/ossec/wodles
+      - filebeat_etc:/etc/filebeat
+      - filebeat_var:/var/lib/filebeat
+      - ./platform/wazuh/certs/generated/root-ca.pem:/etc/ssl/root-ca.pem:ro
+      - ./platform/wazuh/certs/generated/wazuh.manager.pem:/etc/ssl/filebeat.pem:ro
+      - ./platform/wazuh/certs/generated/wazuh.manager-key.pem:/etc/ssl/filebeat.key:ro
+      # Workshop config, delivered through /wazuh-config-mount so the entrypoint
+      # copies it in AFTER laying down the default etc tree (mounting straight into
+      # /var/ossec/etc makes first-boot think it is already populated and skips
+      # defaults like etc/shared/ar.conf, which crashes analysisd).
+      # Runtime copy (gitignored) with the integrator key substituted in by start.sh;
+      # the committed wazuh/ossec.conf is the template with placeholders.
+      - ./platform/wazuh/ossec.runtime.conf:/wazuh-config-mount/etc/ossec.conf:ro
+      - ./platform/wazuh/local_rules.xml:/wazuh-config-mount/etc/rules/local_rules.xml:ro
+      - ./platform/wazuh/local_decoder.xml:/wazuh-config-mount/etc/decoders/local_decoder.xml:ro
+      - ./platform/wazuh/integrations/custom-w2thive:/wazuh-config-mount/integrations/custom-w2thive:ro
+      - ./platform/wazuh/integrations/custom-w2thive.py:/wazuh-config-mount/integrations/custom-w2thive.py:ro
+      - ./platform/wazuh/integrations/custom-n8n:/wazuh-config-mount/integrations/custom-n8n:ro
+      - ./platform/wazuh/integrations/custom-n8n.py:/wazuh-config-mount/integrations/custom-n8n.py:ro
+      # Read the target's logs and uploads (written by bank-web).
+      - weblogs:/var/log/bank-web:ro
+      - hostlogs:/var/log/host:ro
+      - webuploads:/uploads:ro
+    ports:
+      - "1514:1514"
+      - "1515:1515"
+      - "55000:55000"
+    # Ready = the analysis engine is running (not just the container up).
+    healthcheck:
+      test: ["CMD-SHELL", "/var/ossec/bin/wazuh-control status | grep -q 'wazuh-analysisd is running'"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 90s
+    networks:
+      - soclab
+
+  wazuh.dashboard:
+    image: wazuh/wazuh-dashboard:4.9.2
+    container_name: wazuh.dashboard
+    hostname: wazuh.dashboard
+    restart: unless-stopped
+    depends_on:
+      wazuh.indexer:
+        condition: service_healthy
+    environment:
+      INDEXER_USERNAME: admin
+      INDEXER_PASSWORD: brucon2026
+      WAZUH_API_URL: https://wazuh.manager
+      DASHBOARD_USERNAME: kibanaserver
+      DASHBOARD_PASSWORD: kibanaserver
+      API_USERNAME: wazuh-wui
+      API_PASSWORD: MyS3cr37P450r.*-
+    volumes:
+      - ./platform/wazuh/certs/generated/wazuh.dashboard.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem:ro
+      - ./platform/wazuh/certs/generated/wazuh.dashboard-key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem:ro
+      - ./platform/wazuh/certs/generated/root-ca.pem:/usr/share/wazuh-dashboard/certs/root-ca.pem:ro
+      - ./platform/wazuh/config/wazuh_dashboard/opensearch_dashboards.yml:/usr/share/wazuh-dashboard/config/opensearch_dashboards.yml:ro
+      - ./platform/wazuh/config/wazuh_dashboard/wazuh.yml:/usr/share/wazuh-dashboard/data/wazuh/config/wazuh.yml:ro
+    ports:
+      - "8443:5601"
+    healthcheck:
+      test: ["CMD", "curl", "-fsk", "-o", "/dev/null", "https://localhost:5601"]
+      interval: 20s
+      timeout: 10s
+      retries: 30
+      start_period: 60s
+    networks:
+      - soclab
+
+  # --- Self-heals the manager if logcollector dies (qemu emulation crashes it) -
+  wazuh-watchdog:
+    image: docker:27-cli
+    container_name: wazuh-watchdog
+    restart: unless-stopped
+    depends_on:
+      wazuh.manager:
+        condition: service_healthy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./platform/wazuh/watchdog.sh:/watchdog.sh:ro
+    entrypoint: ["sh", "/watchdog.sh"]
+    networks:
+      - soclab
+
+networks:
+  soclab:
+    name: soclab
+    driver: bridge
+
+volumes:
+  thehive-data:
+  thehive-index:
+  thehive-files:
+  n8n-data:
+  weblogs:
+  hostlogs:
+  webuploads:
+  wazuh-indexer-data:
+  # Wazuh manager persistence (mirrors the official single-node volume set).
+  wazuh_api_configuration:
+  wazuh_etc:
+  wazuh_logs:
+  wazuh_queue:
+  wazuh_var_multigroups:
+  wazuh_integrations:
+  wazuh_active_response:
+  wazuh_agentless:
+  wazuh_wodles:
+  filebeat_etc:
+  filebeat_var:

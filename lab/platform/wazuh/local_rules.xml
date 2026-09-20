@@ -1,0 +1,232 @@
+<!--
+  Workshop detection rules, 1001xx band. Keep the ids stable: the n8n workflow, the
+  TheHive integrator's rule_id filter, and the debrief scoreboard all reference them.
+  Auto-loaded from /var/ossec/etc/rules/local_rules.xml.
+
+  Every attack rule has a benign twin with the same log shape. Each rule below is
+  commented with what it fires on.
+
+  Two tuning notes applied throughout:
+    * Frequency rules (if_matched_sid) only count matches that generated an alert, so the
+      rules they count off must be level >0 (100090, 100119, 100152), not level 0.
+    * ignore="60" collapses one attack burst into a single alert instead of re-firing (and
+      creating a duplicate TheHive case) for every event in the burst. Re-fireable after 60s.
+-->
+
+<group name="bankweb,">
+
+  <!-- Anchors: parsed lines, no alert on their own. -->
+  <rule id="100080" level="0">
+    <decoded_as>bankweb-access</decoded_as>
+    <description>Target web access log line</description>
+  </rule>
+
+  <rule id="100081" level="0">
+    <decoded_as>bankweb-auth</decoded_as>
+    <description>Target web auth log line</description>
+  </rule>
+
+  <!-- 404 hit. Level 3 (not 0) so the recon/scan frequency rules can count it via
+       if_matched_sid. Not forwarded to TheHive (not in the integration rule_id list). -->
+  <rule id="100090" level="3">
+    <if_sid>100080</if_sid>
+    <id>404</id>
+    <description>Bank web 404</description>
+  </rule>
+
+  <!-- Login failure. Level 5 (not 0) so the frequency rule 100120 can count it. Not
+       forwarded to TheHive (not in the integration rule_id list). -->
+  <rule id="100119" level="5">
+    <if_sid>100081</if_sid>
+    <field name="authresult">failure</field>
+    <description>Bank web login failure</description>
+    <group>authentication_failures,</group>
+  </rule>
+
+  <!-- 100100 Recon scan (attack): a burst of 404s from one source (sensitive-path probing). No
+       user-agent condition, so a browser-UA scan still trips it and a benign crawler (valid paths,
+       no 404 storm) does not. -->
+  <rule id="100100" level="6" frequency="5" timeframe="60" ignore="60">
+    <if_matched_sid>100090</if_matched_sid>
+    <same_source_ip />
+    <description>Recon scan: 404 burst from $(srcip)</description>
+    <group>recon,attack,</group>
+  </rule>
+
+  <!-- 100110 SQL injection (attack): SQLi pattern in the request URL. -->
+  <rule id="100110" level="10" ignore="60">
+    <if_sid>100080</if_sid>
+    <url type="pcre2">(?i)(union(\s|\+|%20)+select|%27|'\s*or\s*'?1'?='?1|--|information_schema)</url>
+    <description>SQL injection attempt in web request from $(srcip)</description>
+    <group>sql_injection,attack,</group>
+  </rule>
+
+  <!-- 100120 Brute force (attack): repeated login failures from one source. -->
+  <rule id="100120" level="10" frequency="6" timeframe="60" ignore="60">
+    <if_matched_sid>100119</if_matched_sid>
+    <same_source_ip />
+    <description>Brute force: repeated login failures from $(srcip)</description>
+    <group>authentication_failures,attack,</group>
+  </rule>
+
+  <!-- 100121 Admin login (benign twin): a successful login. Note it can also catch a
+       SQLi auth bypass, which is a deliberate teaching nuance: a success from an
+       external attacker IP is not benign. -->
+  <rule id="100121" level="3">
+    <if_sid>100081</if_sid>
+    <field name="authresult">success</field>
+    <description>Successful login from $(srcip)</description>
+    <group>authentication_success,benign,</group>
+  </rule>
+
+  <!-- 100130 Web shell execution (attack): a request for an uploaded script back through the
+       file-serving route, the attacker running the shell they planted. Web-log based, so it
+       carries srcip and merges with the upload alert (100131) by IP. ignore=60 collapses the
+       execution burst into one case. -->
+  <rule id="100130" level="12" ignore="60">
+    <if_sid>100080</if_sid>
+    <url type="pcre2">(?i)^/files/\S+\.php</url>
+    <description>Web shell execution: request to uploaded script $(url) from $(srcip)</description>
+    <group>web,webshell,rce,attack,</group>
+  </rule>
+
+  <!-- 100131 Web shell upload (attack): a POST to the upload endpoint. Web-log based, so it
+       carries srcip and merges with the execution alert (100130) by IP. -->
+  <rule id="100131" level="10">
+    <if_sid>100080</if_sid>
+    <field name="method">POST</field>
+    <url type="pcre2">^/upload$</url>
+    <description>Web shell upload: file posted to /upload from $(srcip)</description>
+    <group>web,webshell,attack,</group>
+  </rule>
+
+  <!-- 100132 Web shell file landed (corroboration): FIM sees the uploaded file appear under
+       /uploads. NOT in the integrator forward list, so it is indexed and queryable in the SIEM
+       but never opens its own case. It corroborates the upload/execution case. -->
+  <rule id="100132" level="10">
+    <if_group>syscheck</if_group>
+    <field name="file" type="pcre2">^/uploads/</field>
+    <match>added</match>
+    <description>Web shell file created in upload directory</description>
+    <group>fim,webshell,attack,</group>
+  </rule>
+
+  <!-- 100141 Marketing/CDN callout (benign twin): destination on the proxy CDN allow-list. -->
+  <rule id="100141" level="3" ignore="60">
+    <decoded_as>proxy</decoded_as>
+    <field name="cat">cdn</field>
+    <description>Outbound proxy connection to $(dst_host) from $(srcip)</description>
+    <group>network,benign,</group>
+  </rule>
+
+  <!-- 100140 C2 beacon (attack): outbound to an uncategorised destination from the compromised
+       internal host. A frequency composite (if_matched_sid + same_source_ip over 300s) proved
+       unreliable here, so this is a single-event match; the console fires the beacon as a burst and
+       ignore=60 collapses it into one case. The destination is a real ThreatFox C2 indicator; the
+       analyst confirms it via external OSINT. -->
+  <rule id="100140" level="10" ignore="60">
+    <decoded_as>proxy</decoded_as>
+    <field name="cat">uncategorized</field>
+    <description>Outbound to uncategorised destination $(dst_host) from $(srcip)</description>
+    <group>c2,attack,</group>
+  </rule>
+
+  <!-- 100142 Data exfiltration (attack): a large-volume transfer to an EXTERNAL destination
+       via a generic grab tool. Twin of the nightly backup (100143), split on the agent; the
+       external destination is the corroborating tell the analyst confirms. -->
+  <rule id="100142" level="11" ignore="60">
+    <decoded_as>dataxfer</decoded_as>
+    <field name="bytes" type="pcre2">^\d{9,}$</field>
+    <field name="user_agent" type="pcre2">(?i)(curl|wget|python|go-http|libcurl|nc)</field>
+    <description>Large data transfer to external host $(dst_host) from $(srcip)</description>
+    <group>exfiltration,attack,</group>
+  </rule>
+
+  <!-- 100143 Backup job (benign twin of exfil): a large transfer to the internal backup
+       server via a named backup agent (Veeam). Same shape as exfil, authorised. -->
+  <rule id="100143" level="3" ignore="60">
+    <decoded_as>dataxfer</decoded_as>
+    <field name="bytes" type="pcre2">^\d{9,}$</field>
+    <field name="user_agent" type="pcre2">(?i)(veeam|restic|rclone|borg|bacula)</field>
+    <description>Large data transfer to $(dst_host) from $(srcip)</description>
+    <group>backup,benign,</group>
+  </rule>
+
+  <!-- 100150 Path traversal / LFI (attack): a directory-traversal pattern in the request URL.
+       High-confidence: legitimate requests never contain ../ walks or /etc/passwd. -->
+  <rule id="100150" level="12" ignore="60">
+    <if_sid>100080</if_sid>
+    <url type="pcre2">(?i)(\.\./|\.\.%2f|%2e%2e%2f|\.\.%5c|/etc/(passwd|shadow)|win\.ini|%00)</url>
+    <description>Path traversal / local file inclusion attempt from $(srcip)</description>
+    <group>web,lfi,attack,</group>
+  </rule>
+
+  <!-- 100152 Crawler request (counted intermediate): a single hit from a search-engine UA.
+       Level 2 (not 0) so 100151 can count it; not forwarded (only 100151 is). This lets the
+       level-0 access anchor (100080) stay silent on every request. -->
+  <rule id="100152" level="3">
+    <if_sid>100080</if_sid>
+    <field name="user_agent">Googlebot|bingbot|crawler</field>
+    <description>Search-engine crawler request from $(srcip)</description>
+    <group>web,benign,</group>
+  </rule>
+
+  <!-- 100151 Heavy crawler (benign twin): high volume, legitimate bot. -->
+  <rule id="100151" level="3" frequency="12" timeframe="60" ignore="60">
+    <if_matched_sid>100152</if_matched_sid>
+    <same_source_ip />
+    <description>High request volume from a single source $(srcip)</description>
+    <group>web,benign,</group>
+  </rule>
+
+  <!-- SSH host. Wazuh's built-in sshd decoder parses the auth.log lines; these rules
+       re-label and escalate the results for the workshop and forward them as cases. -->
+
+  <!-- 100160 SSH brute force (attack): repeated failed logins from one source. Chains
+       from Wazuh's built-in SSH brute-force composite (5763). -->
+  <rule id="100160" level="10" ignore="60">
+    <if_sid>5763</if_sid>
+    <description>SSH brute force from $(srcip)</description>
+    <group>ssh,brute_force,attack,</group>
+  </rule>
+
+  <!-- 100161 SSH login succeeded: the compromise from the attacker IP, or a routine
+       admin login from the benign IP. Same event — triage decides by reputation. -->
+  <rule id="100161" level="8">
+    <if_sid>5715</if_sid>
+    <description>SSH login succeeded for $(dstuser) from $(srcip)</description>
+    <group>ssh,authentication_success,attack,</group>
+  </rule>
+
+  <!-- 100162 Login success after brute force (attack): the breakthrough. Wazuh's built-in 40112
+       fires when an authentication_success follows failures from the same source (SSH via
+       5760/5715; web via 100119/100121, once 100119 carries the authentication_failures group).
+       This forwards that composite as an attack so the compromise merges into the brute-force
+       case by source IP, instead of the SSH success being lost (superseded by 40112) or the web
+       success landing in a separate benign case. A clean login with no prior failures does not
+       trip 40112, so the benign twins (100121/100161) are unaffected. -->
+  <rule id="100162" level="12">
+    <if_sid>40112</if_sid>
+    <description>Successful login after repeated failures from $(srcip) - possible credential compromise</description>
+    <group>authentication_success,brute_force,attack,</group>
+  </rule>
+
+  <!-- Mail gateway. -->
+
+  <!-- 100170 Suspicious email (attack): gateway flagged a delivered message. -->
+  <rule id="100170" level="9">
+    <decoded_as>mailscan</decoded_as>
+    <field name="verdict">suspicious|quarantined|flagged</field>
+    <description>Suspicious email delivered to $(mail_to) from $(mail_from)</description>
+    <group>email,suspicious,attack,</group>
+  </rule>
+
+  <!-- 100171 Legitimate email (benign twin): gateway marked it clean. -->
+  <rule id="100171" level="3">
+    <decoded_as>mailscan</decoded_as>
+    <field name="verdict">clean</field>
+    <description>Email delivered to $(mail_to) from $(mail_from)</description>
+    <group>email,benign,</group>
+  </rule>
+
+</group>

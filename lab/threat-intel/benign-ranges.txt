@@ -1,0 +1,4 @@
+# Benign source range for the SOC noise generator and the benign actions.
+# 35.235.240.0/24 — a clean, no-bad-reputation range: a live AbuseIPDB lookup on any
+# address here returns benign. One CIDR per line.
+35.235.240.0/24

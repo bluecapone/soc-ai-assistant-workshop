@@ -1,0 +1,12 @@
+# Loaded by start.sh / start.ps1 on arm64 hosts (Apple Silicon, Graviton) on top of
+# docker-compose.yml. Wazuh publishes no arm64 image, so its four services run as
+# linux/amd64 under emulation. Every other service stays native.
+services:
+  wazuh-certs-generator:
+    platform: linux/amd64
+  wazuh.indexer:
+    platform: linux/amd64
+  wazuh.manager:
+    platform: linux/amd64
+  wazuh.dashboard:
+    platform: linux/amd64

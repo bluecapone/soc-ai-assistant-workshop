@@ -1,0 +1,40 @@
+# Reverse proxy so students reach each service by a friendly name instead of a port.
+# *.localhost resolves to 127.0.0.1 automatically in Chrome, Edge, and Firefox with no
+# host-file or DNS change. (Safari does not; those users use the localhost:PORT URLs.)
+#
+#   http://web.localhost      -> the vulnerable target intranet
+#   http://panel.localhost    -> the attack control panel
+#   http://thehive.localhost  -> TheHive case management
+#   http://n8n.localhost      -> the n8n workflow editor
+#   http://wazuh.localhost    -> the Wazuh SIEM dashboard
+
+{
+	# Plain HTTP on :80; no automatic TLS for .localhost names.
+	auto_https off
+}
+
+http://web.localhost {
+	reverse_proxy bank-web:8080
+}
+
+http://panel.localhost {
+	reverse_proxy range-control:8000
+}
+
+http://thehive.localhost {
+	reverse_proxy thehive:9000
+}
+
+http://n8n.localhost {
+	reverse_proxy n8n:5678
+}
+
+http://wazuh.localhost {
+	# The dashboard speaks HTTPS with a self-signed cert; proxy to it and skip verify.
+	reverse_proxy https://wazuh.dashboard:5601 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+

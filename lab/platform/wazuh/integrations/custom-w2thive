@@ -1,0 +1,29 @@
+#!/bin/sh
+# Wazuh integrator wrapper. The integrator daemon calls this with:
+#   $1 = path to the alert JSON file
+#   $2 = api_key   (from the <api_key> tag in ossec.conf)
+#   $3 = hook_url  (from the <hook_url> tag in ossec.conf)
+# It hands off to the Python implementation, run under Wazuh's bundled interpreter.
+
+WPYTHON_BIN="framework/python/bin/python3"
+SCRIPT_PATH_NAME="$0"
+DIR_NAME="$(cd "$(dirname "${SCRIPT_PATH_NAME}")"; pwd -P)"
+SCRIPT_NAME="$(basename "${SCRIPT_PATH_NAME}")"
+
+case "${DIR_NAME}" in
+  */integrations)
+    if [ -z "${WAZUH_PATH}" ]; then
+      WAZUH_PATH="$(cd "${DIR_NAME}/.."; pwd)"
+    fi
+    PYTHON_BIN="${WAZUH_PATH}/${WPYTHON_BIN}"
+    ;;
+  *)
+    PYTHON_BIN="python3"
+    ;;
+esac
+
+if [ ! -x "${PYTHON_BIN}" ]; then
+  PYTHON_BIN="python3"
+fi
+
+"${PYTHON_BIN}" "${DIR_NAME}/${SCRIPT_NAME}.py" "$@"
