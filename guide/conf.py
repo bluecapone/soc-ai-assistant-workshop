@@ -6,3 +6,5 @@ extensions = ["myst_parser"]
 exclude_patterns = ["_build"]
 
 html_theme = "sphinx_rtd_theme"
+
+myst_heading_anchors = 2
