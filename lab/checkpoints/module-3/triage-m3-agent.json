@@ -33,7 +33,7 @@
             {
               "id": "f1",
               "leftValue": "={{ $json.body.objectType }}",
-              "rightValue": "Case",
+              "rightValue": "case",
               "operator": {
                 "type": "string",
                 "operation": "equals"
@@ -41,8 +41,8 @@
             },
             {
               "id": "f2",
-              "leftValue": "={{ $json.body.action }}",
-              "rightValue": "create",
+              "leftValue": "={{ $json.body.operation }}",
+              "rightValue": "Creation",
               "operator": {
                 "type": "string",
                 "operation": "equals"
