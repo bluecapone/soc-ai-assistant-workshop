@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "determination": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "suggested_close_state": {
+      "type": "string",
+      "enum": [
+        "true positive",
+        "false positive",
+        "true positive not malicious",
+        "other"
+      ]
+    },
+    "recommended_actions": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "determination",
+    "summary",
+    "suggested_close_state",
+    "recommended_actions"
+  ],
+  "additionalProperties": false
+}

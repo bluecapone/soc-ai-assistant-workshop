@@ -1,5 +1,7 @@
 # Part 0: Connect
 
+Read this manual online at [soc-ai-assistant-workshop.readthedocs.io](https://soc-ai-assistant-workshop.readthedocs.io/).
+
 Your lab is a Docker compose stack on your own laptop: **TheHive**, **n8n**, **Wazuh**, the **Range control panel** and **bank-web**, the target that is vulnerable on purpose. This part starts it and proves it produces log data. *Module 1 needs the case Exercise 0.3 gives you.*
 
 ## Exercise #0.1: bring up the lab
