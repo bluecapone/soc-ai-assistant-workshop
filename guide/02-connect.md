@@ -140,7 +140,7 @@ Exercise 0.3 walks it once by hand.
 
 **Goal**: Claude Code answers a prompt through the workshop gateway with your token, started from the workshop folder.
 
-Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it. Any client that reads the same two variables uses the gateway too.
+Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it. Any client that reads the same two variables uses the gateway too. The gateway is LiteLLM, and its [AI tools page](https://docs.litellm.ai/docs/ai_tools) shows the same setup for other clients, if you would rather work from one you already use.
 
 1. **Gateway.** Export the gateway address (announced from the slide) and the token you got at the door. macOS or Linux:
 
