@@ -35,22 +35,7 @@ hidden: true
   - [Exercise #1.5: test it](03-module-1.md#exercise-15-test-it)
   - [Exercise #1.6: share it](03-module-1.md#exercise-16-share-it)
 - [Part 2: Module 2, run it unattended](04-module-2.md)
-  - [Exercise #2.1: the trigger and the filter](04-module-2.md#exercise-21-the-trigger-and-the-filter)
-  - [Exercise #2.2: extract the ten fields](04-module-2.md#exercise-22-extract-the-ten-fields)
-  - [Exercise #2.3: the Wazuh lookup](04-module-2.md#exercise-23-the-wazuh-lookup)
-  - [Exercise #2.4: judge each indicator on its own](04-module-2.md#exercise-24-judge-each-indicator-on-its-own)
-  - [Exercise #2.5: merge and assemble](04-module-2.md#exercise-25-merge-and-assemble)
-  - [Exercise #2.6: the gather chain and the contract](04-module-2.md#exercise-26-the-gather-chain-and-the-contract)
-  - [Exercise #2.7: render and write](04-module-2.md#exercise-27-render-and-write)
-  - [Exercise #2.8: fire it and walk away](04-module-2.md#exercise-28-fire-it-and-walk-away)
-  - [Exercise #2.9: fix the text](04-module-2.md#exercise-29-fix-the-text)
 - [Part 3: Module 3, let it decide](05-module-3.md)
-  - [Exercise #3.1: duplicate it, then cut it down to size](05-module-3.md#exercise-31-duplicate-it-then-cut-it-down-to-size)
-  - [Exercise #3.2: feed it the whole case](05-module-3.md#exercise-32-feed-it-the-whole-case)
-  - [Exercise #3.3: the lookups as tools](05-module-3.md#exercise-33-the-lookups-as-tools)
-  - [Exercise #3.4: the prompt and the schema](05-module-3.md#exercise-34-the-prompt-and-the-schema)
-  - [Exercise #3.5: fire it and read the trace](05-module-3.md#exercise-35-fire-it-and-read-the-trace)
-  - [Exercise #3.6: you are the gate](05-module-3.md#exercise-36-you-are-the-gate)
 - [Take-home](07-take-home.md)
 - [Appendix: skill frontmatter](08-appendix-frontmatter.md)
 
@@ -91,7 +76,7 @@ Solo work. One checkpoint per module. **Stuck for more than five minutes: take t
 
 - `lab/exercises/README.md`: starting artifacts and checkpoints per module
 - `lab/checkpoints/README.md`: how to use each checkpoint, credentials the workflows expect
-- `exercises/module-1/README.md`: the finished `wazuh-query` and `thehive-case` skills
+- `exercises/module-1/README.md`: the reference `soc-triage` skill files
 - `instructor-docs/`: the theory behind each part, as background reading
 - [TheHive API](https://docs.strangebee.com/thehive/api-docs/), [Wazuh indexer search](https://documentation.wazuh.com/current/user-manual/wazuh-indexer/index.html), [n8n docs](https://docs.n8n.io/)
 

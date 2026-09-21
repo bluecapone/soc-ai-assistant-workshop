@@ -705,55 +705,40 @@ You trigger every step yourself. Nothing happens unless you ask for it. This is 
 
 ## Exercise #1.6: share it
 
-A skill that works only here is a script with a prompt. One that installs anywhere is a tool a colleague can use, argue with and improve. The two lookups inside `soc-triage` are the reusable part.
+A skill that works only here is a script with a prompt. One in a repo is a tool a colleague installs, reads, argues with and improves. You built `soc-triage` across the last five exercises. This last step makes it installable on any laptop.
 
-**Goal**: the Wazuh lookup and the TheHive read and write are standalone skills you can install anywhere.
+**Goal**: `soc-triage`, the skill you built, installs from a repo, two ways.
 
-Nothing in those lookups is specific to triage, so they are worth more as skills of their own: any future skill that needs Wazuh loads `wazuh-query` next to itself. `exercises/module-1/wazuh-query-SKILL.md` and `exercises/module-1/thehive-case-SKILL.md` are the two, each the `SKILL.md` of a one-file skill. Read their frontmatter: the description says what the skill is not for, which is how two skills that both touch the lab stay out of each other's way. Documentation for humans goes in a README next to the skill folders, never inside one.
-
-1. **Install both** as skills:
-   
-   ```bash
-   mkdir -p .claude/skills/wazuh-query .claude/skills/thehive-case
-   cp exercises/module-1/wazuh-query-SKILL.md .claude/skills/wazuh-query/SKILL.md
-   cp exercises/module-1/thehive-case-SKILL.md .claude/skills/thehive-case/SKILL.md
-   ```
-
-2. **Compare** `wazuh-query` with `wazuh_events.sh`: the same query, but credentials are parameters (`$WAZUH_USERNAME`) and the queries cover every field, not only the source IP. That is what "reusable" costs.
-
-3. **List them** and try one: restart `claude`, then `what did 203.0.113.9 do in Wazuh today`.
-
-### Share them: one repo, two installers
-
-Local skills help only you. Put them in a repo, push it, and anyone with access installs them with one command. Make a folder that holds nothing but the skills, `github-repo`, shaped so Claude Code's own installer understands it:
+Make a folder that holds nothing but the skill, `github-repo`, shaped so Claude Code's own installer understands it:
 
 ```text
 github-repo/
 ├── .claude-plugin/
 │   └── marketplace.json          # the catalogue Claude Code reads
-└── soc-skills/                    # one plugin, holding both skills
+└── soc-triage/                   # the plugin
     ├── .claude-plugin/
     │   └── plugin.json
     └── skills/
-        ├── wazuh-query/
-        │   └── SKILL.md
-        └── thehive-case/
-            └── SKILL.md
+        └── soc-triage/           # the whole skill you built
+            ├── SKILL.md
+            ├── scripts/
+            ├── references/
+            └── assets/
 ```
 
-Build it from the two skills you just installed:
+Build it from the skill you already have:
 
 ```bash
-mkdir -p github-repo/.claude-plugin github-repo/soc-skills/.claude-plugin github-repo/soc-skills/skills
-cp -r .claude/skills/wazuh-query .claude/skills/thehive-case github-repo/soc-skills/skills/
+mkdir -p github-repo/.claude-plugin github-repo/soc-triage/.claude-plugin github-repo/soc-triage/skills
+cp -r .claude/skills/soc-triage github-repo/soc-triage/skills/
 ```
 
-Open `github-repo/soc-skills/.claude-plugin/plugin.json`, the plugin itself:
+Open `github-repo/soc-triage/.claude-plugin/plugin.json`, the plugin:
 
 ```json
 {
-  "name": "soc-skills",
-  "description": "Wazuh and TheHive lookups for SOC triage",
+  "name": "soc-triage",
+  "description": "Triage a TheHive case from Wazuh and reputation, then write the verdict",
   "version": "1.0.0"
 }
 ```
@@ -765,7 +750,7 @@ Open `github-repo/.claude-plugin/marketplace.json`, the catalogue that lists it:
   "name": "soc",
   "owner": { "name": "your-name" },
   "plugins": [
-    { "name": "soc-skills", "source": "./soc-skills", "description": "Wazuh and TheHive lookups" }
+    { "name": "soc-triage", "source": "./soc-triage", "description": "SOC triage skill" }
   ]
 }
 ```
@@ -774,7 +759,7 @@ Open `github-repo/.claude-plugin/marketplace.json`, the catalogue that lists it:
 
    ```text
    /plugin marketplace add ./github-repo
-   /plugin install soc-skills@soc
+   /plugin install soc-triage@soc
    ```
 
 2. **Install it the npx way.** The `skills` CLI reads a GitHub repo and adds the skills it finds:
@@ -783,18 +768,19 @@ Open `github-repo/.claude-plugin/marketplace.json`, the catalogue that lists it:
    npx skills add <your-username>/github-repo
    ```
 
-3. **Put it on a server.** Push `github-repo` to GitHub. The local path becomes a repo name, and anyone you give access installs the same two skills from their own laptop with one line:
+3. **Put it on a server.** Push `github-repo` to GitHub. The local path becomes a repo name, and anyone you give access installs the same skill from their own laptop with one line:
 
    ```text
    /plugin marketplace add <your-username>/github-repo
-   /plugin install soc-skills@soc
+   /plugin install soc-triage@soc
    ```
 
-That is the module's whole argument made portable. A skill is text in a repo, so sharing it is a `git push` and a colleague's one command, where an MCP server would be a service each of them has to run and reconnect to. A private repo shares with a team, a public one with the room. A full `https://gitlab.com/...` git URL also works for `/plugin marketplace add`; `npx skills add` expects GitHub.
+That is the module's whole argument made portable. A skill is text in a repo, so sharing it is a `git push` and a colleague's one command, where an MCP server would be a service each of them runs and reconnects to. A private repo shares with a team, a public one with the room. A full `https://gitlab.com/...` git URL also works for `/plugin marketplace add`; `npx skills add` expects GitHub.
 
 **Expected**:
 
-- [ ] Both skills load when called.
-- [ ] Neither skill folder contains a `README.md`.
+- [ ] `/plugin marketplace add ./github-repo` lists `soc-triage`.
 
-**Question 10**: which skill loaded for the Wazuh question?
+- [ ] `/plugin install soc-triage@soc` installs it, and it loads on a triage prompt.
+
+**Question 10**: the one command a colleague runs to install your skill from GitHub.
