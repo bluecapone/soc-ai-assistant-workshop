@@ -106,14 +106,14 @@ services:
       # TheHive key) from environment variables rather than hand-created credentials.
       GENERIC_TIMEZONE: Europe/Brussels
       # Surfaced to the workflow nodes via $env. n8n 2.x blocks $env in nodes by
-      # default; the checkpoints read MODEL_* and OSINT_API_KEY through it, so allow it.
+      # default; the checkpoints read MODEL_* and ABUSEIPDB_API_KEY through it, so allow it.
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
       GATEWAY_BASE_URL: ${GATEWAY_BASE_URL}
       GATEWAY_API_KEY: ${GATEWAY_API_KEY}
       MODEL_WEAK: ${MODEL_WEAK}
       MODEL_FRONTIER: ${MODEL_FRONTIER}
       THEHIVE_N8N_APIKEY: ${THEHIVE_N8N_APIKEY}
-      OSINT_API_KEY: ${OSINT_API_KEY:-}
+      ABUSEIPDB_API_KEY: ${ABUSEIPDB_API_KEY:-}
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - n8n-data:/home/node/.n8n
@@ -292,6 +292,10 @@ services:
       # Consumed by the custom TheHive integrator (wazuh/integrations).
       THEHIVE_URL: http://thehive:9000
       THEHIVE_ORG: ${THEHIVE_ORG}
+      # Base URL of the Wazuh dashboard as the analyst's BROWSER reaches it — used to
+      # build the "open the full burst in the SIEM" Discover deep link inside each case.
+      # Default suits *.localhost; point it at https://localhost:8443 for Safari users.
+      WAZUH_DASHBOARD_URL: ${WAZUH_DASHBOARD_URL:-http://wazuh.localhost}
     ulimits:
       memlock: { soft: -1, hard: -1 }
       nofile: { soft: 655360, hard: 655360 }

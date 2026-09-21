@@ -13,10 +13,10 @@ You triage exactly one security case at a time from the workshop range, the case
 
 ## Workflow
 
-The case id is `$ARGUMENTS`, in the form `~123456`. The analyst exported `THEHIVE_URL`, `THEHIVE_APIKEY`, `WAZUH_URL` and, optionally, `OSINT_API_KEY` before starting `claude`. Run only the scripts below, in this order.
+The case id is `$ARGUMENTS`, in the form `~123456`. The analyst exported `THEHIVE_URL`, `THEHIVE_APIKEY`, `WAZUH_URL` and, optionally, `ABUSEIPDB_API_KEY` before starting `claude`. Run only the scripts below, in this order.
 
 1. Read the case: `${CLAUDE_SKILL_DIR}/scripts/get_case.sh <case-id>`. Take `srcip` from the output.
-2. Read the last 20 Wazuh events for that IP: `${CLAUDE_SKILL_DIR}/scripts/wazuh_events.sh <ip>`. For a host instead: `wazuh_events.sh <host> host`.
+2. Read the last 20 Wazuh events for that IP: `${CLAUDE_SKILL_DIR}/scripts/wazuh_events.sh <ip>`.
 3. Read the reputation: `${CLAUDE_SKILL_DIR}/scripts/reputation.sh <ip>`. The output says whether it came from AbuseIPDB or the offline list; the verdict repeats that label.
 4. Judge, using the rules below.
 5. Write the verdict in the shape of `assets/verdict-template.md`, then post it: `${CLAUDE_SKILL_DIR}/scripts/post_verdict.sh <case-id>` with the Markdown on stdin. Print the same text to the terminal.

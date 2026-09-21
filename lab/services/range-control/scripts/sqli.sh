@@ -2,7 +2,8 @@
 # Attack (rule 100110): SQL injection on search (data theft) and login (auth bypass). A browser
 # user-agent, not sqlmap. A realistic progression: a probe, error-based confirmation, column
 # discovery, then a UNION extraction against the users table — every payload sits in the URL, which
-# is what rule 100110 matches (ignore=60 collapses the burst into one case). The final login
+# each trip rule 100109 (indexed, so the source IP pivots to the whole burst); the composite 100110
+# fires once off those and collapses the burst into a single case. The final login
 # tautology authenticates as admin from the external attacker IP, logging a real authresult=success
 # that is actually an attack (the 100121 teaching nuance: a success from a flagged IP is not benign).
 set -euo pipefail

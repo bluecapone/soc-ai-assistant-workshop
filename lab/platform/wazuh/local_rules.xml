@@ -8,7 +8,7 @@
 
   Two tuning notes applied throughout:
     * Frequency rules (if_matched_sid) only count matches that generated an alert, so the
-      rules they count off must be level >0 (100090, 100119, 100152), not level 0.
+      rules they count off must be level >0 (100090, 100109, 100119, 100129, 100152), not level 0.
     * ignore="60" collapses one attack burst into a single alert instead of re-firing (and
       creating a duplicate TheHive case) for every event in the burst. Re-fireable after 60s.
 -->
@@ -53,10 +53,26 @@
     <group>recon,attack,</group>
   </rule>
 
-  <!-- 100110 SQL injection (attack): SQLi pattern in the request URL. -->
-  <rule id="100110" level="10" ignore="60">
+  <!-- 100109 SQL injection request (counted intermediate): a single web request whose URL carries
+       SQLi syntax. Level 4 (not 0) so the composite 100110 can count it via if_matched_sid, and so
+       every payload in the burst is indexed — the source IP then pivots to the whole progression
+       (probe -> error-based confirm -> column discovery -> UNION extraction), the way a 404 burst
+       reconstructs via 100090. Not forwarded to TheHive (not in the integration rule_id list);
+       only the composite 100110 opens a case. -->
+  <rule id="100109" level="4">
     <if_sid>100080</if_sid>
     <url type="pcre2">(?i)(union(\s|\+|%20)+select|%27|'\s*or\s*'?1'?='?1|--|information_schema)</url>
+    <description>SQL injection syntax in web request from $(srcip)</description>
+    <group>sql_injection,</group>
+  </rule>
+
+  <!-- 100110 SQL injection (attack): repeated SQLi requests from one source, the injection burst.
+       Mirrors the recon/brute-force composites (100100/100120): counts the level-4 requests (100109)
+       and fires once, so the SIEM keeps every request for the pivot while the analyst gets a single
+       incident. ignore=60 collapses re-fires within the burst into that one case. -->
+  <rule id="100110" level="10" frequency="2" timeframe="60" ignore="60">
+    <if_matched_sid>100109</if_matched_sid>
+    <same_source_ip />
     <description>SQL injection attempt in web request from $(srcip)</description>
     <group>sql_injection,attack,</group>
   </rule>
@@ -79,14 +95,27 @@
     <group>authentication_success,benign,</group>
   </rule>
 
-  <!-- 100130 Web shell execution (attack): a request for an uploaded script back through the
-       file-serving route, the attacker running the shell they planted. Web-log based, so it
-       carries srcip and merges with the upload alert (100131) by IP. ignore=60 collapses the
-       execution burst into one case. -->
-  <rule id="100130" level="12" ignore="60">
+  <!-- 100129 Web shell request (counted intermediate): a single request for an uploaded script via
+       the file-serving route. Level 4 (not 0) so the composite 100130 can count it via if_matched_sid,
+       and so every command in the burst is indexed — the source IP then pivots to the whole
+       post-exploitation sequence (id, whoami, reading /root/.ssh, the C2 pull), the way a 404 burst
+       reconstructs via 100090. Not forwarded to TheHive; only the composite 100130 opens a case. -->
+  <rule id="100129" level="4">
     <if_sid>100080</if_sid>
     <url type="pcre2">(?i)^/files/\S+\.php</url>
-    <description>Web shell execution: request to uploaded script $(url) from $(srcip)</description>
+    <description>Request to uploaded script $(url) from $(srcip)</description>
+    <group>web,webshell,rce,</group>
+  </rule>
+
+  <!-- 100130 Web shell execution (attack): repeated requests to the uploaded script, the attacker
+       running the shell they planted. Mirrors the SQLi/recon composites: counts the level-4 requests
+       (100129) and fires once, so the SIEM keeps every command for the pivot while the analyst gets a
+       single incident. Web-log based, so it carries srcip and merges with the upload alert (100131)
+       by IP; ignore=60 collapses re-fires within the burst. -->
+  <rule id="100130" level="12" frequency="2" timeframe="120" ignore="60">
+    <if_matched_sid>100129</if_matched_sid>
+    <same_source_ip />
+    <description>Web shell execution: repeated requests to uploaded script from $(srcip)</description>
     <group>web,webshell,rce,attack,</group>
   </rule>
 

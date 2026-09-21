@@ -142,10 +142,10 @@ You triage exactly one security case at a time from the workshop range, the case
 ```markdown
 ## Workflow
 
-The case id is `$ARGUMENTS`, in the form `~123456`. The analyst exported `THEHIVE_URL`, `THEHIVE_APIKEY`, `WAZUH_URL` and, optionally, `OSINT_API_KEY` before starting `claude`. Run only the scripts below, in this order.
+The case id is `$ARGUMENTS`, in the form `~123456`. The analyst exported `THEHIVE_URL`, `THEHIVE_APIKEY`, `WAZUH_URL` and, optionally, `ABUSEIPDB_API_KEY` before starting `claude`. Run only the scripts below, in this order.
 
 1. Read the case: `${CLAUDE_SKILL_DIR}/scripts/get_case.sh <case-id>`. Take `srcip` from the output.
-2. Read the last 20 Wazuh events for that IP: `${CLAUDE_SKILL_DIR}/scripts/wazuh_events.sh <ip>`. For a host instead: `wazuh_events.sh <host> host`.
+2. Read the last 20 Wazuh events for that IP: `${CLAUDE_SKILL_DIR}/scripts/wazuh_events.sh <ip>`.
 3. Read the reputation: `${CLAUDE_SKILL_DIR}/scripts/reputation.sh <ip>`. The output says whether it came from AbuseIPDB or the offline list; the verdict repeats that label.
 4. Judge, using the rules below.
 5. Write the verdict in the shape of `assets/verdict-template.md`, then post it: `${CLAUDE_SKILL_DIR}/scripts/post_verdict.sh <case-id>` with the Markdown on stdin. Print the same text to the terminal.
@@ -227,29 +227,29 @@ One prompt shape, used four times. Nothing in it is code. Four things it always 
 **What the script is for.** The file name, what goes in, what comes out, and that it only reads.
 
 ```text
-Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. With a second argument, host, it searches by agent name instead. It only reads.
+Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
 ```
 
-**What you know about the lab.** All of it from Part 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the field names in an alert. The variables say where the address and the login come from.
+**What you know about the lab.** All of it from Part 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the fields of the alert you expanded. The variables say where the address and the login come from.
 
 ```text
-What I know about the lab: the Wazuh indexer is OpenSearch. Its address is in WAZUH_URL. The login is admin / brucon2026 unless WAZUH_USERNAME and WAZUH_PASSWORD say otherwise. Its certificate is self-signed. The alerts are in the indices named wazuh-alerts-*. The alert fields I care about are timestamp, rule.id, rule.level, rule.description, data.srcip, data.url, data.dstuser and agent.name.
+What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
 ```
 
-**Look it up first.** Which docs, and which questions. The HTTP call is the model's job, and the docs are where it must get it, not its memory.
+**Look it up first.** Which docs. The HTTP call is the model's job, and the docs are where it must get it, not its memory.
 
 ```text
-Look up the OpenSearch search API in the docs before writing: how to search one field for one value, sort newest first, limit to 20 and return only some fields.
+Look up the OpenSearch search API in the docs before writing.
 ```
 
-**The output, and how to fail.** The exact JSON, the sentence for a missing variable, no half answers. Then: make it executable, do not run it.
+**The output, and how to fail.** What comes out, in words. What to do when a variable is missing. No half answers. The exact shape is not fixed here: Exercise 1.3 writes down whatever yours prints. Then: make it executable, do not run it.
 
 ```text
-Output: only JSON, shaped {"total": <how many alerts matched>, "events": [<one object per alert, with those fields>]}. When WAZUH_URL is not set, stop with the message: export WAZUH_URL first. When anything fails, exit with an error that says what failed, and print no partial answer.
+Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
 Make it executable. Do not run it.
 ```
 
-What the prompt does not say: the endpoint, the request body, the curl flags, the shell guards. The docs give the model the first two. The model knows the last two. You meet all four in the comparison at the end of each part, where the shipped script is explained line by line.
+What the prompt does not say: the endpoint, the request body, the curl flags, the shell guards. The docs give the model the first two. The model knows the last two. You meet all four in the file it writes. Read it before you test it.
 
 A prompt that names the output shape gets thirty comparable scripts in a room of thirty. "Write a Wazuh lookup" gets thirty different ones.
 
@@ -257,7 +257,7 @@ The loop, per script:
 
 1. **Send the prompt.** One documentation call must appear before the file is written: the `find-docs` skill running `ctx7` (Exercise 0.5), or `WebFetch`. If not: `look it up in the docs first, then revise`.
 2. **Run the three hand tests.** Real input works, an unset variable prints the sentence, an unknown value gives the empty shape or the error.
-3. **Diff against the shipped file.** Keep either. The shipped one is also the fallback.
+3. **Compare the output.** Ask the same question without the script, with the one-line command in each part, and check the two answers agree. Your script may look like nobody else's. Only its answer has to match.
 
 Context7 returns the few paragraphs that answer the question. `WebFetch` returns a whole page you must know the address of. Context7 is a third party with a rate limit and gaps, so when it fails, the page is the source:
 
@@ -265,7 +265,7 @@ Context7 returns the few paragraphs that answer the question. `WebFetch` returns
 - TheHive API: `https://docs.strangebee.com/thehive/api-docs/`
 - AbuseIPDB: `https://docs.abuseipdb.com/`
 
-No network at all: copy the four shipped files and read their essentials in Parts B to D.
+No network at all: the four scripts exist in `exercises/module-1/`, written for this manual. Copy them, then read them.
 
 ```bash
 mkdir -p .claude/skills/soc-triage/scripts
@@ -283,63 +283,46 @@ cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
 2. **Prompt.** In Claude Code:
    
    ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. With a second argument, host, it searches by agent name instead. It only reads.
-   What I know about the lab: the Wazuh indexer is OpenSearch. Its address is in WAZUH_URL. The login is admin / brucon2026 unless WAZUH_USERNAME and WAZUH_PASSWORD say otherwise. Its certificate is self-signed. The alerts are in the indices named wazuh-alerts-*. The alert fields I care about are timestamp, rule.id, rule.level, rule.description, data.srcip, data.url, data.dstuser and agent.name.
-   Look up the OpenSearch search API in the docs before writing: how to search one field for one value, sort newest first, limit to 20 and return only some fields.
-   Output: only JSON, shaped {"total": <how many alerts matched>, "events": [<one object per alert, with those fields>]}. When WAZUH_URL is not set, stop with the message: export WAZUH_URL first. When anything fails, exit with an error that says what failed, and print no partial answer.
+   Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
+   What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
+   Look up the OpenSearch search API in the docs before writing.
+   Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
    ```
 
 3. **Watch** for the `ctx7` commands, then read the file it wrote.
 
-4. **Hand tests.** In a second terminal, with the same exports as Exercise 0.4, with the source IP from your Part 0 case:
-   
+4. **Hand tests.** Open a second terminal in the workshop folder and export the same variables as Exercise 0.4. Nothing below runs without them. The example IP, `35.235.240.58`, is one of the noise sources every lab has. Your own Part 0 source IP works as well: in TheHive, in the case observables, or in Wazuh, in the alert's `data.srcip`. Three runs.
+
+   The example IP. Expect its alerts, newest first:
+
    ```bash
-   .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
-   env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
+   .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
+   ```
+
+   Same IP with `WAZUH_URL` removed for this one command. Expect the message:
+
+   ```bash
+   env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
+   ```
+
+   An IP that never hit the site. Expect a count of 0:
+
+   ```bash
    .claude/skills/soc-triage/scripts/wazuh_events.sh 203.0.113.9
    ```
 
-5. **Compare.** `diff .claude/skills/soc-triage/scripts/wazuh_events.sh exercises/module-1/wazuh_events.sh`. Keep yours or copy the shipped one over it.
+5. **Only for testing, comparing output.** The same question asked straight to the indexer, no script. the count and the newest rule id must match what your script printed:
 
-The shipped one, `exercises/module-1/wazuh_events.sh`, for the comparison. Ten lines: one `curl` to the indexer's `_search`, one `jq` to trim the answer. The essentials:
-
-Any failure stops the script with a non-zero exit, so the model sees a failure instead of half an answer:
-
-```bash
-set -euo pipefail
-```
-
-The variable check prints a sentence the model can act on. That sentence is also the first entry of the failure list in `lookups.md`:
-
-```bash
-: "${WAZUH_URL:?export WAZUH_URL first}"
-```
-
-One script, two questions, chosen by an argument rather than by editing:
-
-```bash
-FIELD=data.srcip; [ "${2:-srcip}" = host ] && FIELD=agent.name
-```
-
-`-s` silent, `-S` still show errors, `-f` fail on HTTP errors, `-k` because the indexer serves a self-signed certificate. Credentials default to the lab's and can be overridden by environment, so the script works outside this lab:
-
-```bash
-curl -sSfk -u "${WAZUH_USERNAME:-admin}:${WAZUH_PASSWORD:-brucon2026}" -X POST "$WAZUH_URL/wazuh-alerts-*/_search" -H 'Content-Type: application/json' \
-  -d '{"size":20,"_source":["timestamp","rule.id","rule.level","rule.description","data.srcip","data.url","data.dstuser","agent.name"],"query":{"match":{"'"$FIELD"'":"'"$VALUE"'"}},"sort":[{"timestamp":"desc"}]}' \
-```
-
-Keeps the count and the seven fields the rules read, drops the rest. Twenty full Wazuh events would be pages of JSON. The model reads a short list instead:
-
-```bash
-  | jq '{total: .hits.total.value, events: [.hits.hits[]._source]}'
-```
+   ```bash
+   curl -sk -u admin:brucon2026 "$WAZUH_URL/wazuh-alerts-*/_search?q=data.srcip:35.235.240.58&sort=timestamp:desc&size=20" | jq '[.hits.total.value, .hits.hits[0]._source.rule.id]'
+   ```
 
 **Expected**:
 
-- [ ] `total` is above zero and `events` lists them, newest first.
+- [ ] The count is above zero and the alerts follow, newest first.
 
-- [ ] The unset variable prints `export WAZUH_URL first`. The unknown IP prints `"total": 0`.
+- [ ] The unset variable names `WAZUH_URL` and stops. The unknown IP prints a count of 0 and no alerts.
 
 - [ ] The folder:
   
@@ -359,10 +342,10 @@ TheHive is the only system the skill writes to, and the only write is a comment.
 1. **Prompt for the read.**
    
    ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/get_case.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, it prints that case. It only reads.
-   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description holds a Markdown table with a row | Source IP | `x` | for the source IP.
-   Look up the TheHive 5 API in the docs before writing: how to authenticate, how to read one case by id, and how to list the observables of a case.
-   Output: only JSON, shaped {"title": ..., "tags": [...], "description": ..., "srcip": <the IP from that row, or null when there is no such row>, "observables": [{"dataType": ..., "data": ...}]}. When the observables cannot be read, use an empty list and still print the rest. When THEHIVE_URL or THEHIVE_APIKEY is not set, stop with the message "export <NAME> first", naming the missing one. When anything else fails, exit with an error that says what failed, and print no partial answer.
+   Write a bash script, .claude/skills/soc-triage/scripts/get_case.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, it prints that case: title, tags, description, the source IP and the observables. It only reads.
+   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description has a table with a Source IP row, as I saw in Part 0. I want that IP as its own field, empty when the row is missing.
+   Look up the TheHive 5 API in the docs before writing.
+   Output: only JSON. When the observables cannot be read, print the rest anyway. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
    ```
 
@@ -370,19 +353,30 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    
    ```text
    Write a bash script, .claude/skills/soc-triage/scripts/post_verdict.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, and a Markdown text on standard input, it adds that text as one comment on the case. That is the only thing it writes, anywhere.
-   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY.
-   Look up the TheHive 5 API in the docs before writing: how to authenticate and how to add a comment to a case.
-   The text can hold quotes, backticks and new lines. It must arrive intact, so build the request body with a JSON tool, never by pasting the text into a string.
-   Output: only JSON with the new comment's id and creation time, shaped {"_id": ..., "createdAt": ...}. When THEHIVE_URL or THEHIVE_APIKEY is not set, stop with the message "export <NAME> first", naming the missing one. When anything else fails, exit with an error that says what failed, and print no partial answer.
+   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The text can hold quotes, backticks and new lines, and it must arrive intact.
+   Look up the TheHive 5 API in the docs before writing.
+   Output: only JSON, the new comment's id and creation time. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
    ```
 
-3. **Hand tests for the read**, with the case id from Part 0:
-   
+3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3, in quotes: to the shell a bare `~` is somebody's home folder. Three runs.
+
+   Your case. Expect its title, tags, source IP and observables:
+
    ```bash
-   .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
-   THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
-   env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
+   .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
+   ```
+
+   A wrong key for this one command. Expect an error that says the key was refused, usually a `401`:
+
+   ```bash
+   THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
+   ```
+
+   `THEHIVE_URL` removed for this one command. Expect the message:
+
+   ```bash
+   env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
    ```
 
 4. **Hand test for the write**: the usage error only. <ins>Never run the write by hand</ins>. The skill does that in Exercise 1.5.
@@ -391,44 +385,19 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    .claude/skills/soc-triage/scripts/post_verdict.sh
    ```
 
-5. **Compare** both against the shipped files with `diff`, as in Part B.
+5. **Only for testing, comparing output.** The case, read straight from TheHive, no script. `title` and `tags` must match what `get_case.sh` printed. There is no such check for the write:
 
-The shipped one, `exercises/module-1/get_case.sh`, for the comparison. Two `curl` reads and one `jq` that merges them. The essentials:
-
-Two reads, one bearer token. The case itself, then its observables through TheHive's query API. The observables call is allowed to fail (`|| echo '[]'`) because it is the one that breaks when TheHive is slow:
-
-```bash
-CASE=$(curl -sSf "$THEHIVE_URL/api/v1/case/$CASE_ID" "${AUTH[@]}")
-OBS=$(curl -sSf -X POST "$THEHIVE_URL/api/v1/query" "${AUTH[@]}" -H 'Content-Type: application/json' \
-  -d '{"query":[{"_name":"getCase","idOrName":"'"$CASE_ID"'"},{"_name":"observables"}]}' || echo '[]')
-```
-
-One `jq` builds one object from both responses, so the model gets one shape to read every time. `srcip` comes from the `| Source IP |` row of the description with a regular expression, a second source for the value a verdict cannot do without:
-
-```bash
-jq -n --argjson case "$CASE" --argjson obs "$OBS" '{
-  title: $case.title, tags: $case.tags, description: $case.description,
-  srcip: (($case.description // "") | (capture("\\| Source IP \\| `(?<ip>[^`]+)` \\|") // {ip:null}).ip),
-  observables: [$obs[] | {dataType, data}]
-}'
-```
-
-The shipped one, `exercises/module-1/post_verdict.sh`, for the comparison. One `jq` and one `curl` write. The essentials:
-
-The one write. The verdict arrives on standard input and `jq -Rs` turns it into JSON. Escaping Markdown into JSON is exactly the kind of work a model gets subtly wrong and a program never does. `curl -sSf` makes a failed post a failed script, not a silent nothing. The output is the comment id and nothing else:
-
-```bash
-jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/comment" \
-  -H "Authorization: Bearer $THEHIVE_APIKEY" -H 'Content-Type: application/json' -d @- | jq '{_id, createdAt}'
-```
+   ```bash
+   curl -s -H "Authorization: Bearer $THEHIVE_APIKEY" "$THEHIVE_URL/api/v1/case/~<case id>" | jq '{title, tags}'
+   ```
 
 **Expected**:
 
 - [ ] Title, tags, description with the indicator table, `srcip` filled, and the observables.
 
-- [ ] The wrong key fails with a line that says `401`. The unset variable prints `export THEHIVE_URL first`.
+- [ ] The wrong key fails and says why. The unset variable names `THEHIVE_URL` and stops.
 
-- [ ] `post_verdict.sh` with no argument prints a usage line and nothing else.
+- [ ] `post_verdict.sh` with no argument fails, says why, and writes nothing.
 
 - [ ] The folder:
   
@@ -448,45 +417,36 @@ jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/com
 1. **Prompt.**
    
    ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/reputation.sh, for a Claude Code skill to run. Given an IP address it reports that IP's reputation: from AbuseIPDB when OSINT_API_KEY is set, from an offline list when it is not. The output must say which one answered.
-   What I know: the offline list is the file ${LAB_DIR:-lab}/threat-intel/malicious-ips.txt, one IP per line. An IP is listed when a whole line equals it, so 10.0.0.1 must not match 10.0.0.10.
-   Look up the AbuseIPDB API v2 in the docs before writing: how to authenticate and how to check one IP over the last 90 days.
-   Output: only JSON. With a key: {"source": "abuseipdb", "score": <the abuse confidence score>, "reports": <the number of reports>}. Without a key: {"source": "offline list, not live reputation", "listed": <true or false>}. When anything fails, exit with an error that says what failed, and print no partial answer.
+   Write a bash script, .claude/skills/soc-triage/scripts/reputation.sh, for a Claude Code skill to run. Given an IP address it reports that IP's reputation: from AbuseIPDB when ABUSEIPDB_API_KEY is set, from an offline list when it is not. It only reads.
+   What I know about the lab: the offline list is lab/threat-intel/malicious-ips.txt in the workshop folder, one IP per line. An IP is listed only when a whole line equals it, so 10.0.0.1 is not 10.0.0.10.
+   Look up the AbuseIPDB API v2 in the docs before writing. I want the check over the last 90 days.
+   Output: only JSON, and it must say which source answered, because the offline list is not live reputation. With a key: the abuse confidence score and the number of reports. Without one: whether the IP is listed. When anything fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
    ```
 
-2. **Hand tests**, from the workshop folder, with no key exported:
-   
+2. **Hand tests.** Same terminal. `ABUSEIPDB_API_KEY` is not exported, so the offline list answers. Two runs.
+
+   The example IP, which is noise, not an attacker. Expect not listed:
+
    ```bash
-   .claude/skills/soc-triage/scripts/reputation.sh <ip>
-   .claude/skills/soc-triage/scripts/reputation.sh 203.0.113.9
+   .claude/skills/soc-triage/scripts/reputation.sh 35.235.240.58
    ```
 
-3. **Compare** against the shipped file with `diff`.
+   The first IP of the list itself. Expect listed:
 
-The shipped one, `exercises/module-1/reputation.sh`, for the comparison. One `if` on the key, then either a `curl` or a `grep`. The essentials:
+   ```bash
+   .claude/skills/soc-triage/scripts/reputation.sh 223.159.80.211
+   ```
 
-Same outcome, two tools. AbuseIPDB when a key is exported, the offline list when not. The script makes the choice, not the model, and the output names which one answered (`source`), so the verdict can say "offline list, not live reputation" instead of pretending:
+3. **Only for testing, comparing output.** The list, searched by hand, no script. A line printed means listed, nothing means not, and `reputation.sh` must have said the same. Try it with both IPs:
 
-```bash
-if [ -n "${OSINT_API_KEY:-}" ]; then
-  curl -sSf -G https://api.abuseipdb.com/api/v2/check --data-urlencode "ipAddress=$IP" -d maxAgeInDays=90 \
-    -H "Key: $OSINT_API_KEY" -H 'Accept: application/json' \
-    | jq '{source: "abuseipdb", score: .data.abuseConfidenceScore, reports: .data.totalReports}'
-else
-```
-
-The offline list is found relative to the workshop folder, which is why Exercise 0.4 insists on starting Claude Code there:
-
-```bash
-  LIST=${LAB_DIR:-lab}/threat-intel/malicious-ips.txt   # run from the workshop folder, or export LAB_DIR
-  jq -n --arg ip "$IP" --argjson n "$(grep -cx "$IP" "$LIST" || true)" '{source: "offline list, not live reputation", listed: ($n > 0)}'
-fi
-```
+   ```bash
+   grep -x 223.159.80.211 lab/threat-intel/malicious-ips.txt
+   ```
 
 **Expected**:
 
-- [ ] Both runs print `"source": "offline list, not live reputation"`, one with `listed` true if that IP is on the list, the other false.
+- [ ] Both runs say the offline list answered, one listed, the other not.
 
 - [ ] The folder:
   
@@ -580,11 +540,13 @@ The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
    cp exercises/module-1/brute-force.md .claude/skills/soc-triage/references/examples/
    ```
 
-2. **Match your failures.** Find the entries in `Common issues` for the three failures you produced in Exercise 1.2.
+2. **Match your scripts.** The model reads this file, not your scripts, so it must describe what yours print. Run each script once more and compare with the shape under its name. Compare the three failures you produced in Exercise 1.2 with `Common issues`. Where yours print something else, edit the copy in `references/`, not the script.
 
 **Expected**:
 
-- [ ] All three failures you produced have an entry under `Common issues`.
+- [ ] Each shape in `lookups.md` matches what your script prints, after your edits.
+
+- [ ] All three failures you produced have an entry under `Common issues`, in the words your scripts use.
 
 - [ ] The folder:
   
@@ -770,7 +732,7 @@ The skill was built to work offline. With a key, one script changes its source a
 
 `reputation.sh` already switches on the key. Nothing else in the skill changes. The verdict says a different `source`.
 
-1. **Export a key**: `export OSINT_API_KEY=<AbuseIPDB key>`. Free tier is 1000 requests a day.
+1. **Export a key**: `export ABUSEIPDB_API_KEY=<AbuseIPDB key>`. Free tier is 1000 requests a day.
 2. **Run** `.claude/skills/soc-triage/scripts/reputation.sh <attacker ip>` by hand: `source` is now `abuseipdb`, with a score.
 3. **Rerun** `/soc-triage` on the Exercise 1.5 case.
 

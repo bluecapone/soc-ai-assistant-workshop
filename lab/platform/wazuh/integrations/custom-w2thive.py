@@ -45,6 +45,28 @@ def alert_link(alert_id: str) -> str:
             f"&_g=(time:(from:now-7d,to:now))"
             f"&_q=(query:(language:kuery,query:'{q}'))")
 
+# Base URL of the Wazuh dashboard as the ANALYST's browser reaches it (not the internal
+# docker name) — this is what the "open in the SIEM" link in the case must resolve to.
+WAZUH_DASHBOARD_URL = os.environ.get("WAZUH_DASHBOARD_URL", "http://wazuh.localhost")
+WAZUH_INDEX_PATTERN = os.environ.get("WAZUH_INDEX_PATTERN", "wazuh-alerts-*")
+
+
+def wazuh_discover_url(kql: str, when: str = "now-24h") -> str:
+    """A Wazuh dashboard (OpenSearch Dashboards) Discover deep link pre-filtered to `kql`
+    over [when, now], so a case links straight to the events it was raised on.
+
+    The dashboard stores Discover state as rison in the URL fragment. Rison is full of
+    parentheses, which would truncate a Markdown `[text](url)` link at the first `)`, so we
+    percent-encode each state blob (the dashboard decodeURIComponent's it back before parsing,
+    exactly as its own share links do). Structural chars (`#?&=`) stay raw."""
+    base = WAZUH_DASHBOARD_URL.rstrip("/")
+    enc = lambda s: urllib.parse.quote(s, safe="")
+    g = f"(time:(from:{when},to:now))"
+    a = (f"(discover:(columns:!(_source),sort:!()),"
+         f"metadata:(indexPattern:'{WAZUH_INDEX_PATTERN}',view:discover))")
+    q = f"(filters:!(),query:(language:kuery,query:'{kql}'))"
+    return f"{base}/app/data-explorer/discover#?_g={enc(g)}&_a={enc(a)}&_q={enc(q)}"
+
 
 def severity_from_level(level: int) -> int:
     """Map a Wazuh rule level (0-15) to a TheHive severity (1-4)."""
@@ -412,10 +434,19 @@ def build_case(alert: dict):
     ev = evidence(rule_id, data)
     if ev:
         lines += ["", "### Evidence"] + ev
+    # Link the case straight to the events it was raised on: pivot on the source IP when the
+    # alert carries one (every attack fires from the one pinned attacker IP), else fall back to
+    # this detection's own rule so the link is never empty.
+    if srcip and srcip != "n/a":
+        pivot_kql = f'data.srcip:{srcip}'
+    else:
+        pivot_kql = f'rule.id:{rule_id}'
+    pivot_url = wazuh_discover_url(pivot_kql)
     lines += [
         "",
         "### What to check",
-        f"- Hunt this source in the SIEM: search `data.srcip:{srcip}` over the last 24h to see the full burst.",
+        f"- [Open the full burst in the SIEM]({pivot_url}) — Wazuh Discover, filtered to "
+        f"`{pivot_kql}` over the last 24h.",
         f"- Reputation of the source IP `{srcip}` (AbuseIPDB).",
         f"- {HINTS.get(rule_id, 'Correlate with other activity from the same source.')}",
         "",

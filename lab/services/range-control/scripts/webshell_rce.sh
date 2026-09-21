@@ -3,7 +3,8 @@
 # invoke it through bank-web's file-serving route (GET /files/<shell>?cmd=...), the attacker running
 # the shell they planted. Both requests carry the attacker IP, so the two alerts merge into one case
 # by IP. The file landing under /uploads also trips FIM rule 100132, a non-forwarded breadcrumb. The
-# shell name and the commands vary per run; ignore=60 on rule 100130 collapses the execution burst.
+# shell name and the commands vary per run; each exec request trips rule 100129 (indexed, so the
+# source IP pivots to the whole command sequence) and the composite 100130 fires once off those.
 set -euo pipefail
 source "$(dirname "$0")/_lib.sh"
 ip="$(rand_attacker_ip)"

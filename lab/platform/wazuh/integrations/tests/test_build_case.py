@@ -84,3 +84,37 @@ def test_bruteforce_breakthrough_renders_srcip_and_compromise_language():
     assert "45.9.148.20" in case["description"]
     assert "breakthrough" in case["description"].lower() or "repeated failed" in case["description"].lower()
     assert any(o["dataType"] == "ip" and o["data"] == "45.9.148.20" for o in obs)
+
+
+def _first_link_url(md):
+    """The href of the first Markdown [text](href) link, read up to the first ')'."""
+    i = md.index("](") + 2
+    return md[i:md.index(")", i)]
+
+
+def test_case_links_to_wazuh_discover_on_srcip():
+    case, _ = m.build_case(alert("100120", 10, {"srcip": "203.0.113.10", "url": "/login"}))
+    d = case["description"]
+    assert "`data.srcip:203.0.113.10`" in d                       # human-readable pivot text
+    url = _first_link_url(d)
+    assert url.startswith("http://wazuh.localhost/app/data-explorer/discover#")
+    # The rison parens are percent-encoded, so the ')' that closes the Markdown link is the
+    # real end of the URL — the captured href still carries the whole encoded query blob.
+    assert "_q=" in url and "data.srcip%3A203.0.113.10" in url
+    assert "(" not in url and ")" not in url                      # Markdown-safe: no raw parens
+
+
+def test_case_link_falls_back_to_rule_id_without_srcip():
+    case, _ = m.build_case(alert("100131", 10, {"url": "/upload"}))   # no srcip on the alert
+    url = _first_link_url(case["description"])
+    assert "rule.id%3A100131" in url
+
+
+def test_dashboard_url_is_configurable():
+    # The link must point at the browser-reachable base, overridable for other deployments.
+    old = m.WAZUH_DASHBOARD_URL
+    m.WAZUH_DASHBOARD_URL = "https://siem.example.test"
+    try:
+        assert m.wazuh_discover_url("rule.id:100120").startswith("https://siem.example.test/app/")
+    finally:
+        m.WAZUH_DASHBOARD_URL = old

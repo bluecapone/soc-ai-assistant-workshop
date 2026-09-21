@@ -17,7 +17,7 @@ It uses plain HTTP Request nodes for every step, including the LLM call, because
 2. `start.sh` provisions the three credentials it references: **Wazuh indexer** (`credWazuhIndex01`), **TheHive n8n** (`credTheHiveN8n01`), **Model gateway** (`credModelGatewy1`). Create them by hand only when running n8n without the script:
    - **Wazuh indexer** (HTTP Basic Auth): user `admin`, the indexer password from `.env`.
    - **TheHive n8n** (HTTP Header Auth): header `Authorization`, value `Bearer <THEHIVE_N8N_APIKEY>`.
-3. Confirm the environment variables reach n8n: `GATEWAY_BASE_URL`, `GATEWAY_API_KEY`, `MODEL_WEAK`, and (optional) `OSINT_API_KEY`. They are passed in `docker-compose.yml`.
+3. Confirm the environment variables reach n8n: `GATEWAY_BASE_URL`, `GATEWAY_API_KEY`, `MODEL_WEAK`, and (optional) `ABUSEIPDB_API_KEY`. They are passed in `docker-compose.yml`.
 4. Activate the workflow so the production webhook URL `…/webhook/thehive-alert` is live, then confirm TheHive's notifier points at it (`thehive/application.conf`).
 5. Fire a button on the range control panel and watch the execution: the webhook receives the TheHive event, enrichment runs, the gateway returns a verdict, and the verdict is written back to TheHive.
 

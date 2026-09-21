@@ -413,7 +413,7 @@
           "parameters": [
             {
               "name": "Key",
-              "value": "={{ $env.OSINT_API_KEY }}"
+              "value": "={{ $env.ABUSEIPDB_API_KEY }}"
             },
             {
               "name": "Accept",
