@@ -432,7 +432,7 @@ No question. Exercise 2.8 tests the whole chain end to end.
 
 3. **Watch.** `Executions`: one green row for the `Creation` event. Open it and read each node's output in wire order.
 
-4. **Read it in TheHive.** Open the case. From the API, the comments curl from Part 1 (`03-module-1.md`, Exercise 1.7).
+4. **Read it in TheHive.** Open the case. From the API, the comments curl from Part 1 (`03-module-1.md`, Exercise 1.5, Part B).
 
 **Expected**:
 
@@ -443,7 +443,7 @@ No question. Exercise 2.8 tests the whole chain end to end.
 
 Failure hint: a red `Triage (LLM chain)` with a parser error means the model did not return the three fields. A red mini-chain means the same for one indicator. Read the error text, then go to Exercise 2.9, because the fix is a sentence.
 
-**Question 7**: the case id. **Question 8**: the three judgments (indicator type and verdict) the rendered table shows.
+**Question 7**: the case id. **Question 8**: one phrase from the summary that ties an indicator judgment to what `Enrich: Wazuh` returned.
 
 ## Exercise #2.9: fix the text
 
