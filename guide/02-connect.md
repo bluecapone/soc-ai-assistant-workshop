@@ -181,6 +181,8 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
 
 A `401` means the token is wrong or expired. Ask an instructor for a new one.
 
+Use only two permission modes today: the default one, which asks before each command, or *accept edits*, which asks before commands but not before writing files. `Shift+Tab` cycles between them, and the current one shows at the bottom of the screen. Do not use auto mode. Its safety checks do not pass through the gateway, so Claude Code falls back to its own, slower and billed to the workshop. If a notice about "classifier requests" appears anyway, press Enter, then `Shift+Tab` back to one of the two.
+
 To keep the variables across terminals, add the export lines to `~/.zshrc` or `~/.bash_profile`. On Windows, use the *Environment Variables* control panel.
 
 **Question 4**: what did the test prompt answer?
@@ -216,5 +218,18 @@ Claude Code writes API calls from memory unless something puts the current docum
 - [ ] The test prompt ran `ctx7` before answering.
 
 If the setup cannot reach the registry or the site, Exercise 1.2 still works: it gives the documentation addresses for Claude Code's built-in `WebFetch` tool. If you chose `MCP server` in the setup by mistake, run `npx ctx7 remove --claude --mcp` and start again with `--cli`.
+
+<details>
+<summary>Tip: answer the <code>ctx7</code> permission prompt once</summary>
+
+Claude Code asks before each command, and one lookup is two or three of them. To allow those and nothing else, create `.claude/settings.json` in the workshop folder:
+
+```json
+{ "permissions": { "allow": ["Bash(npx ctx7:*)", "Bash(ctx7:*)"] } }
+```
+
+Every other command still asks. If a lookup is refused instead of asked, look at the mode at the bottom of the screen: auto mode blocks it, and Exercise 0.4 says which two to use.
+
+</details>
 
 **Question 5**: what did the test prompt answer?
