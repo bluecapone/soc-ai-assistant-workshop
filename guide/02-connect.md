@@ -28,7 +28,7 @@ The start script does the one-time setup, so there is nothing to configure by ha
    Start-Process "C:\Program Files\Docker\Docker\Docker Desktop.exe"   # Windows
    ```
    
-   Check with `docker info`; it errors until Docker is up. The start script checks this first and stops with `Docker is installed but the daemon isn't running` if you skip it.
+   Check with `docker info`. It errors until Docker is up. The start script checks this first and stops with `Docker is installed but the daemon isn't running` if you skip it.
 
 3. **Run the start script.** From the workshop folder, on macOS or Linux:
    
@@ -44,28 +44,28 @@ The start script does the one-time setup, so there is nothing to configure by ha
    .\scripts\windows\start.ps1
    ```
 
-4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest; a few minutes.
+4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest, a few minutes.
 
 **Expected**:
 
 - [ ] The script ends with a `== Ready` block: five addresses with their logins, each with a `:port` alternative.
 - [ ] Each address opens in your browser. If a `*.localhost` name does not open, use the port form.
-- [ ] `lab/.env` exists: a copy of `lab/.env.example` with the TheHive API key the script minted. Module 1 reads that key from there; do not edit the file.
+- [ ] `lab/.env` exists: a copy of `lab/.env.example` with the TheHive API key the script minted. Module 1 reads that key from there. Do not edit the file.
 
 Two containers show as *exited* in Docker Desktop: `wazuh-certs-generator` and `thehive-init`. Both are one-time setup jobs that finish before the services start. **Exit code 0 is normal.**
 
-If Docker itself fails (Docker Desktop licensing, cgroup v1, WSL2 backend, corporate TLS interception), put your hand up. *Pair with a neighbour and use their lab; that is the fallback for the day.*
+If Docker itself fails (Docker Desktop licensing, cgroup v1, WSL2 backend, corporate TLS interception), put your hand up. *Pair with a neighbour and use their lab. That is the fallback for the day.*
 
 ## Your range
 
 The *range* is the chain one click travels. Every element below is a container on your laptop, and the panel's quick-access cards link to each one that has a web page.
 
 - **Range control panel** (`http://panel.localhost`) is the attack console: ten attack buttons and six *benign twins*. A benign twin writes the same log shape as its attack but does no harm, so the SOC has to tell them apart. Every click runs a real command against bank-web after a confirm dialog and adds a row to the activity table.
-- **bank-web** is the target: a bank site that is vulnerable on purpose. Its web access log and login log are the main log data; some buttons also write SSH, mail gateway, proxy or data-transfer log lines for the same host. *Nothing is seeded*; the logs fill only when a button is clicked.
+- **bank-web** is the target: a bank site that is vulnerable on purpose. Its web access log and login log are the main log data. Some buttons also write SSH, mail gateway, proxy or data-transfer log lines for the same host. *Nothing is seeded.* The logs fill only when a button is clicked.
 - **Wazuh** (`http://wazuh.localhost`) is the SIEM. The manager reads those log files as new lines arrive, and turns lines into alerts:
-  - a *decoder* splits each line into fields (`data.srcip`, `data.url`, `data.user_agent`);
-  - a *rule* matches on those fields. A match is an *alert* with a rule id and a level from 0 to 15;
-  - some rules count other rules: `100152` fires once per crawler request, and `100151` fires when it has seen twelve of those from one source inside a minute, so one click becomes *one* alert, not fifteen;
+  - a *decoder* splits each line into fields (`data.srcip`, `data.url`, `data.user_agent`).
+  - a *rule* matches on those fields. A match is an *alert* with a rule id and a level from 0 to 15.
+  - some rules count other rules: `100152` fires once per crawler request, and `100151` fires when it has seen twelve of those from one source inside a minute, so one click becomes *one* alert, not fifteen.
   - a noise generator writes rule `100200`, normal internet traffic against the bank site, directly into the alert index, thousands of them, so the SIEM looks real.
 - **The integrator** is a script the Wazuh manager runs for every alert of a *forwarded* rule. It builds a case from the alert's fields and opens it in TheHive. Only a few rule ids are forwarded, so most of what Wazuh sees never becomes a case.
 - **TheHive** (`http://thehive.localhost`) is case management. A *case* is the analyst's work item: a description, *observables* (the IPs, URLs and user agents taken from the alert) and tasks. Your verdicts land here.
@@ -77,13 +77,13 @@ Exercise 0.3 walks it once by hand.
 
 ## Exercise #0.2: sign in everywhere
 
-**Goal**: the panel is your front door; from it you reach TheHive and n8n and sign in to both.
+**Goal**: the panel is your front door. From it you reach TheHive and n8n and sign in to both.
 
-1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login; *click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
+1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login. *Click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
    
    ![Attack console, quick access](screenshots/connect/03-panel.png)
 
-2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login; the lab runs on the free tier and nothing in the workshop needs more.
+2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login. The lab runs on the free tier and nothing in the workshop needs more.
    
    ![TheHive login](screenshots/connect/01-thehive-login.png)
 
@@ -103,17 +103,17 @@ Exercise 0.3 walks it once by hand.
 
 **Goal**: one click on the panel becomes a Wazuh detection and then a TheHive case, and you watched it happen.
 
-`Heavy crawler` is a *benign twin*: a real high-volume crawler reading the bank site from a harmless source address, with the same log shape as a scan. Nothing is seeded; this is the first real log data in the room.
+`Heavy crawler` is a *benign twin*: a real high-volume crawler reading the bank site from a harmless source address, with the same log shape as a scan. Nothing is seeded. This is the first real log data in the room.
 
 1. **Fire.** On the panel, click `Heavy crawler` and confirm. The console prints the action and adds a row to the activity table.
 2. **Sign in to Wazuh.** Open `http://wazuh.localhost` in another tab, user `admin`, password `brucon2026`. *Leave it open.*
-3. **Find the case.** Go back to TheHive and refresh the case list. <ins>Wait up to one minute</ins>; the pipeline has three hops (log collector, rule engine, integrator script). Open the new case.
+3. **Find the case.** Go back to TheHive and refresh the case list. <ins>Wait up to one minute</ins>. The pipeline has three hops (log collector, rule engine, integrator script). Open the new case.
 4. **Follow the link.** In the case description, find the `Wazuh alert` row of the table and click the alert id. Wazuh opens on the one detection your click produced. Expand the row and read:
-   - `full_log`: the log line;
-   - `rule.id` and `rule.description`: the rule that fired;
+   - `full_log`: the log line.
+   - `rule.id` and `rule.description`: the rule that fired.
    - the `data.*` fields: the observables the decoder extracted.
 5. **See the rest.** Now see everything Wazuh fired, not only the one it forwarded. In Wazuh, open the menu (top left), `Threat intelligence`, `Threat Hunting`, tab `Events`. Type `rule.id:100151` in the search bar to find your alert among the rest, then clear it and look at what is around it:
-   - rule `100200` is *noise*: normal internet traffic against the bank site, thousands of events, generated on purpose;
+   - rule `100200` is *noise*: normal internet traffic against the bank site, thousands of events, generated on purpose.
    - rule `100152` is the single crawler hits that `100151` counted.
 
 **Expected**:
@@ -133,7 +133,7 @@ Exercise 0.3 walks it once by hand.
 
 **Goal**: Claude Code answers a prompt through the workshop gateway with your token, started from the workshop folder.
 
-Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it; any client that reads the same two variables uses the gateway too.
+Every model call goes through one *gateway* the instructors run. Claude Code reads two environment variables for it. Any client that reads the same two variables uses the gateway too.
 
 1. **Gateway.** Export the gateway address (announced from the slide) and the token you got at the door. macOS or Linux:
 
@@ -157,7 +157,7 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
    export WAZUH_URL=https://localhost:9200
    ```
 
-3. **Start Claude Code** from the workshop folder. <ins>Start it from here every time</ins>; the skill you build in Module 1 is only found from here.
+3. **Start Claude Code** from the workshop folder. <ins>Start it from here every time</ins>. The skill you build in Module 1 is only found from here.
 
    ```bash
    claude
@@ -167,12 +167,12 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
 
 **Expected**:
 
-- [ ] Claude Code starts without asking you to log in; the two variables did that.
-- [ ] A notice says claude.ai connectors are disabled because another auth source is set. That is the token variable doing its job; ignore it.
+- [ ] Claude Code starts without asking you to log in. The two variables did that.
+- [ ] A notice says claude.ai connectors are disabled because another auth source is set. That is the token variable doing its job. Ignore it.
 - [ ] The test prompt gets an answer.
 - [ ] `! echo $THEHIVE_APIKEY` inside Claude Code (the `!` prefix runs a shell command) prints a long key, not `replace-after-first-boot` and not an empty line.
 
-A `401` means the token is wrong or expired; ask an instructor for a new one.
+A `401` means the token is wrong or expired. Ask an instructor for a new one.
 
 To keep the variables across terminals, add the export lines to `~/.zshrc` or `~/.bash_profile`. On Windows, use the *Environment Variables* control panel.
 

@@ -68,6 +68,7 @@ MITRE = {
     "100160": ("T1110", "Brute Force"),
     "100161": ("T1021.004", "Remote Services: SSH"),
     "100162": ("T1110", "Brute Force"),
+    "100163": ("T1110", "Brute Force"),
     "100170": ("T1566", "Phishing"),
 }
 # Rule -> one-line "what to check" hint for the analyst / AI.
@@ -84,6 +85,7 @@ HINTS = {
     "100160": "Look for a successful SSH login from the same IP right after — that is the compromise moment.",
     "100161": "A successful SSH login: decide by the source IP reputation and whether brute force preceded it from the same address.",
     "100162": "The brute force succeeded; identify the compromised account, reset it, and hunt this source's activity after the successful login.",
+    "100163": "The SSH brute force succeeded; identify the compromised account, reset it, and hunt this source's activity after the successful login.",
     "100170": "Check the sender IP and the embedded URL reputation; confirm whether the recipient clicked, and the attachment hash.",
 }
 
@@ -135,9 +137,13 @@ SUMMARY = {
     "100161": "A successful SSH login for `{dstuser}` from `{srcip}` on `{host}` (rule {id}). Check "
               "whether failed attempts from the same address preceded it, and the source's "
               "reputation.",
-    "100162": "A successful authentication from `{srcip}` immediately followed repeated failed attempts "
-              "from the same source on `{host}`. Rule {id} (Wazuh composite 40112) fires on a login "
-              "success preceded by brute-force failures - the breakthrough. Treat as a credential "
+    "100162": "A successful web login from `{srcip}` immediately followed repeated failed attempts "
+              "from the same source on `{host}`. Rule {id} fires on a login success preceded by "
+              "brute-force failures from the same source - the breakthrough. Treat as a credential "
+              "compromise: identify the account that fell and hunt this source's activity after login.",
+    "100163": "A successful SSH login from `{srcip}` immediately followed repeated failed SSH attempts "
+              "from the same source on `{host}`. Rule {id} fires on an SSH login success preceded by "
+              "brute-force failures from the same source - the breakthrough. Treat as a credential "
               "compromise: identify the account that fell and hunt this source's activity after login.",
     "100170": "The mail gateway flagged an email to `{dstuser}` from `{mail_from}` (sender IP "
               "`{srcip}`) as suspicious. It carries the link `{url}` and the attachment "
@@ -347,6 +353,10 @@ def evidence(rule_id: str, data: dict) -> list:
         return [f"- High request volume from `{data.get('srcip')}` using the user-agent `{data.get('user_agent')}`."]
     if rule_id == "100161":  # successful SSH login (compromise or admin decoy)
         return [f"- A successful SSH login for `{data.get('dstuser') or data.get('user') or 'the account'}` from `{data.get('srcip')}`."]
+    if rule_id in ("100162", "100163"):  # brute-force breakthrough (web / SSH)
+        return [f"- A successful login from `{data.get('srcip')}` followed the failed attempts from the "
+                "same source - the brute force broke through. Identify the account that fell, reset it, "
+                "and hunt this source's activity after the successful login."]
     return []
 
 

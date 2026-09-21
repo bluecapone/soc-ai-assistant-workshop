@@ -74,8 +74,8 @@ for filepath in files_for_cred_check:
         log_fail(f"Check 2: {filepath.name}", str(e))
 
 # Check 3: SKILL.md sections appear in M2 and M3 system messages
-# The finished Module 1 skill is instructor material (instructor-docs/module1/skills/soc-triage), not shipped here.
-skill_path = Path(os.environ.get("SOC_TRIAGE_SKILL", checkpoints_dir / ".." / ".." / ".." / "instructor-docs" / "module1" / "skills" / "soc-triage" / "SKILL.md"))
+# The Module 1 skill ships complete in exercises/module-1 (flat files; the attendee assembles the folder).
+skill_path = Path(os.environ.get("SOC_TRIAGE_SKILL", checkpoints_dir / ".." / ".." / "exercises" / "module-1" / "SKILL.md"))
 try:
     with open(skill_path) as f:
         skill_content = f.read()

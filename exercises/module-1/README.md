@@ -3,7 +3,7 @@
 Everything Module 1 needs, flat. Exercise 1.1 says where each file goes.
 
 - `SKILL.md`, `get_case.sh`, `wazuh_events.sh`, `reputation.sh`, `post_verdict.sh`, `lookups.md`, `brute-force.md`, `verdict-template.md`: the eight files of the `soc-triage` skill you build.
-- `wazuh-query-SKILL.md` and `thehive-case-SKILL.md`: the finished reusable skills Exercise 1.9 asks you to extract, one file each. Yours need not match them.
+- `wazuh-query-SKILL.md` and `thehive-case-SKILL.md`: the finished reusable skills Exercise 1.6 installs, one file each. Yours need not match them.
 
 ## Security
 

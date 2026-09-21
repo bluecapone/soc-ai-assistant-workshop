@@ -29,7 +29,7 @@
 
 <decoder name="bankweb-auth-fields">
   <parent>bankweb-auth</parent>
-  <regex type="pcre2">authresult=(\w+) user=(\S+) src_ip=(\d+\.\d+\.\d+\.\d+)</regex>
+  <regex type="pcre2">authresult=(\w+) user=(.+) src_ip=(\d+\.\d+\.\d+\.\d+)</regex>
   <order>authresult, user, srcip</order>
 </decoder>
 
