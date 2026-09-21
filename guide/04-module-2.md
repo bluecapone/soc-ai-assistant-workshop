@@ -109,19 +109,16 @@ The webhook fires on every case and alert event, and the workflow's own write is
 
 **Goal**: the skeleton is active and only case-creation events reach the rest of the workflow.
 
-1. **Open the skeleton.** In n8n, open `SOC triage, build here (skeleton)`. Two nodes and a sticky note. Read the note (quote its first sentence in backticks: `Build between these two nodes`). Open `Write verdict to TheHive` and read what it expects: an item with `caseId` and `verdict`, credential `TheHive n8n`. Its URL still reads `http://thehive:9000/api/v1/case/{{ $json.caseId }}/comment`, from before Caddy grew an alias for TheHive.
+1. **Open the skeleton.** In n8n, open `SOC triage, build here (skeleton)`. Two nodes and a sticky note. Read the note (quote its first sentence in backticks: `Build between these two nodes`). Open `Write verdict to TheHive` and read what it expects: an item with `caseId` and `verdict`, credential `TheHive n8n`, `POST http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`, the address Caddy aliases on the compose network, the same one you type in the browser.
 
-2. **Fix the write URL.** Change it to `http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`, the address n8n's compose network now aliases to Caddy, the same one you type in the browser.
+2. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
 
-3. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
+3. **Fire.** Panel, `Brute force`, confirm. In n8n, `Executions`: several rows for one click, one per TheHive event. Open one, click `Webhook`, read `body.objectType` and `body.operation`. The write node is red in every execution: it has no `caseId` yet. Expected, until Exercise 2.7.
 
-4. **Fire.** Panel, `Brute force`, confirm. In n8n, `Executions`: several rows for one click, one per TheHive event. Open one, click `Webhook`, read `body.objectType` and `body.operation`. The write node is red in every execution: it has no `caseId` yet. Expected, until Exercise 2.7.
-
-5. **Add the filter.** Insert a `Filter` node between `Webhook` and `Write verdict to TheHive`, named `Case created only`. Two conditions, combinator AND, type string, operation equals. First, `{{ $json.body.objectType }}` equals `case`. Second, `{{ $json.body.operation }}` equals `Creation`. Fence the two expressions as `text`. Save, fire `Brute force` again.
+4. **Add the filter.** Insert a `Filter` node between `Webhook` and `Write verdict to TheHive`, named `Case created only`. Two conditions, combinator AND, type string, operation equals. First, `{{ $json.body.objectType }}` equals `case`. Second, `{{ $json.body.operation }}` equals `Creation`. Fence the two expressions as `text`. Save, fire `Brute force` again.
 
 **Expected**:
 
-- [ ] `Write verdict to TheHive`'s URL reads `thehive.localhost`, not `thehive:9000`.
 - [ ] One execution per TheHive event before the filter, all red at the write node.
 - [ ] After the filter, the `Creation` event passes and any update event stops at `Case created only` (its output shows `0 items` kept).
 - [ ] Node list:
@@ -442,11 +439,11 @@ No question. Exercise 2.8 tests the whole chain end to end.
 - [ ] One green execution, every node ran.
 - [ ] The comment has an indicator table and three `###` sections, and ends with `Written by the Module 2 workflow`.
 - [ ] The table names the source IP `Enrich: Wazuh` returned events for, and any hash or domain the case carried.
-- [ ] The close state is one of the four.
+- [ ] The close state is `other`: this module only suggests, it never determines.
 
 Failure hint: a red `Triage (LLM chain)` with a parser error means the model did not return the three fields. A red mini-chain means the same for one indicator. Read the error text, then go to Exercise 2.9, because the fix is a sentence.
 
-**Question 7**: the case id. **Question 8**: the close state the workflow chose.
+**Question 7**: the case id. **Question 8**: the three judgments (indicator type and verdict) the rendered table shows.
 
 ## Exercise #2.9: fix the text
 

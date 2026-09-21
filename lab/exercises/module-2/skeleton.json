@@ -23,7 +23,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://thehive:9000/api/v1/case/{{ $json.caseId }}/comment",
+        "url": "=http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
