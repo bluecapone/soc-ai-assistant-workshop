@@ -65,7 +65,6 @@ The same, as one run, top to bottom. Left the run, right the folder, an arrow wh
 Open `exercises/module-1/SKILL.md`. Its first five lines, between the two `---`, are the *frontmatter*:
 
 <!-- file: exercises/module-1/SKILL.md to "## Task" -->
-
 ```yaml
 ---
 name: soc-triage
@@ -128,7 +127,6 @@ Open `exercises/module-1/SKILL.md` again and read below the frontmatter. Five se
 - An agent that reads everything and writes one comment is safe to hand a case. One that closes cases is not.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Task" to "## Workflow" -->
-
 ```markdown
 ## Task
 
@@ -142,7 +140,6 @@ You triage exactly one security case at a time from the workshop range, the case
 - The last paragraph is the only mention of the references, which is what makes them load on demand.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Workflow" to "## How to judge" -->
-
 ```markdown
 ## Workflow
 
@@ -165,7 +162,6 @@ Response shapes and known failures of each script: `references/lookups.md`. A wo
 - Each rule is the difference between an attack button and its benign twin on the panel.
 
 <!-- file: exercises/module-1/SKILL.md from "^## How to judge" to "## Verdict contract" -->
-
 ```markdown
 ## How to judge
 
@@ -183,7 +179,6 @@ Response shapes and known failures of each script: `references/lookups.md`. A wo
 - The shape lives in an asset because a template is copied, not paraphrased.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Verdict contract" to "## Guardrails" -->
-
 ```markdown
 ## Verdict contract
 
@@ -198,7 +193,6 @@ Exactly the shape in `assets/verdict-template.md`: three sections, one of the fo
 - Only the four scripts run.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Guardrails" -->
-
 ```markdown
 ## Guardrails
 
@@ -485,7 +479,6 @@ These two files are given, not generated. The scripts were written once. This fi
 Open `exercises/module-1/lookups.md`:
 
 <!-- file: exercises/module-1/lookups.md -->
-
 ```markdown
 # Lookups: shapes and failures
 
@@ -534,7 +527,6 @@ The skill did not load on a natural-language prompt: the description lacks the w
 Open `exercises/module-1/brute-force.md`:
 
 <!-- file: exercises/module-1/brute-force.md -->
-
 ```markdown
 # Example: Brute force
 
