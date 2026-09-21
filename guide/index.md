@@ -34,6 +34,7 @@ hidden: true
   - [Exercise #1.4: the asset](03-module-1.md#exercise-14-the-asset)
   - [Exercise #1.5: test it](03-module-1.md#exercise-15-test-it)
   - [Exercise #1.6: share it](03-module-1.md#exercise-16-share-it)
+  - [Exercise #1.7, bonus: live reputation](03-module-1.md#exercise-17-bonus-live-reputation)
 - [Part 2: Module 2, run it unattended](04-module-2.md)
 - [Part 3: Module 3, let it decide](05-module-3.md)
 - [Take-home](07-take-home.md)
