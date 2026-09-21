@@ -379,11 +379,19 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
    ```
 
-4. **Hand test for the write**: the usage error only. <ins>Never run the write by hand</ins>. The skill does that in Exercise 1.5.
-   
+4. **Hand tests for the write.** Two runs. First, no case id. Expect a usage line and nothing written:
+
    ```bash
    .claude/skills/soc-triage/scripts/post_verdict.sh
    ```
+
+   Then one real comment on your Part 0 case. The text comes in on standard input, so it is piped. Run it without the pipe and the script waits for text and looks frozen: `Ctrl+C` gets out, `Ctrl+D` would post an empty comment. Expect the comment's id and creation time:
+
+   ```bash
+   echo "test comment from post_verdict.sh" | .claude/skills/soc-triage/scripts/post_verdict.sh '~<case id>'
+   ```
+
+   Open the case in TheHive, tab *Comments*. The text is there, under your user. That is the only write the skill ever makes, and you have now seen it land.
 
 5. **Only for testing, comparing output.** The case, read straight from TheHive, no script. `title` and `tags` must match what `get_case.sh` printed. There is no such check for the write:
 
@@ -398,6 +406,8 @@ TheHive is the only system the skill writes to, and the only write is a comment.
 - [ ] The wrong key fails and says why. The unset variable names `THEHIVE_URL` and stops.
 
 - [ ] `post_verdict.sh` with no argument fails, says why, and writes nothing.
+
+- [ ] The test comment shows on the case in TheHive.
 
 - [ ] The folder:
   
