@@ -1,4 +1,4 @@
-# Module 2: run it unattended
+# Part 2: run it unattended
 
 ## What changes here
 
@@ -14,12 +14,12 @@ The Five9 SOC ran its first version about two years ago. It used a cheap model, 
 
 ## Basic LLM Chain, not AI Agent
 
-| | Basic LLM Chain | AI Agent |
-|---|---|---|
-| Calls to the model | One (single-pass) | Loops until it decides |
-| Chooses which tool to call | No | Yes |
-| What happens each turn | The model sees all your enrichment data at once and writes a verdict directly | The model sees the question, decides which source to query, calls a tool, reads the result, and repeats |
-| Used in | Module 2 (this module holds the loop back on purpose) | Module 3 |
+|                            | Basic LLM Chain                                                               | AI Agent                                                                                                |
+| -------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Calls to the model         | One (single-pass)                                                             | Loops until it decides                                                                                  |
+| Chooses which tool to call | No                                                                            | Yes                                                                                                     |
+| What happens each turn     | The model sees all your enrichment data at once and writes a verdict directly | The model sees the question, decides which source to query, calls a tool, reads the result, and repeats |
+| Used in                    | Module 2 (this module holds the loop back on purpose)                         | Module 3                                                                                                |
 
 ## Same contract as Module 1
 
@@ -62,7 +62,6 @@ Here is the exact format the regexes expect:
 | Target | `10.0.0.5` |
 on host `web-server-01`
 ```
-
 
 Use a Set node to pull the fields you need out of the webhook's payload. Add a field for each item in the table below. Reference them with the expressions shown. TheHive's case object nests under `object` in the payload, and each expression includes a fallback using `||` for when the field is absent.
 

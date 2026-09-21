@@ -28,7 +28,7 @@ hidden: true
   - [Exercise #0.4: connect Claude Code to the gateway](02-connect.md#exercise-04-connect-claude-code-to-the-gateway)
 - [Part 1: Module 1, drive it by hand](03-module-1.md)
   - [Exercise #1.1: SKILL.md](03-module-1.md#exercise-11-skillmd)
-  - [Exercise #1.2: the scripts](03-module-1.md#exercise-12-the-scripts)
+  - [Exercise #1.2: the scripts, made from the docs](03-module-1.md#exercise-12-the-scripts-made-from-the-docs)
   - [Exercise #1.3: the references](03-module-1.md#exercise-13-the-references)
   - [Exercise #1.4: the asset](03-module-1.md#exercise-14-the-asset)
   - [Exercise #1.5: test it](03-module-1.md#exercise-15-test-it)

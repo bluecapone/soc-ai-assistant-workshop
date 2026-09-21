@@ -163,13 +163,16 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
    claude
    ```
 
-4. **Test.** Send one test prompt: `what is 2+2?`
+4. **Approve the docs server.** On first start Claude Code asks whether to use the `context7` MCP server from the workshop folder's `.mcp.json`. Say yes. It fetches API documentation on demand; Exercise 1.2 uses it. In another terminal, `claude mcp list` shows it connected. Without it, Claude Code can still read documentation pages with its `WebFetch` tool, and Exercise 1.2 gives the addresses.
+
+5. **Test.** Send one test prompt: `what is 2+2?`
 
 **Expected**:
 
 - [ ] Claude Code starts without asking you to log in. The two variables did that.
 - [ ] A notice says claude.ai connectors are disabled because another auth source is set. That is the token variable doing its job. Ignore it.
 - [ ] The test prompt gets an answer.
+- [ ] `claude mcp list` prints `context7` with a connected status.
 - [ ] `! echo $THEHIVE_APIKEY` inside Claude Code (the `!` prefix runs a shell command) prints a long key, not `replace-after-first-boot` and not an empty line.
 
 A `401` means the token is wrong or expired. Ask an instructor for a new one.

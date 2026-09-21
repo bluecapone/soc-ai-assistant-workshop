@@ -3,7 +3,7 @@
 set -euo pipefail
 IP=${1:?usage: reputation.sh <ip>}
 if [ -n "${OSINT_API_KEY:-}" ]; then
-  curl -sf -G https://api.abuseipdb.com/api/v2/check --data-urlencode "ipAddress=$IP" -d maxAgeInDays=90 \
+  curl -sSf -G https://api.abuseipdb.com/api/v2/check --data-urlencode "ipAddress=$IP" -d maxAgeInDays=90 \
     -H "Key: $OSINT_API_KEY" -H 'Accept: application/json' \
     | jq '{source: "abuseipdb", score: .data.abuseConfidenceScore, reports: .data.totalReports}'
 else

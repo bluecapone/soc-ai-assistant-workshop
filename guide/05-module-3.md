@@ -1,4 +1,4 @@
-# Module 3: let it decide
+# Part 3: let it decide
 
 ## What changes here
 

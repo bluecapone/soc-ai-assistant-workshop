@@ -205,16 +205,70 @@ Exactly the shape in `assets/verdict-template.md`: three sections, one of the fo
 
 **Question 2**: the number of the twin rule and the field it reads.
 
-## Exercise #1.2: the scripts
+## Exercise #1.2: the scripts, made from the docs
 
-The model never sees these files. It runs them and reads what they print. That is why the fiddly parts live here: certificates, JSON escaping, fallbacks, error messages. A script either returns one predictable shape or fails with a sentence the model can act on. You run each one by hand first, because the skill will run them without you watching.
+The model never sees these files. It runs them and reads what they print. That is why the fiddly parts live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that fixes the interface, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
 
-**Goal**: you have run each lookup by hand, you know what it returns and how it fails, and the four scripts are in place.
+**Goal**: the four scripts exist, each one made from a prompt and the docs, each one tested by hand, and the folder holds the version you chose.
 
-### Part A: wazuh_events.sh, a lookup
+### Part A: the method
 
+One prompt shape, used four times. It always says:
 
-Open `exercises/module-1/wazuh_events.sh`. Ten lines: one `curl` to the indexer's `_search`, one `jq` to trim the answer. The essentials:
+- the file to write, its arguments, and the environment variables it needs, with a check that fails with a sentence;
+- which documentation to read and where: `use Context7 for <library>`, or `fetch <url>` when the docs server is not available;
+- the request to make: method, path, headers, body;
+- the exact JSON to print, and nothing else;
+- the guards: `set -euo pipefail`, `curl -sSf`, one `jq` at the end, do not run the script.
+
+A prompt that names the output shape gets thirty comparable scripts in a room of thirty. "Write a Wazuh lookup" gets thirty different ones.
+
+Then the same loop for each script:
+
+1. Send the prompt. Watch the transcript: one documentation call (`context7` or `WebFetch`) must appear before the file is written. If Claude Code wrote from memory, say `check the request format in the docs first, then revise`.
+2. Run the hand tests. Every script has three: it works on real input, an unset variable prints the sentence, an unknown value returns the empty shape or the error.
+3. Diff against the shipped version and read the shipped one's essentials. Keep whichever you prefer. The shipped one is also the fallback when the network is down.
+
+The documentation addresses, for `WebFetch`: OpenSearch query DSL `https://docs.opensearch.org/latest/query-dsl/`, TheHive API `https://docs.strangebee.com/thehive/api-docs/`, AbuseIPDB `https://docs.abuseipdb.com/`.
+
+No network at all: copy the four shipped files and read their essentials in Parts B to D.
+
+```bash
+mkdir -p .claude/skills/soc-triage/scripts
+cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
+```
+
+### Part B: wazuh_events.sh, a lookup
+
+1. **Make the folder**, once:
+
+   ```bash
+   mkdir -p .claude/skills/soc-triage/scripts
+   ```
+
+2. **Prompt.** In Claude Code:
+
+   ```text
+   Write the bash script .claude/skills/soc-triage/scripts/wazuh_events.sh. Usage: wazuh_events.sh <value> [srcip|host]. It returns the last 20 Wazuh alerts for a source IP (default) or for an agent host name, newest first. Read-only.
+   Environment: WAZUH_URL is required, fail with the message "export WAZUH_URL first" when unset. WAZUH_USERNAME and WAZUH_PASSWORD default to admin and brucon2026.
+   Use Context7 (library: OpenSearch) to check the _search request format: a match query on one field, sort by timestamp descending, size 20, _source filtering.
+   Request: POST $WAZUH_URL/wazuh-alerts-*/_search with basic auth, JSON body, curl -k because the indexer has a self-signed certificate. The match field is data.srcip, or agent.name when the second argument is host. _source keeps only: timestamp, rule.id, rule.level, rule.description, data.srcip, data.url, data.dstuser, agent.name.
+   Print only this JSON, through one jq at the end: {"total": <hits.total.value>, "events": [<each hit's _source>]}.
+   Use set -euo pipefail and curl -sSf. Make it executable. Do not run it.
+   ```
+
+3. **Watch** for the Context7 call, then read the file it wrote.
+4. **Hand tests.** In a second terminal, with the same exports as Exercise 0.4, with the source IP from your Part 0 case:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
+   env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
+   .claude/skills/soc-triage/scripts/wazuh_events.sh 203.0.113.9
+   ```
+
+5. **Compare.** `diff .claude/skills/soc-triage/scripts/wazuh_events.sh exercises/module-1/wazuh_events.sh`. Keep yours or copy the shipped one over it.
+
+The shipped one, `exercises/module-1/wazuh_events.sh`, for the comparison. Ten lines: one `curl` to the indexer's `_search`, one `jq` to trim the answer. The essentials:
 
 Any failure stops the script with a non-zero exit, so the model sees a failure instead of half an answer:
 
@@ -234,10 +288,10 @@ One script, two questions, chosen by an argument rather than by editing:
 FIELD=data.srcip; [ "${2:-srcip}" = host ] && FIELD=agent.name
 ```
 
-`-s` silent, `-f` fail on HTTP errors, `-k` because the indexer serves a self-signed certificate. Credentials default to the lab's and can be overridden by environment, so the script works outside this lab:
+`-s` silent, `-S` still show errors, `-f` fail on HTTP errors, `-k` because the indexer serves a self-signed certificate. Credentials default to the lab's and can be overridden by environment, so the script works outside this lab:
 
 ```bash
-curl -sfk -u "${WAZUH_USERNAME:-admin}:${WAZUH_PASSWORD:-brucon2026}" -X POST "$WAZUH_URL/wazuh-alerts-*/_search" -H 'Content-Type: application/json' \
+curl -sSfk -u "${WAZUH_USERNAME:-admin}:${WAZUH_PASSWORD:-brucon2026}" -X POST "$WAZUH_URL/wazuh-alerts-*/_search" -H 'Content-Type: application/json' \
   -d '{"size":20,"_source":["timestamp","rule.id","rule.level","rule.description","data.srcip","data.url","data.dstuser","agent.name"],"query":{"match":{"'"$FIELD"'":"'"$VALUE"'"}},"sort":[{"timestamp":"desc"}]}' \
 ```
 
@@ -247,49 +301,69 @@ Keeps the count and the seven fields the rules read, drops the rest. Twenty full
   | jq '{total: .hits.total.value, events: [.hits.hits[]._source]}'
 ```
 
-1. **Put the lookups in place.** Two of the four scripts read outside TheHive: this one and the reputation, which Part C explains.
-   
-   ```bash
-   mkdir -p .claude/skills/soc-triage/scripts
-   cp exercises/module-1/wazuh_events.sh exercises/module-1/reputation.sh .claude/skills/soc-triage/scripts/
-   ```
-
-2. **Run it.** In a second terminal, with the same exports as Exercise 0.4, with the source IP from your Part 0 case:
-   
-   ```bash
-   .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
-   ```
-
-3. **Break it twice.** Run it once with `WAZUH_URL` unset (`env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>`), and once with an IP nobody used, `203.0.113.9`. Both outputs are entries in the failure list you meet in Exercise 1.3.
-
 **Expected**:
 
 - [ ] `total` is above zero and `events` lists them, newest first.
-
 - [ ] The unset variable prints `export WAZUH_URL first`. The unknown IP prints `"total": 0`.
-
 - [ ] The folder:
-  
+
   ```text
   soc-triage/
   ├── SKILL.md
   └── scripts/
-      ├── reputation.sh
       └── wazuh_events.sh
   ```
 
 **Question 3**: `rule.id` of the newest event for that IP.
 
-### Part B: get_case.sh and post_verdict.sh, the read and the write
+### Part C: get_case.sh and post_verdict.sh, the read and the write
 
+TheHive is the only system the skill writes to, and the only write is a comment. Closing the case is a different call this workshop never makes.
 
-Open `exercises/module-1/get_case.sh`. Two `curl` reads and one `jq` that merges them. The essentials:
+1. **Prompt for the read.**
+
+   ```text
+   Write the bash script .claude/skills/soc-triage/scripts/get_case.sh. Usage: get_case.sh <case-id>, the id in the form ~123456. It reads one TheHive case. Read-only.
+   Environment: THEHIVE_URL and THEHIVE_APIKEY are required, each fails with "export <NAME> first" when unset.
+   Use Context7 (library: TheHive) to check the TheHive 5 API: GET /api/v1/case/{id} with a bearer token, and the query API POST /api/v1/query with a query of getCase followed by observables.
+   The observables call may fail. Treat a failure as an empty list. Take srcip from the case description: the Markdown table row | Source IP | `x` |, null when the row is absent.
+   Print only this JSON, through one jq at the end: {"title", "tags", "description", "srcip", "observables": [{"dataType", "data"}]}.
+   Use set -euo pipefail and curl -sSf. Make it executable. Do not run it.
+   ```
+
+2. **Prompt for the write.**
+
+   ```text
+   Write the bash script .claude/skills/soc-triage/scripts/post_verdict.sh. Usage: post_verdict.sh <case-id>, with the verdict Markdown on standard input. It adds one comment to a TheHive case. That is its only write.
+   Environment: THEHIVE_URL and THEHIVE_APIKEY are required, each fails with "export <NAME> first" when unset.
+   Use Context7 (library: TheHive) to check the TheHive 5 API call that adds a comment to a case: POST /api/v1/case/{id}/comment with a JSON body {"message": "..."}.
+   Build the JSON body from stdin with jq -Rs, never by string concatenation. Print only {"_id", "createdAt"} from the response, through one jq.
+   Use set -euo pipefail and curl -sSf. Make it executable. Do not run it.
+   ```
+
+3. **Hand tests for the read**, with the case id from Part 0:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
+   THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
+   env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
+   ```
+
+4. **Hand test for the write**: the usage error only. <ins>Never run the write by hand</ins>. The skill does that in Exercise 1.5.
+
+   ```bash
+   .claude/skills/soc-triage/scripts/post_verdict.sh
+   ```
+
+5. **Compare** both against the shipped files with `diff`, as in Part B.
+
+The shipped one, `exercises/module-1/get_case.sh`, for the comparison. Two `curl` reads and one `jq` that merges them. The essentials:
 
 Two reads, one bearer token. The case itself, then its observables through TheHive's query API. The observables call is allowed to fail (`|| echo '[]'`) because it is the one that breaks when TheHive is slow:
 
 ```bash
-CASE=$(curl -sf "$THEHIVE_URL/api/v1/case/$CASE_ID" "${AUTH[@]}")
-OBS=$(curl -sf -X POST "$THEHIVE_URL/api/v1/query" "${AUTH[@]}" -H 'Content-Type: application/json' \
+CASE=$(curl -sSf "$THEHIVE_URL/api/v1/case/$CASE_ID" "${AUTH[@]}")
+OBS=$(curl -sSf -X POST "$THEHIVE_URL/api/v1/query" "${AUTH[@]}" -H 'Content-Type: application/json' \
   -d '{"query":[{"_name":"getCase","idOrName":"'"$CASE_ID"'"},{"_name":"observables"}]}' || echo '[]')
 ```
 
@@ -303,60 +377,61 @@ jq -n --argjson case "$CASE" --argjson obs "$OBS" '{
 }'
 ```
 
-Now open `exercises/module-1/post_verdict.sh`. One `jq` and one `curl` write. The essentials:
+The shipped one, `exercises/module-1/post_verdict.sh`, for the comparison. One `jq` and one `curl` write. The essentials:
 
-The one write. The verdict arrives on standard input and `jq -Rs` turns it into JSON. Escaping Markdown into JSON is exactly the kind of work a model gets subtly wrong and a program never does. `curl -sf` makes a failed post a failed script, not a silent nothing. The output is the comment id and nothing else:
+The one write. The verdict arrives on standard input and `jq -Rs` turns it into JSON. Escaping Markdown into JSON is exactly the kind of work a model gets subtly wrong and a program never does. `curl -sSf` makes a failed post a failed script, not a silent nothing. The output is the comment id and nothing else:
 
 ```bash
-jq -Rs '{message: .}' | curl -sf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/comment" \
+jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/comment" \
   -H "Authorization: Bearer $THEHIVE_APIKEY" -H 'Content-Type: application/json' -d @- | jq '{_id, createdAt}'
 ```
-
-1. **Put them in place.**
-   
-   ```bash
-   cp exercises/module-1/get_case.sh exercises/module-1/post_verdict.sh .claude/skills/soc-triage/scripts/
-   ```
-
-2. **Run the read** with the case id from Part 0:
-   
-   ```bash
-   .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
-   ```
-
-3. **Break it.** Run it again with a wrong key in front: `THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh ~<case id>`.
-
-4. **Do not run the write.** The skill does that in Exercise 1.5.
 
 **Expected**:
 
 - [ ] Title, tags, description with the indicator table, `srcip` filled, and the observables.
-
-- [ ] The wrong key prints `curl: (22) ... 401`.
-
+- [ ] The wrong key prints `curl: (22) ... 401`. The unset variable prints `export THEHIVE_URL first`.
+- [ ] `post_verdict.sh` with no argument prints a usage line and nothing else.
 - [ ] The folder:
-  
+
   ```text
   soc-triage/
   ├── SKILL.md
   └── scripts/
       ├── get_case.sh
       ├── post_verdict.sh
-      ├── reputation.sh
       └── wazuh_events.sh
   ```
 
 **Question 4**: the case title.
 
-### Part C: reputation.sh, the lookup with a fallback
+### Part D: reputation.sh, the lookup with a fallback
 
-Open `exercises/module-1/reputation.sh`. One `if` on the key, then either a `curl` or a `grep`. The essentials:
+1. **Prompt.**
+
+   ```text
+   Write the bash script .claude/skills/soc-triage/scripts/reputation.sh. Usage: reputation.sh <ip>. It reports the reputation of one IP from AbuseIPDB when OSINT_API_KEY is set, and from an offline list when it is not. The output must say which one answered.
+   Use Context7 (library: AbuseIPDB) to check the API v2 CHECK endpoint: GET https://api.abuseipdb.com/api/v2/check with the ipAddress and maxAgeInDays=90 query parameters, the Key header, Accept: application/json.
+   With a key, print only {"source": "abuseipdb", "score": <data.abuseConfidenceScore>, "reports": <data.totalReports>}.
+   Without a key, count exact-line matches of the IP in ${LAB_DIR:-lab}/threat-intel/malicious-ips.txt with grep -cx and print only {"source": "offline list, not live reputation", "listed": <true or false>}.
+   Use set -euo pipefail, curl -sSf and one jq per branch. Make it executable. Do not run it.
+   ```
+
+2. **Hand tests**, from the workshop folder, with no key exported:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/reputation.sh <ip>
+   .claude/skills/soc-triage/scripts/reputation.sh 203.0.113.9
+   ```
+
+3. **Compare** against the shipped file with `diff`.
+
+The shipped one, `exercises/module-1/reputation.sh`, for the comparison. One `if` on the key, then either a `curl` or a `grep`. The essentials:
 
 Same outcome, two tools. AbuseIPDB when a key is exported, the offline list when not. The script makes the choice, not the model, and the output names which one answered (`source`), so the verdict can say "offline list, not live reputation" instead of pretending:
 
 ```bash
 if [ -n "${OSINT_API_KEY:-}" ]; then
-  curl -sf -G https://api.abuseipdb.com/api/v2/check --data-urlencode "ipAddress=$IP" -d maxAgeInDays=90 \
+  curl -sSf -G https://api.abuseipdb.com/api/v2/check --data-urlencode "ipAddress=$IP" -d maxAgeInDays=90 \
     -H "Key: $OSINT_API_KEY" -H 'Accept: application/json' \
     | jq '{source: "abuseipdb", score: .data.abuseConfidenceScore, reports: .data.totalReports}'
 else
@@ -370,15 +445,20 @@ The offline list is found relative to the workshop folder, which is why Exercise
 fi
 ```
 
-1. **Run it once** with no key exported, for the same IP:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/reputation.sh <ip>
-   ```
-
 **Expected**:
 
-- [ ] It prints `"source": "offline list, not live reputation"` and `listed` true or false.
+- [ ] Both runs print `"source": "offline list, not live reputation"`, one with `listed` true if that IP is on the list, the other false.
+- [ ] The folder:
+
+  ```text
+  soc-triage/
+  ├── SKILL.md
+  └── scripts/
+      ├── get_case.sh
+      ├── post_verdict.sh
+      ├── reputation.sh
+      └── wazuh_events.sh
+  ```
 
 ## Exercise #1.3: the references
 
