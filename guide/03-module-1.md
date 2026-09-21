@@ -50,22 +50,9 @@ Each kind of file has a home, by when Claude Code loads it:
 | `scripts/`             | never, only their output   | the four steps that touch an API          |
 | `assets/`              | when copied                | the verdict template                      |
 
-The same, as one run, top to bottom:
+The same, as one run, top to bottom. Left the run, right the folder, an arrow where a file is read:
 
-```mermaid
-flowchart TD
-  A["claude starts. The frontmatter of every installed skill is in the context: name, description, allowed tools"]
-  B["A prompt matches the description. The skill is chosen"]
-  C["SKILL.md body enters the context: task, workflow, judging rules, guardrails"]
-  D["A script runs. Only what it prints enters the context"]
-  E{"Failed, or a field is unclear?"}
-  F["references/lookups.md is read: shapes, what the error means"]
-  G["assets/verdict-template.md is copied and filled"]
-  H["post_verdict.sh runs: the one write"]
-  A --> B --> C --> D --> E
-  E -- yes --> F --> D
-  E -- no --> G --> H
-```
+![One run of soc-triage: what loads when](diagrams/skill-run.png)
 
 ## Exercise #1.1: SKILL.md
 
@@ -376,7 +363,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    Make it executable. Do not run it.
    ```
 
-3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3, in quotes: to the shell a bare `~` is somebody's home folder. Three runs.
+3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3: with the case open, the part of the address bar that starts with `~`, as in `.../cases/~4206800/details`. In quotes, because to the shell a bare `~` is somebody's home folder. Three runs.
 
    Your case. Expect its title, tags, source IP and observables:
 
@@ -599,35 +586,31 @@ The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
 
 An asset is something the model copies rather than reads: a template, a form, a fixed shape. The verdict has three sections in a fixed order with four allowed close states. As prose in `SKILL.md` that shape would be paraphrased. As a file it is filled in.
 
-**Goal**: the folder is complete.
+This one you make the way you made the scripts: say what you know and what you want, in your words, and read what comes back.
 
-Open `exercises/module-1/verdict-template.md`:
+**Goal**: the template exists, it agrees with the rest of the skill, and the folder is complete.
 
-<!-- file: exercises/module-1/verdict-template.md -->
+1. **Send the prompt**, in Claude Code, from the workshop folder:
 
-```markdown
-### Summary
-
-What happened, what you looked up, what you found. Two to six sentences. Name the reputation source as the script labelled it.
-
-### Suggested close state
-
-One of: `true positive`, `false positive`, `true positive not malicious`, `other`. Nothing else on that line.
-
-### Recommended actions
-
-Prose, concrete, addressed to the analyst.
-```
-
-- The three headings, their order, the four close states. A template in `assets/` is copied verbatim. A description of the shape in prose would be paraphrased.
-1. **Put it in place.**
-   
-   ```bash
-   mkdir -p .claude/skills/soc-triage/assets
-   cp exercises/module-1/verdict-template.md .claude/skills/soc-triage/assets/
+   ```text
+   Write a Markdown file, .claude/skills/soc-triage/assets/verdict-template.md, for a Claude Code skill to copy and fill in when it writes a verdict on a TheHive case.
+   What I know: a verdict has three sections in this order. A summary: what happened, what was looked up, what was found, two to six sentences, naming the reputation source the way the script labelled it. A suggested close state: exactly one of true positive, false positive, true positive not malicious, other, and nothing else on that line. Recommended actions: prose, concrete, addressed to the analyst.
+   Output: only the template. Each section is a heading followed by one or two lines that say what goes there. No example verdict, nothing outside the file.
    ```
 
+2. **Read the file.** Three headings, in that order. The four close states, spelled as above. Nothing that reads like an example verdict, or the model will copy the example instead of the shape.
+
+3. **Only for testing, comparing output.** The judging rules in `SKILL.md` end in a close state each. The template lists the allowed ones. Both must spell them the same way, or the rule says one thing and the template another. This counts each close state across both files:
+
+   ```bash
+   grep -ohw 'true positive not malicious\|true positive\|false positive\|other' .claude/skills/soc-triage/SKILL.md .claude/skills/soc-triage/assets/verdict-template.md | sort | uniq -c
+   ```
+
+   Four lines, one per state. A state the rules use and the template lacks shows up with a count of one, and that is the template to fix.
+
 **Expected**:
+
+- [ ] The `grep` prints four lines, one per close state.
 
 - [ ] `find .claude/skills/soc-triage -type f | wc -l` prints `8`.
 
@@ -659,19 +642,21 @@ Three tests, in the order a skill author runs them: does it load when it should 
 
 Claude Code loads a skill when the prompt matches its description. `/soc-triage` bypasses the description entirely, so it proves nothing about it. The test is the load, not the run: once you see Claude Code read the skill, stop it with `Esc`.
 
-1. **Should load.** Run each prompt, restart `claude` between runs so each starts clean:
+1. **Make Claude Code see it.** Skills are read when `claude` starts, and this one was written while it was running. Inside Claude Code, run `/reload-skills`. From now on, run it again after every change to the folder.
+2. **Should load.** Run each prompt, restart `claude` between runs so each starts clean:
    - `triage case ~<case id>`
    - `work the newest case in TheHive`
    - `is this alert a false positive`
-2. **Should not load.** Run each prompt:
+3. **Should not load.** Run each prompt:
    - `what is our mean time to respond`
    - `summarise this pcap`
-3. **Prove the description matters.** Change the description to `Helps with things`, save, restart, and run one should-load prompt again. Restore the description.
+4. **Prove the description matters.** Change the description to `Helps with things`, save, `/reload-skills`, and run one should-load prompt again. Restore the description and reload once more.
 
 A skill that loads too little needs more of the words users type in its description. A skill that loads too much needs a sentence saying what it is not for.
 
 **Expected**:
 
+- [ ] `/reload-skills` lists `soc-triage`.
 - [ ] The three should-load prompts load the skill.
 - [ ] The two others do not.
 - [ ] With the useless description, the natural-language prompt no longer loads it.
@@ -682,7 +667,7 @@ A skill that loads too little needs more of the words users type in its descript
 
 You trigger every step yourself. Nothing happens unless you ask for it. This is the functional test: given a real case, when the skill runs, then the verdict is on the case with zero failed calls.
 
-1. **Fire.** On the panel, click `Brute force` and confirm. In TheHive, copy the new case id.
+1. **Fire.** On the panel, click `Brute force` and confirm. In TheHive, open the new case and copy its id from the address bar, the part that starts with `~`.
 
 2. **Run.** In Claude Code:
    
@@ -713,7 +698,7 @@ You trigger every step yourself. Nothing happens unless you ask for it. This is 
 
 `Admin login` is the twin of `Brute force`: a real admin mistypes, then succeeds. Same log shape, harmless intent. A skill is a living document. A wrong verdict is a sentence to fix, not a ticket to file.
 
-1. **Fire the twin.** On the panel, click `Admin login` and confirm. Copy the new case id.
+1. **Fire the twin.** On the panel, click `Admin login` and confirm. Open the new case and copy its id from the address bar.
 2. **Run** `/soc-triage ~<case id>` again.
 3. **Change the twin rule.** In `How to judge`, edit the rule you found in Exercise 1.1 so that it no longer mentions failures before the success, save, and rerun on the same case. Then restore it and rerun once more. One sentence, one rerun, one verdict to compare.
 

@@ -132,7 +132,7 @@ Exercise 0.3 walks it once by hand.
 
 **Question 2**: which rule id fired?
 
-**Question 3**: what is the case id (the `~nnnnnn` in the case URL)?
+**Question 3**: what is the case id? With the case open, it is the part of the address bar that starts with `~`. `http://thehive.localhost/cases/~4206800/details` gives `~4206800`.
 
 *Module 1 needs this case.* If it never appears, pair with a neighbour and use their lab for Module 1.
 
