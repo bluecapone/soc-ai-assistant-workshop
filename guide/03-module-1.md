@@ -50,6 +50,23 @@ Each kind of file has a home, by when Claude Code loads it:
 | `scripts/`             | never, only their output   | the four steps that touch an API          |
 | `assets/`              | when copied                | the verdict template                      |
 
+The same, as one run, top to bottom:
+
+```mermaid
+flowchart TD
+  A["claude starts. The frontmatter of every installed skill is in the context: name, description, allowed tools"]
+  B["A prompt matches the description. The skill is chosen"]
+  C["SKILL.md body enters the context: task, workflow, judging rules, guardrails"]
+  D["A script runs. Only what it prints enters the context"]
+  E{"Failed, or a field is unclear?"}
+  F["references/lookups.md is read: shapes, what the error means"]
+  G["assets/verdict-template.md is copied and filled"]
+  H["post_verdict.sh runs: the one write"]
+  A --> B --> C --> D --> E
+  E -- yes --> F --> D
+  E -- no --> G --> H
+```
+
 ## Exercise #1.1: SKILL.md
 
 `SKILL.md` is the only required file of a skill. Its top, between two `---` lines, is YAML that Claude Code reads at start to decide when the skill applies. The rest is Markdown that the model reads once the skill is chosen: what to do, in what order, how to judge, what never to do. Everything else in the folder exists because this file points at it.
@@ -473,6 +490,8 @@ TheHive is the only system the skill writes to, and the only write is a comment.
 ## Exercise #1.3: the references
 
 A reference is documentation the model opens only when `SKILL.md` sends it there: what a script's output looks like, what an error means, how one full run went. Keeping it out of `SKILL.md` keeps the always-loaded part short and puts the long material where it costs nothing until needed.
+
+These two files are given, not generated. The scripts were written once. This file is the one that keeps changing: every failure you meet from now on becomes one more entry, and most fixes to the skill turn out to be a line here rather than a change to a script or a rule. You start from ours so the first version already knows the failures of this lab.
 
 **Goal**: the two files the skill reads only when it needs them are in place, and your own failures are in the failure list.
 
