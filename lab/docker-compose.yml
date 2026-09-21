@@ -28,7 +28,13 @@ services:
     ports:
       - "80:80"
     networks:
-      - soclab
+      soclab:
+        # Let containers reach TheHive at the same http://thehive.localhost the
+        # student types in the browser. Docker resolves *.localhost to loopback
+        # by default; this alias overrides that so n8n's HTTP node hits Caddy,
+        # which reverse-proxies to thehive:9000.
+        aliases:
+          - thehive.localhost
 
   # --- Fix volume ownership for TheHive (runs as uid 1000) ------------------
   # Docker named volumes are created root-owned; TheHive's embedded BerkeleyJE
@@ -106,7 +112,8 @@ services:
       # TheHive key) from environment variables rather than hand-created credentials.
       GENERIC_TIMEZONE: Europe/Brussels
       # Surfaced to the workflow nodes via $env. n8n 2.x blocks $env in nodes by
-      # default; the checkpoints read MODEL_* and ABUSEIPDB_API_KEY through it, so allow it.
+      # default; the checkpoints read MODEL_*, ABUSEIPDB_API_KEY, VT_API_KEY and
+      # ABUSECH_AUTH_KEY through it, so allow it.
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
       GATEWAY_BASE_URL: ${GATEWAY_BASE_URL}
       GATEWAY_API_KEY: ${GATEWAY_API_KEY}
@@ -114,6 +121,8 @@ services:
       MODEL_FRONTIER: ${MODEL_FRONTIER}
       THEHIVE_N8N_APIKEY: ${THEHIVE_N8N_APIKEY}
       ABUSEIPDB_API_KEY: ${ABUSEIPDB_API_KEY:-}
+      VT_API_KEY: ${VT_API_KEY:-}
+      ABUSECH_AUTH_KEY: ${ABUSECH_AUTH_KEY:-}
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - n8n-data:/home/node/.n8n

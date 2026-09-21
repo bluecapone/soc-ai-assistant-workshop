@@ -449,13 +449,13 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    The first IP of the list itself. Expect listed:
 
    ```bash
-   .claude/skills/soc-triage/scripts/reputation.sh 223.159.80.211
+   .claude/skills/soc-triage/scripts/reputation.sh 193.46.255.145
    ```
 
 3. **Only for testing, comparing output.** The list, searched by hand, no script. A line printed means listed, nothing means not, and `reputation.sh` must have said the same. Try it with both IPs:
 
    ```bash
-   grep -x 223.159.80.211 lab/threat-intel/malicious-ips.txt
+   grep -x 193.46.255.145 lab/threat-intel/malicious-ips.txt
    ```
 
 **Expected**:
@@ -647,6 +647,8 @@ Claude Code loads a skill when the prompt matches its description. `/soc-triage`
    - `triage case ~<case id>`
    - `work the newest case in TheHive`
    - `is this alert a false positive`
+
+   The last two carry no case id on purpose. Once loaded, the skill asks for one, or says it has no script that lists cases. That is a pass: it loaded on the meaning, and it did not improvise. Stop it there.
 3. **Should not load.** Run each prompt:
    - `what is our mean time to respond`
    - `summarise this pcap`

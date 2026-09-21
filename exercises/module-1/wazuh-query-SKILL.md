@@ -72,7 +72,7 @@ wz -X POST "$WAZUH_URL/wazuh-alerts-*/_search" -H 'Content-Type: application/jso
   "size": 50,
   "sort": [{"timestamp": "desc"}],
   "_source": ["timestamp","rule.id","rule.level","rule.description","decoder.name","data.srcip","data.dstuser","data.url","data.authresult"],
-  "query": {"term": {"data.srcip": "223.159.80.211"}}
+  "query": {"term": {"data.srcip": "193.46.255.145"}}
 }'
 ```
 
@@ -122,7 +122,7 @@ The most useful hunt asks what a single IP *did*, not what one event *was*. **"D
 **Decisive check — does the IP show both a brute id and a success id?** Aggregate its rule ids:
 
 ```bash
-IP=223.159.80.211
+IP=193.46.255.145
 wz -X POST "$WAZUH_URL/wazuh-alerts-*/_search" -H 'Content-Type: application/json' -d '{
   "size": 0,
   "query": {"term": {"data.srcip": "'"$IP"'"}},
