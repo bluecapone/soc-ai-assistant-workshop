@@ -72,6 +72,9 @@
 
 <decoder name="proxy-fields">
   <parent>proxy</parent>
+  <!-- Normalise the captured port to data.dstport: the stock Wazuh template maps data.port
+       as an OBJECT (netstat fields), so a scalar data.port makes the indexer reject the whole
+       alert (mapper_parsing_exception) and it never reaches the SIEM. dstport is a keyword. -->
   <regex type="pcre2">src=(\S+) dst=(\S+) dst_host=(\S+) port=(\d+) method=(\w+) bytes=(\d+) ua="([^"]*)" cat=(\S+) action=(\S+)</regex>
-  <order>srcip, dstip, dst_host, port, method, bytes, user_agent, cat, action</order>
+  <order>srcip, dstip, dst_host, dstport, method, bytes, user_agent, cat, action</order>
 </decoder>

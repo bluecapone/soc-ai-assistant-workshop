@@ -311,17 +311,21 @@ async function loadLog(){{
 }}
 window.addEventListener('DOMContentLoaded', loadLog);
 
+// The action id and IP travel in the POST body, never the URL. Ad-blockers and privacy
+// extensions match request URLs against filter lists (e.g. EasyPrivacy blocks anything
+// containing "beacon"), and a blocked fetch surfaces as "TypeError: Failed to fetch"
+// (net::ERR_BLOCKED_BY_CLIENT). Keeping ids like c2_beacon out of the URL dodges that.
+const JSON_POST = body => ({{method:'POST', headers:{{'Content-Type':'application/json'}}, body: JSON.stringify(body)}});
 async function fire(id, label, isAttack, el){{
   let pv = {{}};
-  try {{ const r = await fetch('/preview/' + id); pv = await r.json(); }} catch (e) {{}}
+  try {{ const r = await fetch('/preview', JSON_POST({{id}})); pv = await r.json(); }} catch (e) {{}}
   const ok = await askConfirm(label, isAttack, pv);
   if (!ok) return;
   el.classList.add('firing');
   const out = document.getElementById('out');
   out.textContent = 'running ' + label + '\\u2026';
   try {{
-    const q = pv && pv.ip ? ('?ip=' + encodeURIComponent(pv.ip)) : '';
-    const r = await fetch('/fire/' + id + q, {{method:'POST'}});
+    const r = await fetch('/fire', JSON_POST({{id, ip: (pv && pv.ip) || ''}}));
     out.textContent = (await r.text()).trim() || '(no output)';
   }} catch (e) {{
     out.textContent = 'error: ' + e;
@@ -515,8 +519,16 @@ def index() -> str:
     return render()
 
 
-@app.route("/preview/<button_id>")
-def preview(button_id: str):
+# The id and IP arrive in the JSON body, not the URL — an ad-blocker/privacy extension
+# matches URLs against filter lists and blocks e.g. anything containing "beacon"
+# (net::ERR_BLOCKED_BY_CLIENT), which the panel would report as "Failed to fetch".
+def _body():
+    return request.get_json(silent=True) or request.form or {}
+
+
+@app.route("/preview", methods=["POST"])
+def preview():
+    button_id = _body().get("id", "")
     if button_id not in ALL:
         return Response("unknown button", status=404)
     if KIND.get(button_id) == "ATTACK":
@@ -527,15 +539,17 @@ def preview(button_id: str):
     return Response(json.dumps(payload), mimetype="application/json")
 
 
-@app.route("/fire/<button_id>", methods=["POST"])
-def fire(button_id: str):
+@app.route("/fire", methods=["POST"])
+def fire():
+    body = _body()
+    button_id = body.get("id", "")
     entry = ALL.get(button_id)
     if not entry:
         return Response(f"unknown button: {button_id}", status=404)
     label, rule, script, _blurb = entry
     path = os.path.join(SCRIPTS, script)
     env = {**os.environ, "TARGET_BASE_URL": TARGET}
-    chosen_ip = request.args.get("ip", "")
+    chosen_ip = body.get("ip", "")
     if chosen_ip and KIND.get(button_id) == "ATTACK":
         env["MALICIOUS_DEST_IP" if button_id in OUTBOUND else "ATTACKER_IP"] = chosen_ip
     try:

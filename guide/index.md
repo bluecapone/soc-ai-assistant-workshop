@@ -26,6 +26,7 @@ hidden: true
   - [Exercise #0.2: sign in everywhere](02-connect.md#exercise-02-sign-in-everywhere)
   - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-03-fire-a-benign-button-and-follow-it)
   - [Exercise #0.4: connect Claude Code to the gateway](02-connect.md#exercise-04-connect-claude-code-to-the-gateway)
+  - [Exercise #0.5: connect the docs server](02-connect.md#exercise-05-connect-the-docs-server)
 - [Part 1: Module 1, drive it by hand](03-module-1.md)
   - [Exercise #1.1: SKILL.md](03-module-1.md#exercise-11-skillmd)
   - [Exercise #1.2: the scripts, made from the docs](03-module-1.md#exercise-12-the-scripts-made-from-the-docs)
@@ -60,7 +61,7 @@ Every attendee runs an independent copy of the same six components. Nothing is s
 | TheHive             | Case management; your agent writes verdicts here                                            | `analyst@brucon.local` / `brucon2026` |
 | n8n                 | Workflow orchestration for Modules 2 and 3                                                  | `admin@brucon.local` / `Brucon2026`   |
 | Wazuh               | SIEM; collects live logs from bank-web and fires detections                                 | `admin` / `brucon2026`                |
-| Range control panel | Attack console: ten attack buttons and six benign twins, all real commands against bank-web | none                                  |
+| Range control panel | Attack console: nine attack buttons and six benign twins, all real commands against bank-web | none                                  |
 | bank-web            | Deliberately vulnerable web application, the detection target                               | none                                  |
 | Model gateway       | Every model call routes through it                                                          | your token, one per attendee          |
 

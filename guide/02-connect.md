@@ -60,7 +60,9 @@ If Docker itself fails (Docker Desktop licensing, cgroup v1, WSL2 backend, corpo
 
 The *range* is the chain one click travels. Every element below is a container on your laptop, and the panel's quick-access cards link to each one that has a web page.
 
-- **Range control panel** (`http://panel.localhost`) is the attack console: ten attack buttons and six *benign twins*. A benign twin writes the same log shape as its attack but does no harm, so the SOC has to tell them apart. Every click runs a real command against bank-web after a confirm dialog and adds a row to the activity table.
+![The Range: one click, six hops](screenshots/connect/00-your-range.png)
+
+- **Range control panel** (`http://panel.localhost`) is the attack console: nine attack buttons and six *benign twins*. A benign twin writes the same log shape as its attack but does no harm, so the SOC has to tell them apart. Every click runs a real command against bank-web after a confirm dialog and adds a row to the activity table.
 - **bank-web** is the target: a bank site that is vulnerable on purpose. Its web access log and login log are the main log data. Some buttons also write SSH, mail gateway, proxy or data-transfer log lines for the same host. *Nothing is seeded.* The logs fill only when a button is clicked.
 - **Wazuh** (`http://wazuh.localhost`) is the SIEM. The manager reads those log files as new lines arrive, and turns lines into alerts:
   - a *decoder* splits each line into fields (`data.srcip`, `data.url`, `data.user_agent`).
@@ -71,7 +73,12 @@ The *range* is the chain one click travels. Every element below is a container o
 - **TheHive** (`http://thehive.localhost`) is case management. A *case* is the analyst's work item: a description, *observables* (the IPs, URLs and user agents taken from the alert) and tasks. Your verdicts land here.
 - **n8n** (`http://n8n.localhost`) is workflow automation. A *workflow* is a chain of nodes on a canvas: a trigger node starts it (a webhook the integrator calls when it opens a case) and each next node does one thing with the data, such as calling a model or writing a verdict back to TheHive. Module 1 puts your AI triage in the middle of that chain.
 
-
+```mermaid
+pie showData
+    title Range control panel: 15 buttons
+    "Attack buttons" : 9
+    "Benign twins" : 6
+```
 
 Exercise 0.3 walks it once by hand.
 
@@ -79,7 +86,7 @@ Exercise 0.3 walks it once by hand.
 
 **Goal**: the panel is your front door. From it you reach TheHive and n8n and sign in to both.
 
-1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login. *Click a credential to copy it*. Below is the attack console: ten attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
+1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login. *Click a credential to copy it*. Below is the attack console: nine attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
    
    ![Attack console, quick access](screenshots/connect/03-panel.png)
 
@@ -163,16 +170,13 @@ Every model call goes through one *gateway* the instructors run. Claude Code rea
    claude
    ```
 
-4. **Approve the docs server.** On first start Claude Code asks whether to use the `context7` MCP server from the workshop folder's `.mcp.json`. Say yes. It fetches API documentation on demand; Exercise 1.2 uses it. In another terminal, `claude mcp list` shows it connected. Without it, Claude Code can still read documentation pages with its `WebFetch` tool, and Exercise 1.2 gives the addresses.
-
-5. **Test.** Send one test prompt: `what is 2+2?`
+4. **Test.** Send one test prompt: `what is 2+2?`
 
 **Expected**:
 
 - [ ] Claude Code starts without asking you to log in. The two variables did that.
 - [ ] A notice says claude.ai connectors are disabled because another auth source is set. That is the token variable doing its job. Ignore it.
 - [ ] The test prompt gets an answer.
-- [ ] `claude mcp list` prints `context7` with a connected status.
 - [ ] `! echo $THEHIVE_APIKEY` inside Claude Code (the `!` prefix runs a shell command) prints a long key, not `replace-after-first-boot` and not an empty line.
 
 A `401` means the token is wrong or expired. Ask an instructor for a new one.
@@ -180,3 +184,37 @@ A `401` means the token is wrong or expired. Ask an instructor for a new one.
 To keep the variables across terminals, add the export lines to `~/.zshrc` or `~/.bash_profile`. On Windows, use the *Environment Variables* control panel.
 
 **Question 4**: what did the test prompt answer?
+
+## Exercise #0.5: connect the docs server
+
+Claude Code writes API calls from memory unless something puts the current documentation in front of it. Context7 does that: it indexes the docs of thousands of libraries and answers a question with the few paragraphs that matter. It comes in two forms, an MCP server the model calls, or a command-line tool plus a *skill* that tells the model to run it. This workshop uses the second form. It is a skill, the thing Module 1 is about, and it costs less: no tool schemas sit in the context on every turn, and one shell command replaces two tool round-trips. Reference: [Context7 for Claude Code](https://context7.com/docs/clients/claude-code) and the [ctx7 CLI](https://context7.com/docs/clients/cli).
+
+**Goal**: Claude Code has the `find-docs` skill and uses it when asked for library documentation.
+
+1. **Sign up or sign in** at [context7.com](https://context7.com/dashboard). Free. The setup below signs you in from the terminal, so have the browser ready.
+2. **Run the setup** from any folder. It installs the `ctx7` command, the skill and a rule file, all in your user folder, so it works from every project:
+
+   ```bash
+   npx ctx7 setup --cli --claude
+   ```
+
+3. **Sign in when asked.** The terminal prints a link and a short code. Open the link, enter the code, come back. Setup stores a key for you.
+4. **Check the skill.** `ls ~/.claude/skills/find-docs` shows a `SKILL.md`. Open it: it tells the model to run `ctx7 library <name> "<question>"` to find the library id, then `ctx7 docs <id> "<question>"` to read. The rule file, `~/.claude/rules/context7.md`, is what makes the model reach for it without being asked.
+5. **Try the command yourself**, the way the skill will:
+
+   ```bash
+   npx ctx7 library opensearch "match query on one field, sort by timestamp"
+   npx ctx7 docs /websites/opensearch "match query on one field, sort by timestamp"
+   ```
+
+6. **Try it through Claude Code.** Start `claude` from the workshop folder and send: `use context7 to show the OpenSearch Query DSL match query syntax, one line`. Say "Query DSL", or the docs may hand back the SQL plugin's `MATCHQUERY()` first. The transcript shows the skill loading and one or two `ctx7` commands, then the answer.
+
+**Expected**:
+
+- [ ] `~/.claude/skills/find-docs/SKILL.md` exists.
+- [ ] `npx ctx7 docs /websites/opensearch "..."` prints documentation excerpts in the terminal.
+- [ ] The test prompt ran `ctx7` before answering.
+
+If the setup cannot reach the registry or the site, Exercise 1.2 still works: it gives the documentation addresses for Claude Code's built-in `WebFetch` tool. If you chose `MCP server` in the setup by mistake, run `npx ctx7 remove --claude --mcp` and start again with `--cli`.
+
+**Question 5**: what did the test prompt answer?

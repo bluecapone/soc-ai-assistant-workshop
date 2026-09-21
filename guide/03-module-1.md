@@ -58,10 +58,10 @@ Each kind of file has a home, by when Claude Code loads it:
 
 ### Part A: the frontmatter
 
-
 Open `exercises/module-1/SKILL.md`. Its first five lines, between the two `---`, are the *frontmatter*:
 
 <!-- file: exercises/module-1/SKILL.md to "## Task" -->
+
 ```yaml
 ---
 name: soc-triage
@@ -73,7 +73,8 @@ allowed-tools: Bash(${CLAUDE_SKILL_DIR}/scripts/get_case.sh *), Bash(${CLAUDE_SK
 ---
 ```
 
-Six keys, each with a job:
+<details>
+<summary>What each key does</summary>
 
 - `name`: kebab-case, matching the folder. `/soc-triage` in Claude Code comes from here.
 - `description`: what the skill does. Together with `when_to_use` it is the only text Claude Code always has in context, so the pair decides whether the skill loads. "Helps with security" would never load.
@@ -83,6 +84,10 @@ Six keys, each with a job:
 - `allowed-tools`: the four scripts, by exact path, and nothing else. `${CLAUDE_SKILL_DIR}` is replaced by the skill's own folder wherever it is installed, so the paths stay right after `npx skills add` and the scripts run without a permission prompt. Naming the scripts instead of `Bash(*)` is the least privilege the skill needs. `allowed-tools` limits what runs. `disable-model-invocation` limits who starts it.
 
 Other fields exist (`model`, `effort`, `context: fork`, `hooks`, `paths`). None is needed here. All of them: [Appendix: skill frontmatter](08-appendix-frontmatter.md).
+
+
+
+</details>
 
 1. **Make the folder and put the file in place.** Claude Code reads skills from `.claude/skills/` in the folder it was started from.
    
@@ -110,7 +115,6 @@ Other fields exist (`model`, `effort`, `context: fork`, `hooks`, `paths`). None 
 
 ### Part B: the body
 
-
 Open `exercises/module-1/SKILL.md` again and read below the frontmatter. Five sections, five jobs.
 
 **Task**:
@@ -120,6 +124,7 @@ Open `exercises/module-1/SKILL.md` again and read below the frontmatter. Five se
 - An agent that reads everything and writes one comment is safe to hand a case. One that closes cases is not.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Task" to "## Workflow" -->
+
 ```markdown
 ## Task
 
@@ -133,6 +138,7 @@ You triage exactly one security case at a time from the workshop range, the case
 - The last paragraph is the only mention of the references, which is what makes them load on demand.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Workflow" to "## How to judge" -->
+
 ```markdown
 ## Workflow
 
@@ -155,6 +161,7 @@ Response shapes and known failures of each script: `references/lookups.md`. A wo
 - Each rule is the difference between an attack button and its benign twin on the panel.
 
 <!-- file: exercises/module-1/SKILL.md from "^## How to judge" to "## Verdict contract" -->
+
 ```markdown
 ## How to judge
 
@@ -172,6 +179,7 @@ Response shapes and known failures of each script: `references/lookups.md`. A wo
 - The shape lives in an asset because a template is copied, not paraphrased.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Verdict contract" to "## Guardrails" -->
+
 ```markdown
 ## Verdict contract
 
@@ -186,6 +194,7 @@ Exactly the shape in `assets/verdict-template.md`: three sections, one of the fo
 - Only the four scripts run.
 
 <!-- file: exercises/module-1/SKILL.md from "^## Guardrails" -->
+
 ```markdown
 ## Guardrails
 
@@ -207,29 +216,58 @@ Exactly the shape in `assets/verdict-template.md`: three sections, one of the fo
 
 ## Exercise #1.2: the scripts, made from the docs
 
-The model never sees these files. It runs them and reads what they print. That is why the fiddly parts live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that fixes the interface, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
+The model never sees these files. It runs them and reads what they print. That is why the parts that are easy to get slightly wrong live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that fixes the interface, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
 
 **Goal**: the four scripts exist, each one made from a prompt and the docs, each one tested by hand, and the folder holds the version you chose.
 
 ### Part A: the method
 
-One prompt shape, used four times. It always says:
+One prompt shape, used four times. Five things it always says. The examples are lines of the `wazuh_events.sh` prompt in Part B.
 
-- the file to write, its arguments, and the environment variables it needs, with a check that fails with a sentence;
-- which documentation to read and where: `use Context7 for <library>`, or `fetch <url>` when the docs server is not available;
-- the request to make: method, path, headers, body;
-- the exact JSON to print, and nothing else;
-- the guards: `set -euo pipefail`, `curl -sSf`, one `jq` at the end, do not run the script.
+**The file and its interface.**
+
+```text
+Write the bash script .claude/skills/soc-triage/scripts/wazuh_events.sh. Usage: wazuh_events.sh <value> [srcip|host].
+```
+
+**The variables, and the sentence to fail with.**
+
+```text
+WAZUH_URL is required, fail with the message "export WAZUH_URL first" when unset.
+```
+
+**Where to read the docs first.**
+
+```text
+Use Context7 (library: OpenSearch) to check the _search request format: a match query on one field, sort by timestamp descending, size 20, _source filtering.
+```
+
+**The request: method, path, auth, body.**
+
+```text
+POST $WAZUH_URL/wazuh-alerts-*/_search with basic auth, JSON body, curl -k because the indexer has a self-signed certificate.
+```
+
+**The exact output, and the guards.**
+
+```text
+Print only this JSON, through one jq at the end: {"total": <hits.total.value>, "events": [<each hit's _source>]}.
+Use set -euo pipefail and curl -sSf. Make it executable. Do not run it.
+```
 
 A prompt that names the output shape gets thirty comparable scripts in a room of thirty. "Write a Wazuh lookup" gets thirty different ones.
 
-Then the same loop for each script:
+The loop, per script:
 
-1. Send the prompt. Watch the transcript: one documentation call (`context7` or `WebFetch`) must appear before the file is written. If Claude Code wrote from memory, say `check the request format in the docs first, then revise`.
-2. Run the hand tests. Every script has three: it works on real input, an unset variable prints the sentence, an unknown value returns the empty shape or the error.
-3. Diff against the shipped version and read the shipped one's essentials. Keep whichever you prefer. The shipped one is also the fallback when the network is down.
+1. **Send the prompt.** One documentation call must appear before the file is written: the `find-docs` skill running `ctx7` (Exercise 0.5), or `WebFetch`. If not: `check the request format in the docs first, then revise`.
+2. **Run the three hand tests.** Real input works, an unset variable prints the sentence, an unknown value gives the empty shape or the error.
+3. **Diff against the shipped file.** Keep either. The shipped one is also the fallback.
 
-The documentation addresses, for `WebFetch`: OpenSearch query DSL `https://docs.opensearch.org/latest/query-dsl/`, TheHive API `https://docs.strangebee.com/thehive/api-docs/`, AbuseIPDB `https://docs.abuseipdb.com/`.
+Context7 returns the few paragraphs that answer the question. `WebFetch` returns a whole page you must know the address of. Context7 is a third party with a rate limit and gaps, so when it fails, the page is the source:
+
+- OpenSearch query DSL: `https://docs.opensearch.org/latest/query-dsl/`
+- TheHive API: `https://docs.strangebee.com/thehive/api-docs/`
+- AbuseIPDB: `https://docs.abuseipdb.com/`
 
 No network at all: copy the four shipped files and read their essentials in Parts B to D.
 
@@ -241,13 +279,13 @@ cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
 ### Part B: wazuh_events.sh, a lookup
 
 1. **Make the folder**, once:
-
+   
    ```bash
    mkdir -p .claude/skills/soc-triage/scripts
    ```
 
 2. **Prompt.** In Claude Code:
-
+   
    ```text
    Write the bash script .claude/skills/soc-triage/scripts/wazuh_events.sh. Usage: wazuh_events.sh <value> [srcip|host]. It returns the last 20 Wazuh alerts for a source IP (default) or for an agent host name, newest first. Read-only.
    Environment: WAZUH_URL is required, fail with the message "export WAZUH_URL first" when unset. WAZUH_USERNAME and WAZUH_PASSWORD default to admin and brucon2026.
@@ -258,8 +296,9 @@ cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
    ```
 
 3. **Watch** for the Context7 call, then read the file it wrote.
-4. **Hand tests.** In a second terminal, with the same exports as Exercise 0.4, with the source IP from your Part 0 case:
 
+4. **Hand tests.** In a second terminal, with the same exports as Exercise 0.4, with the source IP from your Part 0 case:
+   
    ```bash
    .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
    env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh <ip>
@@ -304,9 +343,11 @@ Keeps the count and the seven fields the rules read, drops the rest. Twenty full
 **Expected**:
 
 - [ ] `total` is above zero and `events` lists them, newest first.
-- [ ] The unset variable prints `export WAZUH_URL first`. The unknown IP prints `"total": 0`.
-- [ ] The folder:
 
+- [ ] The unset variable prints `export WAZUH_URL first`. The unknown IP prints `"total": 0`.
+
+- [ ] The folder:
+  
   ```text
   soc-triage/
   ├── SKILL.md
@@ -321,7 +362,7 @@ Keeps the count and the seven fields the rules read, drops the rest. Twenty full
 TheHive is the only system the skill writes to, and the only write is a comment. Closing the case is a different call this workshop never makes.
 
 1. **Prompt for the read.**
-
+   
    ```text
    Write the bash script .claude/skills/soc-triage/scripts/get_case.sh. Usage: get_case.sh <case-id>, the id in the form ~123456. It reads one TheHive case. Read-only.
    Environment: THEHIVE_URL and THEHIVE_APIKEY are required, each fails with "export <NAME> first" when unset.
@@ -332,7 +373,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    ```
 
 2. **Prompt for the write.**
-
+   
    ```text
    Write the bash script .claude/skills/soc-triage/scripts/post_verdict.sh. Usage: post_verdict.sh <case-id>, with the verdict Markdown on standard input. It adds one comment to a TheHive case. That is its only write.
    Environment: THEHIVE_URL and THEHIVE_APIKEY are required, each fails with "export <NAME> first" when unset.
@@ -342,7 +383,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    ```
 
 3. **Hand tests for the read**, with the case id from Part 0:
-
+   
    ```bash
    .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
    THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh ~<case id>
@@ -350,7 +391,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    ```
 
 4. **Hand test for the write**: the usage error only. <ins>Never run the write by hand</ins>. The skill does that in Exercise 1.5.
-
+   
    ```bash
    .claude/skills/soc-triage/scripts/post_verdict.sh
    ```
@@ -389,10 +430,13 @@ jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/com
 **Expected**:
 
 - [ ] Title, tags, description with the indicator table, `srcip` filled, and the observables.
-- [ ] The wrong key prints `curl: (22) ... 401`. The unset variable prints `export THEHIVE_URL first`.
-- [ ] `post_verdict.sh` with no argument prints a usage line and nothing else.
-- [ ] The folder:
 
+- [ ] The wrong key prints `curl: (22) ... 401`. The unset variable prints `export THEHIVE_URL first`.
+
+- [ ] `post_verdict.sh` with no argument prints a usage line and nothing else.
+
+- [ ] The folder:
+  
   ```text
   soc-triage/
   ├── SKILL.md
@@ -407,7 +451,7 @@ jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/com
 ### Part D: reputation.sh, the lookup with a fallback
 
 1. **Prompt.**
-
+   
    ```text
    Write the bash script .claude/skills/soc-triage/scripts/reputation.sh. Usage: reputation.sh <ip>. It reports the reputation of one IP from AbuseIPDB when OSINT_API_KEY is set, and from an offline list when it is not. The output must say which one answered.
    Use Context7 (library: AbuseIPDB) to check the API v2 CHECK endpoint: GET https://api.abuseipdb.com/api/v2/check with the ipAddress and maxAgeInDays=90 query parameters, the Key header, Accept: application/json.
@@ -417,7 +461,7 @@ jq -Rs '{message: .}' | curl -sSf -X POST "$THEHIVE_URL/api/v1/case/$CASE_ID/com
    ```
 
 2. **Hand tests**, from the workshop folder, with no key exported:
-
+   
    ```bash
    .claude/skills/soc-triage/scripts/reputation.sh <ip>
    .claude/skills/soc-triage/scripts/reputation.sh 203.0.113.9
@@ -448,8 +492,9 @@ fi
 **Expected**:
 
 - [ ] Both runs print `"source": "offline list, not live reputation"`, one with `listed` true if that IP is on the list, the other false.
-- [ ] The folder:
 
+- [ ] The folder:
+  
   ```text
   soc-triage/
   ├── SKILL.md
@@ -469,6 +514,7 @@ A reference is documentation the model opens only when `SKILL.md` sends it there
 Open `exercises/module-1/lookups.md`:
 
 <!-- file: exercises/module-1/lookups.md -->
+
 ```markdown
 # Lookups: shapes and failures
 
@@ -517,6 +563,7 @@ The skill did not load on a natural-language prompt: the description lacks the w
 Open `exercises/module-1/brute-force.md`:
 
 <!-- file: exercises/module-1/brute-force.md -->
+
 ```markdown
 # Example: Brute force
 
@@ -530,9 +577,8 @@ The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
 ```
 
 - One worked run, from the typed command to the close state. An example anchors behaviour better than a rule: it shows the scripts in order, real-looking values, and a verdict that follows from the rules.
-
 1. **Put them in place.**
-
+   
    ```bash
    mkdir -p .claude/skills/soc-triage/references/examples
    cp exercises/module-1/lookups.md .claude/skills/soc-triage/references/
@@ -544,8 +590,9 @@ The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
 **Expected**:
 
 - [ ] All three failures you produced have an entry under `Common issues`.
-- [ ] The folder:
 
+- [ ] The folder:
+  
   ```text
   soc-triage/
   ├── SKILL.md
@@ -571,6 +618,7 @@ An asset is something the model copies rather than reads: a template, a form, a 
 Open `exercises/module-1/verdict-template.md`:
 
 <!-- file: exercises/module-1/verdict-template.md -->
+
 ```markdown
 ### Summary
 
@@ -586,9 +634,8 @@ Prose, concrete, addressed to the analyst.
 ```
 
 - The three headings, their order, the four close states. A template in `assets/` is copied verbatim. A description of the shape in prose would be paraphrased.
-
 1. **Put it in place.**
-
+   
    ```bash
    mkdir -p .claude/skills/soc-triage/assets
    cp exercises/module-1/verdict-template.md .claude/skills/soc-triage/assets/
@@ -597,8 +644,9 @@ Prose, concrete, addressed to the analyst.
 **Expected**:
 
 - [ ] `find .claude/skills/soc-triage -type f | wc -l` prints `8`.
-- [ ] The folder, complete:
 
+- [ ] The folder, complete:
+  
   ```text
   soc-triage/
   ├── SKILL.md
@@ -623,7 +671,6 @@ Three tests, in the order a skill author runs them: does it load when it should 
 
 ### Part A: does it load?
 
-
 Claude Code loads a skill when the prompt matches its description. `/soc-triage` bypasses the description entirely, so it proves nothing about it. The test is the load, not the run: once you see Claude Code read the skill, stop it with `Esc`.
 
 1. **Should load.** Run each prompt, restart `claude` between runs so each starts clean:
@@ -646,7 +693,6 @@ A skill that loads too little needs more of the words users type in its descript
 **Question 6**: which prompt, if any, failed to load it?
 
 ### Part B: fire an alert and run it
-
 
 You trigger every step yourself. Nothing happens unless you ask for it. This is the functional test: given a real case, when the skill runs, then the verdict is on the case with zero failed calls.
 
@@ -678,7 +724,6 @@ You trigger every step yourself. Nothing happens unless you ask for it. This is 
 **Question 8**: the close state the skill chose.
 
 ### Part C: the twin, then tighten
-
 
 `Admin login` is the twin of `Brute force`: a real admin mistypes, then succeeds. Same log shape, harmless intent. A skill is a living document. A wrong verdict is a sentence to fix, not a ticket to file.
 

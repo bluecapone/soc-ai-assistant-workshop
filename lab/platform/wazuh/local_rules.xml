@@ -111,24 +111,43 @@
     <group>fim,webshell,attack,</group>
   </rule>
 
-  <!-- 100141 Marketing/CDN callout (benign twin): destination on the proxy CDN allow-list. -->
-  <rule id="100141" level="3" ignore="60">
-    <decoded_as>proxy</decoded_as>
-    <field name="cat">cdn</field>
-    <description>Outbound proxy connection to $(dst_host) from $(srcip)</description>
-    <group>network,benign,</group>
-  </rule>
-
-  <!-- 100140 C2 beacon (attack): outbound to an uncategorised destination from the compromised
-       internal host. A frequency composite (if_matched_sid + same_source_ip over 300s) proved
-       unreliable here, so this is a single-event match; the console fires the beacon as a burst and
-       ignore=60 collapses it into one case. The destination is a real ThreatFox C2 indicator; the
-       analyst confirms it via external OSINT. -->
-  <rule id="100140" level="10" ignore="60">
+  <!-- Proxy egress anchors: one parsed proxy line each. Level 3 (not 0) so the beacon/CDN
+       frequency rules below can count them via if_matched_sid. Not forwarded to TheHive. -->
+  <rule id="100148" level="3">
     <decoded_as>proxy</decoded_as>
     <field name="cat">uncategorized</field>
-    <description>Outbound to uncategorised destination $(dst_host) from $(srcip)</description>
+    <description>Outbound proxy connection to uncategorised destination $(dst_host)</description>
+  </rule>
+
+  <rule id="100149" level="3">
+    <decoded_as>proxy</decoded_as>
+    <field name="cat">cdn</field>
+    <description>Outbound proxy connection to CDN destination $(dst_host)</description>
+  </rule>
+
+  <!-- 100140 C2 beacon (attack): repeated uncategorised outbound callouts to the SAME destination
+       from the compromised host. One connection is not a beacon; the cadence to one destination is.
+       frequency=5/timeframe=120 fires on the 5th callout to a destination (grouped by dst_host); the
+       console fires the beacon as a burst of 12-24, so it trips at once, and ignore=60 collapses the
+       burst into a single case. Counts off the level-3 anchor 100148 (a frequency rule only counts
+       matches that alerted). The destination is a real ThreatFox C2 indicator; the analyst confirms
+       it via external OSINT. -->
+  <rule id="100140" level="10" frequency="5" timeframe="120" ignore="60">
+    <if_matched_sid>100148</if_matched_sid>
+    <same_field>dst_host</same_field>
+    <description>C2 beacon: repeated callouts to uncategorised destination $(dst_host) from $(srcip)</description>
     <group>c2,attack,</group>
+  </rule>
+
+  <!-- 100141 Marketing/CDN callout (benign twin): the same shape as the C2 beacon — repeated
+       outbound callouts to ONE destination — but the destination is on the proxy CDN allow-list
+       (cat=cdn), so it is authorised. The tell is the destination category, not the volume.
+       Counts off the level-3 anchor 100149. -->
+  <rule id="100141" level="3" frequency="5" timeframe="120" ignore="60">
+    <if_matched_sid>100149</if_matched_sid>
+    <same_field>dst_host</same_field>
+    <description>Repeated outbound proxy connections to $(dst_host) from $(srcip)</description>
+    <group>network,benign,</group>
   </rule>
 
   <!-- 100142 Data exfiltration (attack): a large-volume transfer to an EXTERNAL destination
