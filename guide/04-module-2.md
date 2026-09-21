@@ -109,16 +109,19 @@ The webhook fires on every case and alert event, and the workflow's own write is
 
 **Goal**: the skeleton is active and only case-creation events reach the rest of the workflow.
 
-1. **Open the skeleton.** In n8n, open `SOC triage, build here (skeleton)`. Two nodes and a sticky note. Read the note (quote its first sentence in backticks: `Build between these two nodes`). Open `Write verdict to TheHive` and read what it expects: an item with `caseId` and `verdict`, credential `TheHive n8n`, `POST http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`.
+1. **Open the skeleton.** In n8n, open `SOC triage, build here (skeleton)`. Two nodes and a sticky note. Read the note (quote its first sentence in backticks: `Build between these two nodes`). Open `Write verdict to TheHive` and read what it expects: an item with `caseId` and `verdict`, credential `TheHive n8n`. Its URL still reads `http://thehive:9000/api/v1/case/{{ $json.caseId }}/comment`, from before Caddy grew an alias for TheHive.
 
-2. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
+2. **Fix the write URL.** Change it to `http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`, the address n8n's compose network now aliases to Caddy, the same one you type in the browser.
 
-3. **Fire.** Panel, `Brute force`, confirm. In n8n, `Executions`: several rows for one click, one per TheHive event. Open one, click `Webhook`, read `body.objectType` and `body.operation`. The write node is red in every execution: it has no `caseId` yet. Expected, until Exercise 2.7.
+3. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
 
-4. **Add the filter.** Insert a `Filter` node between `Webhook` and `Write verdict to TheHive`, named `Case created only`. Two conditions, combinator AND, type string, operation equals. First, `{{ $json.body.objectType }}` equals `case`. Second, `{{ $json.body.operation }}` equals `Creation`. Fence the two expressions as `text`. Save, fire `Brute force` again.
+4. **Fire.** Panel, `Brute force`, confirm. In n8n, `Executions`: several rows for one click, one per TheHive event. Open one, click `Webhook`, read `body.objectType` and `body.operation`. The write node is red in every execution: it has no `caseId` yet. Expected, until Exercise 2.7.
+
+5. **Add the filter.** Insert a `Filter` node between `Webhook` and `Write verdict to TheHive`, named `Case created only`. Two conditions, combinator AND, type string, operation equals. First, `{{ $json.body.objectType }}` equals `case`. Second, `{{ $json.body.operation }}` equals `Creation`. Fence the two expressions as `text`. Save, fire `Brute force` again.
 
 **Expected**:
 
+- [ ] `Write verdict to TheHive`'s URL reads `thehive.localhost`, not `thehive:9000`.
 - [ ] One execution per TheHive event before the filter, all red at the write node.
 - [ ] After the filter, the `Creation` event passes and any update event stops at `Case created only` (its output shows `0 items` kept).
 - [ ] Node list:
@@ -286,14 +289,16 @@ An IF node per indicator decides whether there is anything to look up. When ther
   -> Enrich: Wazuh
      -> IP present?
           true  -> Lookup IP: AbuseIPDB -> IP verdict
+                       -> OpenAI Chat Model, Mini-verdict parser (shared)
           false -> IP not present
      -> Hash present?
           true  -> Lookup hash: VirusTotal -> Hash verdict
+                       -> OpenAI Chat Model, Mini-verdict parser (shared)
           false -> Hash not present
      -> Domain present?
           true  -> Lookup domain: ThreatFox -> Domain verdict
+                       -> OpenAI Chat Model, Mini-verdict parser (shared)
           false -> Domain not present
-       (IP verdict, Hash verdict, Domain verdict) -> OpenAI Chat Model, Mini-verdict parser
   -> Write verdict to TheHive
   ```
 
@@ -459,11 +464,12 @@ Failure hint: a red `Triage (LLM chain)` with a parser error means the model did
 
 **Expected**:
 
-- [ ] With the rule as shipped, a close state different from Exercise 2.8's.
-- [ ] With the rule weakened, the twin's close state moves towards the attack's, or the summary loses the failures.
+- [ ] With the rule as shipped, the summary mentions the failed attempts before the success.
+- [ ] With the rule weakened, the summary drops that mention, or reads the run as a plain admin login.
+- [ ] Both runs keep `suggested_close_state` at `other`: this module never makes the determination itself, only Module 3 does.
 - [ ] Each fix was one sentence, one save, one click.
 
-**Question 9**: the two close states, rule as shipped and rule weakened.
+**Question 9**: the sentence you changed, and the summary phrase that disappeared when you weakened it.
 
 ## Stuck five minutes?
 

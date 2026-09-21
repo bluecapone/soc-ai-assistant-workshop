@@ -1,3 +1,5 @@
 .DS_Store
 guide/_build/
 .venv/
+.pytest_cache/
+__pycache__/
