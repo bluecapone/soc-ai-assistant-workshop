@@ -731,7 +731,74 @@ Nothing in those lookups is specific to triage, so they are worth more as skills
 
 3. **List them** and try one: restart `claude`, then `what did 203.0.113.9 do in Wazuh today`.
 
-To share, push your fork to GitHub and install with `npx skills add <your-username>/<repo-name> --skill wazuh-query --agent claude-code`. GitLab URLs are not documented for `npx skills add`. Use GitHub.
+### Share them: one repo, two installers
+
+Local skills help only you. Put them in a repo, push it, and anyone with access installs them with one command. Make a folder that holds nothing but the skills, `github-repo`, shaped so Claude Code's own installer understands it:
+
+```text
+github-repo/
+├── .claude-plugin/
+│   └── marketplace.json          # the catalogue Claude Code reads
+└── soc-skills/                    # one plugin, holding both skills
+    ├── .claude-plugin/
+    │   └── plugin.json
+    └── skills/
+        ├── wazuh-query/
+        │   └── SKILL.md
+        └── thehive-case/
+            └── SKILL.md
+```
+
+Build it from the two skills you just installed:
+
+```bash
+mkdir -p github-repo/.claude-plugin github-repo/soc-skills/.claude-plugin github-repo/soc-skills/skills
+cp -r .claude/skills/wazuh-query .claude/skills/thehive-case github-repo/soc-skills/skills/
+```
+
+Open `github-repo/soc-skills/.claude-plugin/plugin.json`, the plugin itself:
+
+```json
+{
+  "name": "soc-skills",
+  "description": "Wazuh and TheHive lookups for SOC triage",
+  "version": "1.0.0"
+}
+```
+
+Open `github-repo/.claude-plugin/marketplace.json`, the catalogue that lists it:
+
+```json
+{
+  "name": "soc",
+  "owner": { "name": "your-name" },
+  "plugins": [
+    { "name": "soc-skills", "source": "./soc-skills", "description": "Wazuh and TheHive lookups" }
+  ]
+}
+```
+
+1. **Install it the Claude Code way**, from the folder as a local marketplace. Inside `claude`:
+
+   ```text
+   /plugin marketplace add ./github-repo
+   /plugin install soc-skills@soc
+   ```
+
+2. **Install it the npx way.** The `skills` CLI reads a GitHub repo and adds the skills it finds:
+
+   ```bash
+   npx skills add <your-username>/github-repo
+   ```
+
+3. **Put it on a server.** Push `github-repo` to GitHub. The local path becomes a repo name, and anyone you give access installs the same two skills from their own laptop with one line:
+
+   ```text
+   /plugin marketplace add <your-username>/github-repo
+   /plugin install soc-skills@soc
+   ```
+
+That is the module's whole argument made portable. A skill is text in a repo, so sharing it is a `git push` and a colleague's one command, where an MCP server would be a service each of them has to run and reconnect to. A private repo shares with a team, a public one with the room. A full `https://gitlab.com/...` git URL also works for `/plugin marketplace add`; `npx skills add` expects GitHub.
 
 **Expected**:
 
