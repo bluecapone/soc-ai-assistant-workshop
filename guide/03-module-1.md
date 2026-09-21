@@ -739,21 +739,3 @@ To share, push your fork to GitHub and install with `npx skills add <your-userna
 - [ ] Neither skill folder contains a `README.md`.
 
 **Question 10**: which skill loaded for the Wazuh question?
-
-## Exercise #1.7, bonus: live reputation
-
-The skill was built to work offline. With a key, one script changes its source and nothing else moves. That is what the fallback design bought.
-
-**Goal**: the verdict cites the source IP's reputation from a live API.
-
-`reputation.sh` already switches on the key. Nothing else in the skill changes. The verdict says a different `source`.
-
-1. **Export a key**: `export ABUSEIPDB_API_KEY=<AbuseIPDB key>`. Free tier is 1000 requests a day.
-2. **Run** `.claude/skills/soc-triage/scripts/reputation.sh <attacker ip>` by hand: `source` is now `abuseipdb`, with a score.
-3. **Rerun** `/soc-triage` on the Exercise 1.5 case.
-
-**Expected**:
-
-- [ ] The summary names the reputation and its source.
-
-**Question 11**: `abuseConfidenceScore` for the attacker IP.
