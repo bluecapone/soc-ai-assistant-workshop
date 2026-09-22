@@ -421,22 +421,6 @@
           "name": "TheHive n8n"
         }
       }
-    },
-    {
-      "parameters": {
-        "content": "## Complete this agent: add the missing tools\n\nThe system prompt lists seven tools, but only three are wired to the agent: `wazuh_events_for_ip`, `wazuh_events_for_host` and `thehive_related_cases`. Add the four the prompt still names, as **HTTP Request Tool** nodes connected to the agent's tool input:\n\n- `ip_reputation` -> AbuseIPDB score for an IP (https://api.abuseipdb.com/api/v2/check).\n- `vt_file_report` -> VirusTotal detections for a file hash (https://www.virustotal.com/api/v3/files).\n- `vt_domain_report` -> VirusTotal detections for a domain (https://www.virustotal.com/api/v3/domains).\n- `threatfox_search` -> abuse.ch ThreatFox lookup for any indicator (https://threatfox-api.abuse.ch/api/v1/).\n\nUse the three wired tools as the pattern: a clear `toolDescription`, and a `$fromAI(...)` placeholder for the indicator the agent passes in. Put the API keys in `lab/.env`: `ABUSEIPDB_API_KEY`, `VT_API_KEY` and `ABUSECH_AUTH_KEY`. Create a free account at abuseipdb.com and virustotal.com to get the keys.",
-        "height": 340,
-        "width": 820,
-        "color": 4
-      },
-      "id": "c1d2e3f4-0000-4000-8000-000000000002",
-      "name": "Complete the tools",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        1568,
-        420
-      ]
     }
   ],
   "connections": {

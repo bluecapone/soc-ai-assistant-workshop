@@ -583,22 +583,6 @@
           "name": "TheHive n8n"
         }
       }
-    },
-    {
-      "parameters": {
-        "content": "## Complete this workflow: add the hash and domain tools\n\nThe **IP** branch below is a full worked example: `IP present?` -> `Lookup IP: AbuseIPDB` -> `IP verdict`, with `IP not present` on the false path, both feeding `Merge verdicts`. It uses `ABUSEIPDB_API_KEY` from `lab/.env`.\n\nBuild the same pattern for the two gates already wired to `Enrich: Wazuh`:\n\n- **Hash present?** -> `Lookup hash: VirusTotal` -> `Hash verdict`, with `Hash not present` on the false path.\n- **Domain present?** -> `Lookup domain: ThreatFox` -> `Domain verdict`, with `Domain not present` on the false path.\n\nWire both new branches into `Merge verdicts` (one free input each), like the IP branch. Copy the three IP nodes and change the service URL, the query and the indicator field. Get a free VirusTotal key and an abuse.ch ThreatFox key, and add them to `lab/.env` as `VT_API_KEY` and `ABUSECH_AUTH_KEY`.",
-        "height": 420,
-        "width": 760,
-        "color": 4
-      },
-      "id": "b1c2d3e4-0000-4000-8000-000000000001",
-      "name": "Complete the tools",
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        -6400,
-        -320
-      ]
     }
   ],
   "connections": {
