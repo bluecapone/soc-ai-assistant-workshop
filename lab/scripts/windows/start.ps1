@@ -267,9 +267,9 @@ function Import-Workflow($workflow_id, $path, $label) {
         if ($LASTEXITCODE -eq 0) { Ok "$label imported" } else { Die "$label import failed" }
     }
 }
-Import-Workflow "soctriageskel001" "/import-exercises/module-2/skeleton.json"          "Module 2 skeleton"
-Import-Workflow "soctriagem2chk01" "/import-checkpoints/module-2/triage-m2-chain.json" "Module 2 checkpoint"
-Import-Workflow "soctriagem3chk01" "/import-checkpoints/module-3/triage-m3-agent.json" "Module 3 checkpoint"
+Import-Workflow "soctriageskel001" "/import-workflows/module-2/skeleton.json"   "Module 2 skeleton"
+Import-Workflow "soctriagem2chk01" "/import-workflows/module-2/checkpoint.json" "Module 2 checkpoint"
+Import-Workflow "soctriagem3chk01" "/import-workflows/module-3/checkpoint.json" "Module 3 checkpoint"
 
 
 # --- 5. Wazuh reachable -------------------------------------------------------

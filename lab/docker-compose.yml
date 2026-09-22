@@ -114,7 +114,7 @@ services:
       # TheHive key) from environment variables rather than hand-created credentials.
       GENERIC_TIMEZONE: Europe/Brussels
       # Surfaced to the workflow nodes via $env. n8n 2.x blocks $env in nodes by
-      # default; the checkpoints read MODEL_*, ABUSEIPDB_API_KEY, VT_API_KEY and
+      # default; the workflows read MODEL_*, ABUSEIPDB_API_KEY, VT_API_KEY and
       # ABUSECH_AUTH_KEY through it, so allow it.
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
       GATEWAY_BASE_URL: ${GATEWAY_BASE_URL}
@@ -128,8 +128,7 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - n8n-data:/home/node/.n8n
-      - ./checkpoints:/import-checkpoints:ro
-      - ./exercises:/import-exercises:ro
+      - ./workflows:/import-workflows:ro
     ports:
       - "5678:5678"
     # node is guaranteed present in the n8n image (works whether the base is alpine or debian).

@@ -6,9 +6,8 @@ import re
 import sys
 from pathlib import Path
 
-# Resolve paths relative to this file
-checkpoints_dir = Path(__file__).parent
-lab_dir = checkpoints_dir.parent
+# Resolve paths relative to this file (lab/workflows/)
+workflows_dir = Path(__file__).parent
 
 # Track failures
 failures = []
@@ -22,9 +21,9 @@ def log_fail(msg, detail=""):
 
 # Check 1: JSON parsing and id/name pairs
 files_to_check = [
-    (checkpoints_dir / "module-2" / "triage-m2-chain.json", "soctriagem2chk01", "SOC triage, Module 2 checkpoint (LLM chain)"),
-    (checkpoints_dir / "module-3" / "triage-m3-agent.json", "soctriagem3chk01", "SOC triage, Module 3 checkpoint (AI Agent)"),
-    (lab_dir / "exercises" / "module-2" / "skeleton.json", "soctriageskel001", "SOC triage (skeleton)"),
+    (workflows_dir / "module-2" / "checkpoint.json", "soctriagem2chk01", "SOC triage, Module 2 checkpoint (LLM chain)"),
+    (workflows_dir / "module-3" / "checkpoint.json", "soctriagem3chk01", "SOC triage, Module 3 checkpoint (AI Agent)"),
+    (workflows_dir / "module-2" / "skeleton.json", "soctriageskel001", "SOC triage (skeleton)"),
 ]
 
 for filepath, expected_id, expected_name in files_to_check:
@@ -47,9 +46,9 @@ for filepath, expected_id, expected_name in files_to_check:
 allowed_cred_ids = {"credWazuhIndex01", "credTheHiveN8n01", "credModelGatewy1"}
 
 files_for_cred_check = [
-    checkpoints_dir / "module-2" / "triage-m2-chain.json",
-    checkpoints_dir / "module-3" / "triage-m3-agent.json",
-    lab_dir / "exercises" / "module-2" / "skeleton.json",
+    workflows_dir / "module-2" / "checkpoint.json",
+    workflows_dir / "module-3" / "checkpoint.json",
+    workflows_dir / "module-2" / "skeleton.json",
 ]
 
 for filepath in files_for_cred_check:
@@ -74,7 +73,7 @@ for filepath in files_for_cred_check:
 
 # Check 3: SKILL.md sections appear in M2 and M3 system messages
 # The Module 1 skill ships complete in exercises/module-1 (flat files; the attendee assembles the folder).
-skill_path = Path(os.environ.get("SOC_TRIAGE_SKILL", checkpoints_dir / ".." / ".." / "exercises" / "module-1" / "SKILL.md"))
+skill_path = Path(os.environ.get("SOC_TRIAGE_SKILL", workflows_dir / ".." / ".." / "exercises" / "module-1" / "SKILL.md"))
 try:
     with open(skill_path) as f:
         skill_content = f.read()
@@ -129,7 +128,7 @@ try:
     ]
     
     # Check M2
-    with open(checkpoints_dir / "module-2" / "triage-m2-chain.json") as f:
+    with open(workflows_dir / "module-2" / "checkpoint.json") as f:
         m2_data = json.load(f)
     
     m2_node_found = False
@@ -155,7 +154,7 @@ try:
         log_fail("Check 3: M2 node", "Triage (LLM chain) node not found")
     
     # Check M3
-    with open(checkpoints_dir / "module-3" / "triage-m3-agent.json") as f:
+    with open(workflows_dir / "module-3" / "checkpoint.json") as f:
         m3_data = json.load(f)
     
     m3_node_found = False
@@ -182,9 +181,9 @@ except Exception as e:
 
 # Check 4: Webhook path "thehive-alert"
 webhook_files = [
-    (checkpoints_dir / "module-2" / "triage-m2-chain.json", "soctriagem2chk01"),
-    (checkpoints_dir / "module-3" / "triage-m3-agent.json", "soctriagem3chk01"),
-    (lab_dir / "exercises" / "module-2" / "skeleton.json", "soctriageskel001"),
+    (workflows_dir / "module-2" / "checkpoint.json", "soctriagem2chk01"),
+    (workflows_dir / "module-3" / "checkpoint.json", "soctriagem3chk01"),
+    (workflows_dir / "module-2" / "skeleton.json", "soctriageskel001"),
 ]
 
 for filepath, workflow_id in webhook_files:
@@ -209,7 +208,7 @@ for filepath, workflow_id in webhook_files:
 # Check 5: Node shape validation
 try:
     # M2 Triage node shape
-    with open(checkpoints_dir / "module-2" / "triage-m2-chain.json") as f:
+    with open(workflows_dir / "module-2" / "checkpoint.json") as f:
         m2_data = json.load(f)
     
     m2_triage_found = False
@@ -252,7 +251,7 @@ try:
         log_fail("Check 5: M2 Triage node", "Triage (LLM chain) node not found")
     
     # M3 Triage node shape
-    with open(checkpoints_dir / "module-3" / "triage-m3-agent.json") as f:
+    with open(workflows_dir / "module-3" / "checkpoint.json") as f:
         m3_data = json.load(f)
     
     m3_triage_found = False
@@ -306,8 +305,8 @@ try:
         log_fail("Check 5: M3 Triage node", "Triage (AI Agent) node not found")
     
     # Check OutputParserStructured nodes (skip skeleton)
-    for file_label, file_path in [("M2", checkpoints_dir / "module-2" / "triage-m2-chain.json"), 
-                                   ("M3", checkpoints_dir / "module-3" / "triage-m3-agent.json")]:
+    for file_label, file_path in [("M2", workflows_dir / "module-2" / "checkpoint.json"), 
+                                   ("M3", workflows_dir / "module-3" / "checkpoint.json")]:
         with open(file_path) as f:
             data = json.load(f)
         
@@ -372,9 +371,9 @@ try:
                 log_ok(f"Check 5: M3 tool '{tool_name}' connected via ai_tool")
     
     # Check for ".item.json" in all generated files
-    for file_label, file_path in [("M2", checkpoints_dir / "module-2" / "triage-m2-chain.json"),
-                                   ("M3", checkpoints_dir / "module-3" / "triage-m3-agent.json"),
-                                   ("skeleton", lab_dir / "exercises" / "module-2" / "skeleton.json")]:
+    for file_label, file_path in [("M2", workflows_dir / "module-2" / "checkpoint.json"),
+                                   ("M3", workflows_dir / "module-3" / "checkpoint.json"),
+                                   ("skeleton", workflows_dir / "module-2" / "skeleton.json")]:
         with open(file_path) as f:
             file_content = f.read()
         

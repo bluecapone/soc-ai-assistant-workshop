@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-WF_PATH = Path(__file__).resolve().parents[1] / "module-2" / "triage-m2-chain.json"
+WF_PATH = Path(__file__).resolve().parents[1] / "module-2" / "checkpoint.json"
 
 
 @pytest.fixture(scope="module")
