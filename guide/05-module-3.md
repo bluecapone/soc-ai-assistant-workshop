@@ -181,10 +181,10 @@ The four, at a glance. Each is an `HTTP Request Tool` on the agent's `Tool` conn
 
 | Tool | Method | Source | Header |
 |---|---|---|---|
-| `ip_reputation` | GET | AbuseIPDB | `Key` = `{{ $env.ABUSEIPDB_API_KEY }}` |
-| `vt_file_report` | GET | VirusTotal | `x-apikey` = `{{ $env.VT_API_KEY }}` |
-| `vt_domain_report` | GET | VirusTotal | `x-apikey` = `{{ $env.VT_API_KEY }}` |
-| `threatfox_search` | POST | ThreatFox | `Auth-Key` = `{{ $env.ABUSECH_AUTH_KEY }}` |
+| `ip_reputation` | GET | AbuseIPDB | `Key: {{ $env.ABUSEIPDB_API_KEY }}` |
+| `vt_file_report` | GET | VirusTotal | `x-apikey: {{ $env.VT_API_KEY }}` |
+| `vt_domain_report` | GET | VirusTotal | `x-apikey: {{ $env.VT_API_KEY }}` |
+| `threatfox_search` | POST | ThreatFox | `Auth-Key: {{ $env.ABUSECH_AUTH_KEY }}` |
 
 The first three also send `Accept` = `application/json`. The descriptions and URLs below are pasted verbatim, so they stay in code blocks rather than in the table.
 

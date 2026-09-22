@@ -256,7 +256,7 @@ The IP branch in Exercise 2.2 is the worked example. Build the other two the sam
 | gate field | `{{ $('Extract case').first().json.hash }}` | `{{ $('Extract case').first().json.domain }}` |
 | lookup node | `Lookup hash: VirusTotal` | `Lookup domain: ThreatFox` |
 | method | GET | POST |
-| header | `x-apikey` = `{{ $env.VT_API_KEY }}` | `Auth-Key` = `{{ $env.ABUSECH_AUTH_KEY }}` |
+| header | `x-apikey: {{ $env.VT_API_KEY }}` | `Auth-Key: {{ $env.ABUSECH_AUTH_KEY }}` |
 | body | none | the `search_ioc` query |
 | skip node | `Hash not present` | `Domain not present` |
 | judge node | `Hash verdict` | `Domain verdict` |
@@ -356,7 +356,19 @@ The gather chain (`Triage (LLM chain)`) weighs all three judgments against each 
 
 **Goal**: the gather chain holds the Module 1 rules as its system message, the same shared model behind the gateway, and a parser that refuses anything but the three fields.
 
-1. **Read the chain.** `Triage (LLM chain)` is a `Basic LLM Chain`. Prompt `Define below`, text `{{ JSON.stringify($json, null, 2) }}`. `Require Specific Output Format` on. System message: `exercises/module-2/system-prompt.md` (included below). Model connector: the same shared `OpenAI Chat Model` (no second copy). Parser connector: `Structured Output Parser`, schema `exercises/module-2/output-schema.json`. The final `This module` section explains that this workflow does not make a real determination yet. It always writes `suggested_close_state` as `other` because this is Module 2: the determination step happens in Module 3.
+1. **Read the chain.** `Triage (LLM chain)` is a Basic LLM Chain. It is given, already configured:
+
+   ```text
+   Prompt:         Define below
+   Text:           {{ JSON.stringify($json, null, 2) }}
+   Output format:  Require Specific Output Format, on
+   System message: exercises/module-2/system-prompt.md
+   Model:          the shared OpenAI Chat Model, no second copy
+   Parser:         Structured Output Parser
+   Schema:         exercises/module-2/output-schema.json
+   ```
+
+   The system message ends with a section called `This module`. It says this workflow does not make a real determination yet, and always writes `suggested_close_state` as `other`, because the determination step is Module 3.
 
 Gather chain system message, `exercises/module-2/system-prompt.md`:
 

@@ -36,7 +36,7 @@ The body also sees `$ARGUMENTS` (everything after the command) and `${CLAUDE_SKI
 | Field | What it does |
 |---|---|
 | `model` | Model override for the rest of the turn, or `inherit`. Same values as `/model`. |
-| `effort` | `low`, `medium`, `high`, `xhigh`, `max`, for the turn. |
+| `effort` | `low, medium, high, xhigh, max`, for the turn. |
 | `context` | `fork`: run the skill in a forked subagent. |
 | `agent` | Subagent type, with `context: fork`. |
 | `background` | With `context: fork`, `false` waits for the result in the same turn. Default `true`. |
