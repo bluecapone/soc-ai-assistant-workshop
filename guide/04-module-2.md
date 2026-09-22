@@ -255,7 +255,7 @@ The IP branch in Exercise 2.2 is the worked example. Build the other two the sam
 | gate, already on canvas | `Hash present?` | `Domain present?` |
 | gate field | `{{ $('Extract case').first().json.hash }}` | `{{ $('Extract case').first().json.domain }}` |
 | lookup node | `Lookup hash: VirusTotal` | `Lookup domain: ThreatFox` |
-| method | `GET` | `POST` |
+| method | GET | POST |
 | header | `x-apikey` = `{{ $env.VT_API_KEY }}` | `Auth-Key` = `{{ $env.ABUSECH_AUTH_KEY }}` |
 | body | none | the `search_ioc` query |
 | skip node | `Hash not present` | `Domain not present` |
