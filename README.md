@@ -2,7 +2,7 @@
 
 Build a SOC triage agent and run it against an intrusion you launch on your own laptop. This repo is your workshop folder: the guide, the files you copy during the exercises, and the Docker lab.
 
-Read **[guide.pdf](guide.pdf)** first. It has every exercise, in order, with what you should see at each step.
+The workshop guide is online at **[soc-ai-assistant-workshop.readthedocs.io](https://soc-ai-assistant-workshop.readthedocs.io)**. Read it first: it has every exercise, in order, with what you should see at each step.
 
 ## What you need
 
@@ -72,6 +72,6 @@ Use `--images` (`-Images`) to rebuild the workshop services from scratch without
 
 ## What is in here
 
-- `guide.pdf`: the workshop manual. Start here.
+- `guide/`: the source of the online guide at [soc-ai-assistant-workshop.readthedocs.io](https://soc-ai-assistant-workshop.readthedocs.io).
 - `exercises/`: files the exercises tell you to copy.
 - `lab/`: the Docker Compose lab and its start and clean scripts.
