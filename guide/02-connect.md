@@ -1,5 +1,7 @@
 # Part 0: Connect
 
+Read this manual online at [soc-ai-assistant-workshop.readthedocs.io](https://soc-ai-assistant-workshop.readthedocs.io/).
+
 Your lab is a Docker compose stack on your own laptop: **TheHive**, **n8n**, **Wazuh**, the **Range control panel** and **bank-web**, the target that is vulnerable on purpose. This part starts it and proves it produces log data. *Module 1 needs the case Exercise 0.3 gives you.*
 
 ## Exercise #0.1: bring up the lab
@@ -34,14 +36,14 @@ The start script does the one-time setup, so there is nothing to configure by ha
    
    ```bash
    cd lab
-   ./scripts/start.sh
+   ./scripts/macos-linux/start.sh
    ```
    
    On Windows:
    
    ```powershell
    cd lab
-   powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
+   powershell -ExecutionPolicy Bypass -File .\scripts\windows\start.ps1
    ```
 
 4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest, a few minutes.

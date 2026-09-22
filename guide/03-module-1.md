@@ -1,10 +1,10 @@
 # Part 1: Module 1, drive it by hand
 
-You build a Claude Code skill, `soc-triage`, step by step, part by part, then run it against your own lab. Its eight parts are in `exercises/module-1/`, flat. Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
+You build a Claude Code skill, `soc-triage`, from the outside in: first the scripts it runs, then the references and the template it reads, and last the `SKILL.md` that names them all. Then you run it against your own lab. You write that last file last, and the model loads it first. Its eight parts are in `exercises/module-1/`, flat. Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
 
 **The plan** 
 
-Before the first file, the author of a skill answers four questions:
+A skill begins as a plan. Its author answers four questions, and the `SKILL.md` you write last is where the answers land:
 
 1. What does the user want done? One outcome.
 2. Which steps get there, in what order?
@@ -54,7 +54,414 @@ The same, as one run, top to bottom. Left the run, right the folder, an arrow wh
 
 ![One run of soc-triage: what loads when](diagrams/skill-run.png)
 
-## Exercise #1.1: SKILL.md
+## Exercise #1.1: the scripts, made from the docs
+
+The model never sees these files. It runs them and reads what they print. That is why the parts that are easy to get slightly wrong live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that says what you know and what you want, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
+
+**Goal**: the four scripts exist, each one made from a prompt and the docs, each one tested by hand, and the folder holds the version you chose.
+
+### Part A: the method
+
+One prompt shape, used four times. Nothing in it is code. Four things it always says, in your words. The examples are the lines of the `wazuh_events.sh` prompt in Part B.
+
+**What the script is for.** The file name, what goes in, what comes out, and that it only reads.
+
+```text
+Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
+```
+
+**What you know about the lab.** All of it from Part 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the fields of the alert you expanded. The variables say where the address and the login come from.
+
+```text
+What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
+```
+
+**Look it up first.** Which docs. The HTTP call is the model's job, and the docs are where it must get it, not its memory.
+
+```text
+Look up the OpenSearch search API in the docs before writing.
+```
+
+**The output, and how to fail.** What comes out, in words. What to do when a variable is missing. No half answers. The exact shape is not fixed here: Exercise 1.2 writes down whatever yours prints. Then: make it executable, do not run it.
+
+```text
+Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
+Make it executable. Do not run it.
+```
+
+What the prompt does not say: the endpoint, the request body, the curl flags, the shell guards. The docs give the model the first two. The model knows the last two. You meet all four in the file it writes. Read it before you test it.
+
+A prompt that names the output shape gets thirty comparable scripts in a room of thirty. "Write a Wazuh lookup" gets thirty different ones.
+
+The loop, per script:
+
+1. **Send the prompt.** One documentation call must appear before the file is written: the `find-docs` skill running `ctx7` (Exercise 0.5), or `WebFetch`. If not: `look it up in the docs first, then revise`.
+2. **Run the three hand tests.** Real input works, an unset variable prints the sentence, an unknown value gives the empty shape or the error.
+3. **Compare the output.** Ask the same question without the script, with the one-line command in each part, and check the two answers agree. Your script may look like nobody else's. Only its answer has to match.
+
+Context7 returns the few paragraphs that answer the question. `WebFetch` returns a whole page you must know the address of. Context7 is a third party with a rate limit and gaps, so when it fails, the page is the source:
+
+- OpenSearch query DSL: `https://docs.opensearch.org/latest/query-dsl/`
+- TheHive API: `https://docs.strangebee.com/thehive/api-docs/`
+- AbuseIPDB: `https://docs.abuseipdb.com/`
+
+No network at all: the four scripts exist in `exercises/module-1/`, written for this manual. Copy them, then read them.
+
+```bash
+mkdir -p .claude/skills/soc-triage/scripts
+cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
+```
+
+### Part B: wazuh_events.sh, a lookup
+
+1. **Make the folder**, once:
+   
+   ```bash
+   mkdir -p .claude/skills/soc-triage/scripts
+   ```
+
+2. **Prompt.** In Claude Code:
+   
+   ```text
+   Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
+   What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
+   Look up the OpenSearch search API in the docs before writing.
+   Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
+   Make it executable. Do not run it.
+   ```
+
+3. **Watch** for the `ctx7` commands, then read the file it wrote.
+
+4. **Hand tests.** Open a second terminal in the workshop folder and export the same variables as Exercise 0.4. Nothing below runs without them. The example IP, `35.235.240.58`, is one of the noise sources every lab has. Your own Part 0 source IP works as well: in TheHive, in the case observables, or in Wazuh, in the alert's `data.srcip`. Three runs.
+
+   The example IP. Expect its alerts, newest first:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
+   ```
+
+   Same IP with `WAZUH_URL` removed for this one command. Expect the message:
+
+   ```bash
+   env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
+   ```
+
+   An IP that never hit the site. Expect a count of 0:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/wazuh_events.sh 203.0.113.9
+   ```
+
+5. **Only for testing, comparing output.** The same question asked straight to the indexer, no script. the count and the newest rule id must match what your script printed:
+
+   ```bash
+   curl -sk -u admin:brucon2026 "$WAZUH_URL/wazuh-alerts-*/_search?q=data.srcip:35.235.240.58&sort=timestamp:desc&size=20" | jq '[.hits.total.value, .hits.hits[0]._source.rule.id]'
+   ```
+
+**Expected**:
+
+- [ ] The count is above zero and the alerts follow, newest first.
+
+- [ ] The unset variable names `WAZUH_URL` and stops. The unknown IP prints a count of 0 and no alerts.
+
+- [ ] The folder:
+  
+  ```text
+  soc-triage/
+  └── scripts/
+      └── wazuh_events.sh
+  ```
+
+**Question 1**: `rule.id` of the newest event for that IP.
+
+### Part C: get_case.sh and post_verdict.sh, the read and the write
+
+TheHive is the only system the skill writes to, and the only write is a comment. Closing the case is a different call this workshop never makes.
+
+1. **Prompt for the read.**
+   
+   ```text
+   Write a bash script, .claude/skills/soc-triage/scripts/get_case.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, it prints that case: title, tags, description, the source IP and the observables. It only reads.
+   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description has a table with a Source IP row, as I saw in Part 0. I want that IP as its own field, empty when the row is missing.
+   Look up the TheHive 5 API in the docs before writing.
+   Output: only JSON. When the observables cannot be read, print the rest anyway. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
+   Make it executable. Do not run it.
+   ```
+
+2. **Prompt for the write.**
+   
+   ```text
+   Write a bash script, .claude/skills/soc-triage/scripts/post_verdict.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, and a Markdown text on standard input, it adds that text as one comment on the case. That is the only thing it writes, anywhere.
+   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The text can hold quotes, backticks and new lines, and it must arrive intact.
+   Look up the TheHive 5 API in the docs before writing.
+   Output: only JSON, the new comment's id and creation time. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
+   Make it executable. Do not run it.
+   ```
+
+3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3: with the case open, the part of the address bar that starts with `~`, as in `.../cases/~4206800/details`. In quotes, because to the shell a bare `~` is somebody's home folder. Three runs.
+
+   Your case. Expect its title, tags, source IP and observables:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
+   ```
+
+   A wrong key for this one command. Expect an error that says the key was refused, usually a `401`:
+
+   ```bash
+   THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
+   ```
+
+   `THEHIVE_URL` removed for this one command. Expect the message:
+
+   ```bash
+   env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
+   ```
+
+4. **Hand tests for the write.** Two runs. First, no case id. Expect a usage line and nothing written:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/post_verdict.sh
+   ```
+
+   Then one real comment on your Part 0 case. The text comes in on standard input, so it is piped. Run it without the pipe and the script waits for text and looks frozen: `Ctrl+C` gets out, `Ctrl+D` would post an empty comment. Expect the comment's id and creation time:
+
+   ```bash
+   echo "test comment from post_verdict.sh" | .claude/skills/soc-triage/scripts/post_verdict.sh '~<case id>'
+   ```
+
+   Open the case in TheHive, tab *Comments*. The text is there, under your user. That is the only write the skill ever makes, and you have now seen it land.
+
+5. **Only for testing, comparing output.** The case, read straight from TheHive, no script. `title` and `tags` must match what `get_case.sh` printed. There is no such check for the write:
+
+   ```bash
+   curl -s -H "Authorization: Bearer $THEHIVE_APIKEY" "$THEHIVE_URL/api/v1/case/~<case id>" | jq '{title, tags}'
+   ```
+
+**Expected**:
+
+- [ ] Title, tags, description with the indicator table, `srcip` filled, and the observables.
+
+- [ ] The wrong key fails and says why. The unset variable names `THEHIVE_URL` and stops.
+
+- [ ] `post_verdict.sh` with no argument fails, says why, and writes nothing.
+
+- [ ] The test comment shows on the case in TheHive.
+
+- [ ] The folder:
+  
+  ```text
+  soc-triage/
+  └── scripts/
+      ├── get_case.sh
+      ├── post_verdict.sh
+      └── wazuh_events.sh
+  ```
+
+**Question 2**: the case title.
+
+### Part D: reputation.sh, the lookup with a fallback
+
+1. **Prompt.**
+   
+   ```text
+   Write a bash script, .claude/skills/soc-triage/scripts/reputation.sh, for a Claude Code skill to run. Given an IP address it reports that IP's reputation: from AbuseIPDB when ABUSEIPDB_API_KEY is set, from an offline list when it is not. It only reads.
+   What I know about the lab: the offline list is lab/threat-intel/malicious-ips.txt in the workshop folder, one IP per line. An IP is listed only when a whole line equals it, so 10.0.0.1 is not 10.0.0.10.
+   Look up the AbuseIPDB API v2 in the docs before writing. I want the check over the last 90 days.
+   Output: only JSON, and it must say which source answered, because the offline list is not live reputation. With a key: the abuse confidence score and the number of reports. Without one: whether the IP is listed. When anything fails, exit with an error that says what failed, and print no partial answer.
+   Make it executable. Do not run it.
+   ```
+
+2. **Hand tests.** Same terminal. `ABUSEIPDB_API_KEY` is not exported, so the offline list answers. Two runs.
+
+   The example IP, which is noise, not an attacker. Expect not listed:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/reputation.sh 35.235.240.58
+   ```
+
+   The first IP of the list itself. Expect listed:
+
+   ```bash
+   .claude/skills/soc-triage/scripts/reputation.sh 193.46.255.145
+   ```
+
+3. **Only for testing, comparing output.** The list, searched by hand, no script. A line printed means listed, nothing means not, and `reputation.sh` must have said the same. Try it with both IPs:
+
+   ```bash
+   grep -x 193.46.255.145 lab/threat-intel/malicious-ips.txt
+   ```
+
+**Expected**:
+
+- [ ] Both runs say the offline list answered, one listed, the other not.
+
+- [ ] The folder:
+  
+  ```text
+  soc-triage/
+  └── scripts/
+      ├── get_case.sh
+      ├── post_verdict.sh
+      ├── reputation.sh
+      └── wazuh_events.sh
+  ```
+
+## Exercise #1.2: the references
+
+A reference is documentation the model opens only when `SKILL.md` sends it there: what a script's output looks like, what an error means, how one full run went. Keeping it out of `SKILL.md` keeps the always-loaded part short and puts the long material where it costs nothing until needed.
+
+These two files are given, not generated. The scripts were written once. This file is the one that keeps changing: every failure you meet from now on becomes one more entry, and most fixes to the skill turn out to be a line here rather than a change to a script or a rule. You start from ours so the first version already knows the failures of this lab.
+
+**Goal**: the two files the skill reads only when it needs them are in place, and your own failures are in the failure list.
+
+Open `exercises/module-1/lookups.md`:
+
+<!-- file: exercises/module-1/lookups.md -->
+```markdown
+# Lookups: shapes and failures
+
+## get_case.sh
+
+    { "title": "...", "tags": ["rule:100151", "..."], "description": "...| Source IP | `192.0.2.1` |...",
+      "srcip": "192.0.2.1", "observables": [ { "dataType": "ip", "data": "192.0.2.1" } ] }
+
+`srcip` is read from the description table; it is `null` when the row is missing, then use the `ip` observable.
+
+## wazuh_events.sh
+
+    { "total": 14, "events": [ { "timestamp": "...", "rule": { "id": "100151", "level": 10, "description": "..." },
+      "data": { "srcip": "192.0.2.1", "url": "/..." }, "agent": { "name": "wazuh.manager" } } ] }
+
+Newest first. `total` is the count in the index, `events` at most 20.
+
+## reputation.sh
+
+`{"source":"abuseipdb","score":0-100,"reports":n}` with a key; 50 and above is flagged. Without a key: `{"source":"offline list, not live reputation","listed":true|false}`.
+
+## post_verdict.sh
+
+`{"_id":"~...","createdAt":...}` on success. Nothing else is written anywhere.
+
+## Common issues
+
+`THEHIVE_APIKEY: export THEHIVE_APIKEY first` from a script: the variable is not set in the shell that started `claude`. Export it from `THEHIVE_N8N_APIKEY` in `lab/.env` and restart `claude`.
+
+`curl: (22) The requested URL returned error: 401` from `get_case.sh`: the key is wrong or stale. Same fix.
+
+`curl: (22) ... error: 404` from `get_case.sh`: the id is missing its `~` prefix, or the case lives in another lab. Copy the id from the case URL in the browser.
+
+`{"total": 0, "events": []}` from `wazuh_events.sh`: no events for that value. Retry with the `ip` observable; if still empty, write that the evidence is missing and choose `other`.
+
+`curl: (7) Failed to connect` from `wazuh_events.sh`: `WAZUH_URL` points at the wrong port or the lab is down. `https://localhost:9200` is the indexer.
+
+`grep: lab/threat-intel/malicious-ips.txt: No such file` from `reputation.sh`: `claude` was not started from the workshop folder. Restart it there, or export `LAB_DIR`.
+
+The skill did not load on a natural-language prompt: the description lacks the words that were typed. Add them. `/soc-triage` bypasses the description and proves nothing about it.
+```
+
+- The shape of each script's output, so the model knows what `total` or `srcip` means before it sees one.
+- `Common issues`: every failure you produced by hand in Exercise 1.1, with its cause and fix. This is error handling for an agent: not code that retries, but text that tells it what the error means and what to do. It lives in a reference because the model needs it only when something went wrong.
+
+Open `exercises/module-1/brute-force.md`:
+
+<!-- file: exercises/module-1/brute-force.md -->
+```markdown
+# Example: Brute force
+
+The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
+
+1. `get_case.sh ~123456` returned title `Brute force login from 198.51.100.7`, tags `rule:100210`, `srcip` `198.51.100.7`.
+2. `wazuh_events.sh 198.51.100.7` returned 12 events: eleven authentication failures for `data.dstuser` `admin` inside two minutes, then one success.
+3. `reputation.sh 198.51.100.7` returned `{"source":"offline list, not live reputation","listed":true}`.
+4. Rule 2 applies: failures before the success from the same source, and a listed IP.
+5. Verdict posted with `post_verdict.sh ~123456`. Close state: `true positive`.
+```
+
+- One worked run, from the typed command to the close state. An example anchors behaviour better than a rule: it shows the scripts in order, real-looking values, and a verdict that follows from the rules.
+1. **Put them in place.**
+   
+   ```bash
+   mkdir -p .claude/skills/soc-triage/references/examples
+   cp exercises/module-1/lookups.md .claude/skills/soc-triage/references/
+   cp exercises/module-1/brute-force.md .claude/skills/soc-triage/references/examples/
+   ```
+
+2. **Match your scripts.** The model reads this file, not your scripts, so it must describe what yours print. Run each script once more and compare with the shape under its name. Compare the three failures you produced in Exercise 1.1 with `Common issues`. Where yours print something else, edit the copy in `references/`, not the script.
+
+**Expected**:
+
+- [ ] Each shape in `lookups.md` matches what your script prints, after your edits.
+
+- [ ] All three failures you produced have an entry under `Common issues`, in the words your scripts use.
+
+- [ ] The folder:
+  
+  ```text
+  soc-triage/
+  ├── scripts/
+  │   ├── get_case.sh
+  │   ├── post_verdict.sh
+  │   ├── reputation.sh
+  │   └── wazuh_events.sh
+  └── references/
+      ├── lookups.md
+      └── examples/
+          └── brute-force.md
+  ```
+
+**Question 3**: which entry covers the wrong key?
+
+## Exercise #1.3: the asset
+
+An asset is something the model copies rather than reads: a template, a form, a fixed shape. The verdict has three sections in a fixed order with four allowed close states. As prose in `SKILL.md` that shape would be paraphrased. As a file it is filled in.
+
+This one you make the way you made the scripts: say what you know and what you want, in your words, and read what comes back.
+
+**Goal**: the template exists, its three headings and four close states are right, and the folder now holds the scripts, the references and this template.
+
+1. **Send the prompt**, in Claude Code, from the workshop folder:
+
+   ```text
+   Write a Markdown file, .claude/skills/soc-triage/assets/verdict-template.md, for a Claude Code skill to copy and fill in when it writes a verdict on a TheHive case.
+   What I know: a verdict has three sections in this order. A summary: what happened, what was looked up, what was found, two to six sentences, naming the reputation source the way the script labelled it. A suggested close state: exactly one of true positive, false positive, true positive not malicious, other, and nothing else on that line. Recommended actions: prose, concrete, addressed to the analyst.
+   Output: only the template. Each section is a heading followed by one or two lines that say what goes there. No example verdict, nothing outside the file.
+   ```
+
+2. **Read the file.** Three headings, in that order. The four close states, spelled as above. Nothing that reads like an example verdict, or the model will copy the example instead of the shape.
+
+3. **Check the four states.** The template must name all four close states, spelled exactly, because the judging rules you write in Exercise 1.4 have to match them. This prints the states the template names:
+
+   ```bash
+   grep -ohw 'true positive not malicious\|true positive\|false positive\|other' .claude/skills/soc-triage/assets/verdict-template.md | sort -u
+   ```
+
+   Four lines. A missing one is a template to fix now, before the rules lean on it.
+
+**Expected**:
+
+- [ ] The `grep` prints four close states.
+
+- [ ] `find .claude/skills/soc-triage -type f | wc -l` prints `7`.
+
+- [ ] The folder, complete:
+  
+  ```text
+  soc-triage/
+  ├── scripts/
+  │   ├── get_case.sh
+  │   ├── post_verdict.sh
+  │   ├── reputation.sh
+  │   └── wazuh_events.sh
+  ├── references/
+  │   ├── lookups.md
+  │   └── examples/
+  │       └── brute-force.md
+  └── assets/
+      └── verdict-template.md
+  ```
+
+## Exercise #1.4: SKILL.md
 
 `SKILL.md` is the only required file of a skill. Its top, between two `---` lines, is YAML that Claude Code reads at start to decide when the skill applies. The rest is Markdown that the model reads once the skill is chosen: what to do, in what order, how to judge, what never to do. Everything else in the folder exists because this file points at it.
 
@@ -92,10 +499,9 @@ Other fields exist (`model`, `effort`, `context: fork`, `hooks`, `paths`). None 
 
 </details>
 
-1. **Make the folder and put the file in place.** Claude Code reads skills from `.claude/skills/` in the folder it was started from.
+1. **Put the file in place.** The folder already holds the scripts, references and template you built. This adds the `SKILL.md` that names them.
    
    ```bash
-   mkdir -p .claude/skills/soc-triage
    cp exercises/module-1/SKILL.md .claude/skills/soc-triage/
    ```
 
@@ -107,14 +513,9 @@ Other fields exist (`model`, `effort`, `context: fork`, `hooks`, `paths`). None 
 
 - [ ] Claude Code's answer names a case id and the phrases from `when_to_use`.
 
-- [ ] The folder:
-  
-  ```text
-  soc-triage/
-  └── SKILL.md
-  ```
+- [ ] `SKILL.md` now sits beside the `scripts`, `references` and `assets` you built.
 
-**Question 1**: which of the three trigger phrasings did Claude Code quote?
+**Question 4**: which of the three trigger phrasings did Claude Code quote?
 
 ### Part B: the body
 
@@ -210,399 +611,17 @@ Exactly the shape in `assets/verdict-template.md`: three sections, one of the fo
 - [ ] You can point at the rule that separates `Brute force` from `Admin login`.
 - [ ] You can point at the sentence that stops the model from following instructions hidden in a case.
 
-**Question 2**: the number of the twin rule and the field it reads.
-
-## Exercise #1.2: the scripts, made from the docs
-
-The model never sees these files. It runs them and reads what they print. That is why the parts that are easy to get slightly wrong live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that says what you know and what you want, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
-
-**Goal**: the four scripts exist, each one made from a prompt and the docs, each one tested by hand, and the folder holds the version you chose.
-
-### Part A: the method
-
-One prompt shape, used four times. Nothing in it is code. Four things it always says, in your words. The examples are the lines of the `wazuh_events.sh` prompt in Part B.
-
-**What the script is for.** The file name, what goes in, what comes out, and that it only reads.
-
-```text
-Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
-```
-
-**What you know about the lab.** All of it from Part 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the fields of the alert you expanded. The variables say where the address and the login come from.
-
-```text
-What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
-```
-
-**Look it up first.** Which docs. The HTTP call is the model's job, and the docs are where it must get it, not its memory.
-
-```text
-Look up the OpenSearch search API in the docs before writing.
-```
-
-**The output, and how to fail.** What comes out, in words. What to do when a variable is missing. No half answers. The exact shape is not fixed here: Exercise 1.3 writes down whatever yours prints. Then: make it executable, do not run it.
-
-```text
-Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
-Make it executable. Do not run it.
-```
-
-What the prompt does not say: the endpoint, the request body, the curl flags, the shell guards. The docs give the model the first two. The model knows the last two. You meet all four in the file it writes. Read it before you test it.
-
-A prompt that names the output shape gets thirty comparable scripts in a room of thirty. "Write a Wazuh lookup" gets thirty different ones.
-
-The loop, per script:
-
-1. **Send the prompt.** One documentation call must appear before the file is written: the `find-docs` skill running `ctx7` (Exercise 0.5), or `WebFetch`. If not: `look it up in the docs first, then revise`.
-2. **Run the three hand tests.** Real input works, an unset variable prints the sentence, an unknown value gives the empty shape or the error.
-3. **Compare the output.** Ask the same question without the script, with the one-line command in each part, and check the two answers agree. Your script may look like nobody else's. Only its answer has to match.
-
-Context7 returns the few paragraphs that answer the question. `WebFetch` returns a whole page you must know the address of. Context7 is a third party with a rate limit and gaps, so when it fails, the page is the source:
-
-- OpenSearch query DSL: `https://docs.opensearch.org/latest/query-dsl/`
-- TheHive API: `https://docs.strangebee.com/thehive/api-docs/`
-- AbuseIPDB: `https://docs.abuseipdb.com/`
-
-No network at all: the four scripts exist in `exercises/module-1/`, written for this manual. Copy them, then read them.
+**The skill is whole now.** The judging rules you just read end in a close state each, and they must match the template from Exercise 1.3, or the rule and the template disagree:
 
 ```bash
-mkdir -p .claude/skills/soc-triage/scripts
-cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
+grep -ohw 'true positive not malicious\|true positive\|false positive\|other' .claude/skills/soc-triage/SKILL.md .claude/skills/soc-triage/assets/verdict-template.md | sort | uniq -c
 ```
 
-### Part B: wazuh_events.sh, a lookup
-
-1. **Make the folder**, once:
-   
-   ```bash
-   mkdir -p .claude/skills/soc-triage/scripts
-   ```
-
-2. **Prompt.** In Claude Code:
-   
-   ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
-   What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
-   Look up the OpenSearch search API in the docs before writing.
-   Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
-   Make it executable. Do not run it.
-   ```
-
-3. **Watch** for the `ctx7` commands, then read the file it wrote.
-
-4. **Hand tests.** Open a second terminal in the workshop folder and export the same variables as Exercise 0.4. Nothing below runs without them. The example IP, `35.235.240.58`, is one of the noise sources every lab has. Your own Part 0 source IP works as well: in TheHive, in the case observables, or in Wazuh, in the alert's `data.srcip`. Three runs.
-
-   The example IP. Expect its alerts, newest first:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
-   ```
-
-   Same IP with `WAZUH_URL` removed for this one command. Expect the message:
-
-   ```bash
-   env -u WAZUH_URL .claude/skills/soc-triage/scripts/wazuh_events.sh 35.235.240.58
-   ```
-
-   An IP that never hit the site. Expect a count of 0:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/wazuh_events.sh 203.0.113.9
-   ```
-
-5. **Only for testing, comparing output.** The same question asked straight to the indexer, no script. the count and the newest rule id must match what your script printed:
-
-   ```bash
-   curl -sk -u admin:brucon2026 "$WAZUH_URL/wazuh-alerts-*/_search?q=data.srcip:35.235.240.58&sort=timestamp:desc&size=20" | jq '[.hits.total.value, .hits.hits[0]._source.rule.id]'
-   ```
+Four lines, one per state, each seen in both files.
 
 **Expected**:
 
-- [ ] The count is above zero and the alerts follow, newest first.
-
-- [ ] The unset variable names `WAZUH_URL` and stops. The unknown IP prints a count of 0 and no alerts.
-
-- [ ] The folder:
-  
-  ```text
-  soc-triage/
-  ├── SKILL.md
-  └── scripts/
-      └── wazuh_events.sh
-  ```
-
-**Question 3**: `rule.id` of the newest event for that IP.
-
-### Part C: get_case.sh and post_verdict.sh, the read and the write
-
-TheHive is the only system the skill writes to, and the only write is a comment. Closing the case is a different call this workshop never makes.
-
-1. **Prompt for the read.**
-   
-   ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/get_case.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, it prints that case: title, tags, description, the source IP and the observables. It only reads.
-   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description has a table with a Source IP row, as I saw in Part 0. I want that IP as its own field, empty when the row is missing.
-   Look up the TheHive 5 API in the docs before writing.
-   Output: only JSON. When the observables cannot be read, print the rest anyway. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
-   Make it executable. Do not run it.
-   ```
-
-2. **Prompt for the write.**
-   
-   ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/post_verdict.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, and a Markdown text on standard input, it adds that text as one comment on the case. That is the only thing it writes, anywhere.
-   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The text can hold quotes, backticks and new lines, and it must arrive intact.
-   Look up the TheHive 5 API in the docs before writing.
-   Output: only JSON, the new comment's id and creation time. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
-   Make it executable. Do not run it.
-   ```
-
-3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3: with the case open, the part of the address bar that starts with `~`, as in `.../cases/~4206800/details`. In quotes, because to the shell a bare `~` is somebody's home folder. Three runs.
-
-   Your case. Expect its title, tags, source IP and observables:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
-   ```
-
-   A wrong key for this one command. Expect an error that says the key was refused, usually a `401`:
-
-   ```bash
-   THEHIVE_APIKEY=wrong .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
-   ```
-
-   `THEHIVE_URL` removed for this one command. Expect the message:
-
-   ```bash
-   env -u THEHIVE_URL .claude/skills/soc-triage/scripts/get_case.sh '~<case id>'
-   ```
-
-4. **Hand tests for the write.** Two runs. First, no case id. Expect a usage line and nothing written:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/post_verdict.sh
-   ```
-
-   Then one real comment on your Part 0 case. The text comes in on standard input, so it is piped. Run it without the pipe and the script waits for text and looks frozen: `Ctrl+C` gets out, `Ctrl+D` would post an empty comment. Expect the comment's id and creation time:
-
-   ```bash
-   echo "test comment from post_verdict.sh" | .claude/skills/soc-triage/scripts/post_verdict.sh '~<case id>'
-   ```
-
-   Open the case in TheHive, tab *Comments*. The text is there, under your user. That is the only write the skill ever makes, and you have now seen it land.
-
-5. **Only for testing, comparing output.** The case, read straight from TheHive, no script. `title` and `tags` must match what `get_case.sh` printed. There is no such check for the write:
-
-   ```bash
-   curl -s -H "Authorization: Bearer $THEHIVE_APIKEY" "$THEHIVE_URL/api/v1/case/~<case id>" | jq '{title, tags}'
-   ```
-
-**Expected**:
-
-- [ ] Title, tags, description with the indicator table, `srcip` filled, and the observables.
-
-- [ ] The wrong key fails and says why. The unset variable names `THEHIVE_URL` and stops.
-
-- [ ] `post_verdict.sh` with no argument fails, says why, and writes nothing.
-
-- [ ] The test comment shows on the case in TheHive.
-
-- [ ] The folder:
-  
-  ```text
-  soc-triage/
-  ├── SKILL.md
-  └── scripts/
-      ├── get_case.sh
-      ├── post_verdict.sh
-      └── wazuh_events.sh
-  ```
-
-**Question 4**: the case title.
-
-### Part D: reputation.sh, the lookup with a fallback
-
-1. **Prompt.**
-   
-   ```text
-   Write a bash script, .claude/skills/soc-triage/scripts/reputation.sh, for a Claude Code skill to run. Given an IP address it reports that IP's reputation: from AbuseIPDB when ABUSEIPDB_API_KEY is set, from an offline list when it is not. It only reads.
-   What I know about the lab: the offline list is lab/threat-intel/malicious-ips.txt in the workshop folder, one IP per line. An IP is listed only when a whole line equals it, so 10.0.0.1 is not 10.0.0.10.
-   Look up the AbuseIPDB API v2 in the docs before writing. I want the check over the last 90 days.
-   Output: only JSON, and it must say which source answered, because the offline list is not live reputation. With a key: the abuse confidence score and the number of reports. Without one: whether the IP is listed. When anything fails, exit with an error that says what failed, and print no partial answer.
-   Make it executable. Do not run it.
-   ```
-
-2. **Hand tests.** Same terminal. `ABUSEIPDB_API_KEY` is not exported, so the offline list answers. Two runs.
-
-   The example IP, which is noise, not an attacker. Expect not listed:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/reputation.sh 35.235.240.58
-   ```
-
-   The first IP of the list itself. Expect listed:
-
-   ```bash
-   .claude/skills/soc-triage/scripts/reputation.sh 193.46.255.145
-   ```
-
-3. **Only for testing, comparing output.** The list, searched by hand, no script. A line printed means listed, nothing means not, and `reputation.sh` must have said the same. Try it with both IPs:
-
-   ```bash
-   grep -x 193.46.255.145 lab/threat-intel/malicious-ips.txt
-   ```
-
-**Expected**:
-
-- [ ] Both runs say the offline list answered, one listed, the other not.
-
-- [ ] The folder:
-  
-  ```text
-  soc-triage/
-  ├── SKILL.md
-  └── scripts/
-      ├── get_case.sh
-      ├── post_verdict.sh
-      ├── reputation.sh
-      └── wazuh_events.sh
-  ```
-
-## Exercise #1.3: the references
-
-A reference is documentation the model opens only when `SKILL.md` sends it there: what a script's output looks like, what an error means, how one full run went. Keeping it out of `SKILL.md` keeps the always-loaded part short and puts the long material where it costs nothing until needed.
-
-These two files are given, not generated. The scripts were written once. This file is the one that keeps changing: every failure you meet from now on becomes one more entry, and most fixes to the skill turn out to be a line here rather than a change to a script or a rule. You start from ours so the first version already knows the failures of this lab.
-
-**Goal**: the two files the skill reads only when it needs them are in place, and your own failures are in the failure list.
-
-Open `exercises/module-1/lookups.md`:
-
-<!-- file: exercises/module-1/lookups.md -->
-```markdown
-# Lookups: shapes and failures
-
-## get_case.sh
-
-    { "title": "...", "tags": ["rule:100151", "..."], "description": "...| Source IP | `192.0.2.1` |...",
-      "srcip": "192.0.2.1", "observables": [ { "dataType": "ip", "data": "192.0.2.1" } ] }
-
-`srcip` is read from the description table; it is `null` when the row is missing, then use the `ip` observable.
-
-## wazuh_events.sh
-
-    { "total": 14, "events": [ { "timestamp": "...", "rule": { "id": "100151", "level": 10, "description": "..." },
-      "data": { "srcip": "192.0.2.1", "url": "/..." }, "agent": { "name": "wazuh.manager" } } ] }
-
-Newest first. `total` is the count in the index, `events` at most 20.
-
-## reputation.sh
-
-`{"source":"abuseipdb","score":0-100,"reports":n}` with a key; 50 and above is flagged. Without a key: `{"source":"offline list, not live reputation","listed":true|false}`.
-
-## post_verdict.sh
-
-`{"_id":"~...","createdAt":...}` on success. Nothing else is written anywhere.
-
-## Common issues
-
-`THEHIVE_APIKEY: export THEHIVE_APIKEY first` from a script: the variable is not set in the shell that started `claude`. Export it from `THEHIVE_N8N_APIKEY` in `lab/.env` and restart `claude`.
-
-`curl: (22) The requested URL returned error: 401` from `get_case.sh`: the key is wrong or stale. Same fix.
-
-`curl: (22) ... error: 404` from `get_case.sh`: the id is missing its `~` prefix, or the case lives in another lab. Copy the id from the case URL in the browser.
-
-`{"total": 0, "events": []}` from `wazuh_events.sh`: no events for that value. Retry with the `ip` observable; if still empty, write that the evidence is missing and choose `other`.
-
-`curl: (7) Failed to connect` from `wazuh_events.sh`: `WAZUH_URL` points at the wrong port or the lab is down. `https://localhost:9200` is the indexer.
-
-`grep: lab/threat-intel/malicious-ips.txt: No such file` from `reputation.sh`: `claude` was not started from the workshop folder. Restart it there, or export `LAB_DIR`.
-
-The skill did not load on a natural-language prompt: the description lacks the words that were typed. Add them. `/soc-triage` bypasses the description and proves nothing about it.
-```
-
-- The shape of each script's output, so the model knows what `total` or `srcip` means before it sees one.
-- `Common issues`: every failure you produced by hand in Exercise 1.2, with its cause and fix. This is error handling for an agent: not code that retries, but text that tells it what the error means and what to do. It lives in a reference because the model needs it only when something went wrong.
-
-Open `exercises/module-1/brute-force.md`:
-
-<!-- file: exercises/module-1/brute-force.md -->
-```markdown
-# Example: Brute force
-
-The analyst typed `/soc-triage ~123456` (or "triage case ~123456").
-
-1. `get_case.sh ~123456` returned title `Brute force login from 198.51.100.7`, tags `rule:100210`, `srcip` `198.51.100.7`.
-2. `wazuh_events.sh 198.51.100.7` returned 12 events: eleven authentication failures for `data.dstuser` `admin` inside two minutes, then one success.
-3. `reputation.sh 198.51.100.7` returned `{"source":"offline list, not live reputation","listed":true}`.
-4. Rule 2 applies: failures before the success from the same source, and a listed IP.
-5. Verdict posted with `post_verdict.sh ~123456`. Close state: `true positive`.
-```
-
-- One worked run, from the typed command to the close state. An example anchors behaviour better than a rule: it shows the scripts in order, real-looking values, and a verdict that follows from the rules.
-1. **Put them in place.**
-   
-   ```bash
-   mkdir -p .claude/skills/soc-triage/references/examples
-   cp exercises/module-1/lookups.md .claude/skills/soc-triage/references/
-   cp exercises/module-1/brute-force.md .claude/skills/soc-triage/references/examples/
-   ```
-
-2. **Match your scripts.** The model reads this file, not your scripts, so it must describe what yours print. Run each script once more and compare with the shape under its name. Compare the three failures you produced in Exercise 1.2 with `Common issues`. Where yours print something else, edit the copy in `references/`, not the script.
-
-**Expected**:
-
-- [ ] Each shape in `lookups.md` matches what your script prints, after your edits.
-
-- [ ] All three failures you produced have an entry under `Common issues`, in the words your scripts use.
-
-- [ ] The folder:
-  
-  ```text
-  soc-triage/
-  ├── SKILL.md
-  ├── scripts/
-  │   ├── get_case.sh
-  │   ├── post_verdict.sh
-  │   ├── reputation.sh
-  │   └── wazuh_events.sh
-  └── references/
-      ├── lookups.md
-      └── examples/
-          └── brute-force.md
-  ```
-
-**Question 5**: which entry covers the wrong key?
-
-## Exercise #1.4: the asset
-
-An asset is something the model copies rather than reads: a template, a form, a fixed shape. The verdict has three sections in a fixed order with four allowed close states. As prose in `SKILL.md` that shape would be paraphrased. As a file it is filled in.
-
-This one you make the way you made the scripts: say what you know and what you want, in your words, and read what comes back.
-
-**Goal**: the template exists, it agrees with the rest of the skill, and the folder is complete.
-
-1. **Send the prompt**, in Claude Code, from the workshop folder:
-
-   ```text
-   Write a Markdown file, .claude/skills/soc-triage/assets/verdict-template.md, for a Claude Code skill to copy and fill in when it writes a verdict on a TheHive case.
-   What I know: a verdict has three sections in this order. A summary: what happened, what was looked up, what was found, two to six sentences, naming the reputation source the way the script labelled it. A suggested close state: exactly one of true positive, false positive, true positive not malicious, other, and nothing else on that line. Recommended actions: prose, concrete, addressed to the analyst.
-   Output: only the template. Each section is a heading followed by one or two lines that say what goes there. No example verdict, nothing outside the file.
-   ```
-
-2. **Read the file.** Three headings, in that order. The four close states, spelled as above. Nothing that reads like an example verdict, or the model will copy the example instead of the shape.
-
-3. **Only for testing, comparing output.** The judging rules in `SKILL.md` end in a close state each. The template lists the allowed ones. Both must spell them the same way, or the rule says one thing and the template another. This counts each close state across both files:
-
-   ```bash
-   grep -ohw 'true positive not malicious\|true positive\|false positive\|other' .claude/skills/soc-triage/SKILL.md .claude/skills/soc-triage/assets/verdict-template.md | sort | uniq -c
-   ```
-
-   Four lines, one per state. A state the rules use and the template lacks shows up with a count of one, and that is the template to fix.
-
-**Expected**:
-
-- [ ] The `grep` prints four lines, one per close state.
+- [ ] The `grep` prints four lines, one per close state, each from both files.
 
 - [ ] `find .claude/skills/soc-triage -type f | wc -l` prints `8`.
 
@@ -623,6 +642,8 @@ This one you make the way you made the scripts: say what you know and what you w
   └── assets/
       └── verdict-template.md
   ```
+
+**Question 5**: the number of the twin rule and the field it reads.
 
 ## Exercise #1.5: test it
 
@@ -694,7 +715,7 @@ You trigger every step yourself. Nothing happens unless you ask for it. This is 
 
 1. **Fire the twin.** On the panel, click `Admin login` and confirm. Open the new case and copy its id from the address bar.
 2. **Run** `/soc-triage ~<case id>` again.
-3. **Change the twin rule.** In `How to judge`, edit the rule you found in Exercise 1.1 so that it no longer mentions failures before the success, save, and rerun on the same case. Then restore it and rerun once more. One sentence, one rerun, one verdict to compare.
+3. **Change the twin rule.** In `How to judge`, edit the rule you found in Exercise 1.4 so that it no longer mentions failures before the success, save, and rerun on the same case. Then restore it and rerun once more. One sentence, one rerun, one verdict to compare.
 
 **Expected**:
 

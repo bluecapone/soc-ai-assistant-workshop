@@ -1,107 +1,323 @@
-# Part 3: let it decide
+# Part 3: Module 3, let it decide
 
-## What changes here
+You open the Module 3 skeleton, which already has the webhook, the filter, the case fetches, and the agent in place. The three wired tools show the pattern. You add four more tools and activate the workflow. The agent reads the whole case, chooses which lookups to run, and judges. Then you decide what happens to the case. The two texts you paste are in `exercises/module-3/`.
 
-Module 3 widens the scope in two ways.
+**The plan**
 
-First, the agent sees the whole case instead of one observable: every finding attached to it, every earlier report, everything gathered so far.
+```text
+Use case: triage one TheHive case, the agent choosing what to look up
+Trigger: the same webhook and filter as Module 2
+Steps:   1. read the case and its observables from TheHive
+         2. hand the whole case to the agent
+         3. the agent calls the lookups it needs, up to 10 turns
+         4. it judges, and states its determination in one line
+         5. post the verdict, then you agree or disagree on the case
+Result:  one comment with four sections, nothing else changed anywhere, nothing happens to the case until you decide
+```
 
-Second, the agent decides which tools to call and when. The workflow no longer forces every lookup to run. The agent reasons about which sources matter for this alert and queries only those.
+```mermaid
+flowchart LR
+  WH{{"Webhook"}}
+  CO{{"Case created only"}}
+  EC{{"Extract case"}}
+  FC{{"Fetch case"}}
+  FO{{"Fetch observables"}}
+  AC{{"Assemble case context"}}
+  TR{{"Triage (AI Agent)"}}
+  RV{{"Render verdict"}}
+  WV{{"Write verdict to TheHive"}}
+  OM[["OpenAI Chat Model (frontier)"]]
+  SP[["Structured Output Parser"]]
+  T1[["wazuh_events_for_ip"]]
+  T2[["wazuh_events_for_host"]]
+  T3[["thehive_related_cases"]]
+  T4[["ip_reputation"]]
+  T5[["vt_file_report"]]
+  T6[["vt_domain_report"]]
+  T7[["threatfox_search"]]
+  TH[("TheHive")]
+  WZ[("Wazuh indexer")]
+  AB[("AbuseIPDB")]
+  VT[("VirusTotal")]
+  TF[("ThreatFox")]
+  YOU(("you"))
+  TH -- "event" --> WH
+  WH --> CO
+  CO -- "1" --> EC
+  EC -- "1" --> FC
+  FC --> FO
+  FC -.-> TH
+  FO -.-> TH
+  FO -- "2" --> AC
+  AC -- "3" --> TR
+  TR -.-> OM
+  TR -.-> SP
+  TR -.-> T1
+  TR -.-> T2
+  TR -.-> T3
+  TR -.-> T4
+  TR -.-> T5
+  TR -.-> T6
+  TR -.-> T7
+  T1 -.-> WZ
+  T2 -.-> WZ
+  T3 -.-> TH
+  T4 -.-> AB
+  T5 -.-> VT
+  T6 -.-> VT
+  T7 -.-> TF
+  TR -- "4" --> RV
+  RV -- "5  the one write" --> WV
+  WV --> TH
+  YOU -- "agree or disagree" --> TH
+```
 
-## Case scope, not observable scope
+Success means: the execution trace shows at least one lookup the agent chose to run, the comment carries a `Determination` line and the same three sections Module 2 wrote, and the case is unchanged until you write your decision on it. Exercises 3.5 and 3.6 test that.
 
-The agent reasons across everything attached to the case. This is why Module 2's step of narrowing your input is gone: the point is now the opposite. The skeleton feeds the entire case payload, every observable and every earlier report, so the agent can assess the full picture before deciding what to investigate.
+Each piece has a home:
 
-## Now it chooses
+| Module 2 | Module 3 | What changed |
+|---|---|---|
+| the whole chain-per-indicator build: branches, lookups, mini chains, the merge | three tools wired, four to add | tools, run only when the agent asks |
+| `Extract case` alone | `Extract case`, `Fetch case`, `Fetch observables` | the whole case, observables included |
+| built by the workflow before the model ever runs | `Assemble case context` | case plus observables, no pre-run lookups |
+| `Triage (LLM chain)`, `OpenAI Chat Model` | `Triage (AI Agent)`, `OpenAI Chat Model (frontier)` | loops, at most 10 turns, frontier model |
+| three fields | four fields, `determination` first | one line saying malicious, benign, or undetermined |
+| you read the verdict | you agree or disagree on the case | the gate |
 
-Module 2 fixed the lookup sequence: each HTTP Request node ran in order, every time. Module 3 inverts this. The agent sees the lookups as tools it can call, and it decides which ones matter for this case.
+## Exercise #3.1: open the Module 3 skeleton
 
-On each turn the agent reasons about the evidence, decides if it needs more, and chooses which tool to invoke. A tool call is a turn. The Max Iterations option caps how many turns the agent takes. It is set to 10.
+The skeleton already has the foundation: webhook, filter, case reads, the agent, the parser, and three of seven tools wired. You see what is there, confirm it is ready, and move on to understanding the tool pattern.
 
-The cap is a safety limit. In normal triage the agent finishes in two or three turns. If a run reaches ten it ends without a verdict and stops in the trace. That almost always means a tool kept failing and the agent kept retrying, so read the tool calls to see what went wrong.
+**Goal**: the skeleton is open, active on the webhook path, and you can name the three wired tools.
 
-## Same contract, third time
+1. **Open the skeleton.** In n8n, open `SOC triage, Module 3 skeleton (AI Agent)`. Fourteen nodes, the three wired tools among them. Count the tools on the agent's `Tool` connector, then read the system prompt's tool list and see how many it names.
 
-Three modules, three different workers, one output shape. Every case, whether it came through Module 1's manual review, Module 2's automatic run, or Module 3's agent loop, carries the same sections: a summary of what the alert means, a suggested close state (true positive, false positive, true positive but not malicious, or other), and recommended actions. This lets you compare all three approaches side by side at the end.
+2. **Read the model and the agent.** `Triage (AI Agent)`: the `Memory` connector is empty, on purpose, because each case is one run. The `Tool` connector shows three of the seven tools the system prompt names. Confirm `OpenAI Chat Model (frontier)` sits on the agent's `Model` connector and that its model is `{{ $env.MODEL_FRONTIER }}`. The frontier tier is not a luxury here: the weak tier ignores tools, so an agent on it returns a verdict having looked nothing up.
 
-## The difference between recommending and acting
+3. **Activate it.** Only one workflow on `thehive-alert`. Deactivate any other, then toggle this one on.
 
-A model that recommends is not a model that acts. The difference is one line in a configuration file: a permission and a credential. Not a smarter model, not a better prompt, not a bigger context. The model alone cannot touch the range. Without the write credential to the system of record, no recommendation becomes an action. This is the workshop's central claim. Say it slowly.
+4. **Fire and see.** `Brute force`, confirm. In n8n, `Executions`: one green row for the `create` event. Open it and check that every node ran and the `Render verdict` output has four `###` headings.
 
-## What we did not give it
+**Expected**:
 
-The agent has no write permission to the range. It cannot trigger containment, and it has no path to the wider system of record. The one narrow exception is TheHive: like Module 1 and Module 2, it writes its recommendation there, and nothing beyond that. Writing a recommendation is not acting on it. Nothing closes, escalates, or contains until you decide, in Step 7.
+- [ ] The system prompt names seven tools, and only three are wired.
+- [ ] Three tools are wired to the agent: name them.
+- [ ] The agent's `Memory` connector is empty.
+- [ ] `grep MODEL_FRONTIER lab/.env` prints a model id.
+- [ ] Node list:
 
-## You are the gate
+  ```text
+  Webhook
+  -> Case created only
+  -> Extract case
+  -> Fetch case
+  -> Fetch observables
+  -> Assemble case context
+  -> Triage (AI Agent)
+       -> OpenAI Chat Model (frontier)
+       -> Structured Output Parser
+       -> wazuh_events_for_ip
+       -> wazuh_events_for_host
+       -> thehive_related_cases
+  -> Render verdict
+  -> Write verdict to TheHive
+  ```
 
-The agent recommends. You decide. Every verdict from this workflow waits for a human before anything happens to it.
+**Question 1**: the model id `MODEL_FRONTIER` holds.
 
-A real gate requires three things:
+## Exercise #3.2: what the agent is given
 
-1. The reviewer must have the authority to overrule the machine. A gate staffed by someone with no power to disagree is an approval ritual, not a gate.
-2. The surface must show the evidence so the reviewer can read why the agent recommended this verdict.
-3. The two choices, agree or disagree, must be equally easy and neither one the default.
+The skeleton fetches the case and its observables from TheHive, and assembles them into one item. Nothing is pre-run. The agent reads the whole case, its history, what tried to reach it, and decides what else to look up.
 
-## Step 1: open the agent skeleton
+**Goal**: the agent's input is the case record and its observables, read from TheHive, and nothing else.
 
-The Module 3 skeleton is a different workflow from Module 2. `start.sh` imported it as `SOC triage, Module 3 skeleton (AI Agent)`. Open it.
+1. **Read the three input nodes.** `Fetch case`, `Fetch observables`, `Assemble case context` are already wired and working. Open each and read what it does. The case record from TheHive with `severity`, `status`, `createdAt`. Its observables. A Set node that hands both to the agent.
 
-Most of it is built. Trace it left to right:
+2. **Fire and read.** `Brute force`. Open the execution. Click `Assemble case context` and read the output.
 
-- `Webhook`, `Case created only` and `Extract case` are the same front end as Module 2.
-- `Fetch case` and `Fetch observables` read the whole case and its observables back from TheHive, and `Assemble case context` collapses them into one document for the agent.
-- `Triage (AI Agent)` is the worker. Its model is already the frontier tier (`claude-sonnet-5`), its max output tokens are already set to 4096 so it has room to reason across turns, and its `Structured Output Parser` already captures a determination alongside the three sections.
-- `Render verdict` and `Write verdict to TheHive` post the recommendation to the case.
+3. **Only for testing, comparing output.** The case and the observables, asked straight to TheHive:
 
-The agent's system prompt already names seven tools and says when to use each. Three are wired: `wazuh_events_for_ip`, `wazuh_events_for_host`, and `thehive_related_cases`. The other four are not. Your job is to add them, so the agent can actually call every tool its prompt describes.
+   ```bash
+   curl -s -H "Authorization: Bearer $THEHIVE_APIKEY" "$THEHIVE_URL/api/v1/case/~<case id>" | jq '.title, .severity'
+   curl -s -X POST "$THEHIVE_URL/api/v1/query" -H "Authorization: Bearer $THEHIVE_APIKEY" -H "Content-Type: application/json" -d '{"query":[{"_name":"getCase","idOrName":"~<case id>"},{"_name":"observables"}]}' | jq '.[].dataType'
+   ```
 
-## Step 2: read a wired tool
+**Expected**:
 
-The three wired tools are the pattern you copy. Open `wazuh_events_for_ip`:
+- [ ] `case.severity`, `case.status`, and `case.createdAt` are filled.
+- [ ] `observables` lists the case's observables with `dataType` and `data`.
+- [ ] `case.tags` has no `kind:` entry.
+- [ ] The curl output matches the node output.
 
-- It is an HTTP Request **Tool** node, connected to the agent's Tool input (not into the main flow).
-- Its `toolDescription` explains, in one line, what the tool returns and when to call it. The agent picks a tool by reading this, so it is written for the agent, not for you.
-- Where a normal node would take a fixed value, the tool uses `{{ $fromAI('ip', 'IPv4 address of the source to look up', 'string') }}`. The agent fills that argument in when it decides to call the tool.
+**Question 2**: how many observables the case has.
 
-Every tool you add follows this shape: a Tool node wired to the agent, a clear `toolDescription`, and a `$fromAI(...)` placeholder for the indicator.
+## Exercise #3.3: read the three wired tools
 
-## Step 3: get your API keys
+Each tool has a description the agent reads to decide whether to call it, and `$fromAI(...)` marks the argument the model fills. The three wired tools show the pattern. Read them, understand what they answer, and you will add four more the same way.
 
-The four tools use AbuseIPDB, VirusTotal, and ThreatFox, the same services as Module 2. If you did Module 2, `ABUSEIPDB_API_KEY`, `VT_API_KEY` and `ABUSECH_AUTH_KEY` are already in `lab/.env`. If not, create a free account on each ([abuseipdb.com](https://www.abuseipdb.com), [virustotal.com](https://www.virustotal.com), [auth.abuse.ch](https://auth.abuse.ch)), put the keys in `lab/.env`, and <ins>re-run the start script so n8n picks up the new keys</ins>.
+**Goal**: you understand the tool pattern and can name what each of the three wired tools answers.
 
-## Step 4: add the four tools
+1. **Wazuh by IP.** `wazuh_events_for_ip` on the agent's `Tool` connector. Read its description and its `$fromAI` argument. What does it return?
 
-Add each as an HTTP Request Tool node and connect it to the agent's Tool input. Use the exact tool names the prompt already refers to, and give each a `toolDescription` the agent can act on.
+2. **Wazuh by host.** `wazuh_events_for_host`. Same questions.
 
-| Tool | Request | Header |
-| ---- | ------- | ------ |
-| `ip_reputation` | `GET https://api.abuseipdb.com/api/v2/check?ipAddress={{ $fromAI('ip', 'IPv4 address to check', 'string') }}&maxAgeInDays=90` | `Key: {{ $env.ABUSEIPDB_API_KEY }}` and `Accept: application/json` |
-| `vt_file_report` | `GET https://www.virustotal.com/api/v3/files/{{ $fromAI('hash', 'file sha256 to look up', 'string') }}` | `x-apikey: {{ $env.VT_API_KEY }}` |
-| `vt_domain_report` | `GET https://www.virustotal.com/api/v3/domains/{{ $fromAI('domain', 'domain to look up', 'string') }}` | `x-apikey: {{ $env.VT_API_KEY }}` |
-| `threatfox_search` | `POST https://threatfox-api.abuse.ch/api/v1/` with JSON body `{{ JSON.stringify({ query: 'search_ioc', search_term: $fromAI('indicator', 'IP, domain, URL or hash to search', 'string'), exact_match: true }) }}` | `Auth-Key: {{ $env.ABUSECH_AUTH_KEY }}` |
+3. **TheHive, related cases.** `thehive_related_cases`. Read its description and see what it queries TheHive for.
 
-Match each `toolDescription` to what the agent's prompt says the tool is for: AbuseIPDB reputation for an IP, VirusTotal detections for a file hash, VirusTotal detections for a domain, and an abuse.ch ThreatFox lookup for any indicator. The agent only calls a tool it can read a purpose for.
+**Expected**:
 
-## Step 5: fire an alert
+- [ ] Three tools are attached to the agent's `Tool` connector.
+- [ ] Each tool has a `toolDescription` that tells the agent why to call it.
 
-Activate the workflow. n8n allows only one active workflow on the `thehive-alert` path, so **deactivate your Module 2 workflow first** or the activation fails and cases keep going to the old chain.
+**Question 3**: the three tools' names.
 
-Then use the panel at [panel.localhost](http://panel.localhost) to fire a test alert. **One trigger per case.** The lab groups alerts from the same attacker IP into one case for 15 minutes, and the workflow runs only when a case is created. To get a fresh run: wait 15 minutes, pick a different attacker IP in the fire dialog, or fire a different attack.
+## Exercise #3.4: add the four missing tools
 
-## Step 6: watch what it decided to look up
+The system prompt names seven tools. Three are wired. Add the four others as `HTTP Request Tool` nodes on the agent's `Tool` connector. Copy the descriptions and the `$fromAI(...)` placeholders verbatim from the fact sheet.
 
-Let the run finish, then open the n8n execution trace and read the flow. The agent called some tools and skipped others. The trace shows which, and in which order. Read its reasoning: why did it call a Wazuh lookup and skip another? This is where you see the agent thinking.
+**Goal**: seven tools on the agent, each describing what the agent needs to know to decide whether to call it.
 
-Tool calling through the gateway can fail quietly rather than loudly. If the trace shows zero tool calls, check your tool wiring before assuming the agent chose not to look anything up.
+1. **IP reputation.** `HTTP Request Tool`, named `ip_reputation`. Description, URL, headers, body verbatim:
 
-## Step 7: approve or reject
+   Description:
 
-Go to TheHive and open the case. You are the gate. Agree with the agent's recommendation, or disagree and explain your reasoning, and write your choice in the case timeline. Nothing moves, no close, no escalation, no containment, until you decide.
+   ```text
+   Look up an IP on AbuseIPDB. Returns abuseConfidenceScore (0 to 100, 50 and above is flagged) and totalReports. Returns an error when no key is configured. Then say reputation is unavailable.
+   ```
 
-## Step 8: put the three side by side
+   `GET`, URL (expression):
 
-You have a Module 1 case from the manual review, a Module 2 case from the automated run, and a Module 3 case from the agent loop. All three carry the same three-section verdict shape, but the worker and the reasoning path differ. Compare them to see what changed across the three approaches.
+   ```text
+   https://api.abuseipdb.com/api/v2/check?ipAddress={{ $fromAI('ip', 'IPv4 address to look up', 'string') }}&maxAgeInDays=90
+   ```
+
+   Headers: `Key` = `{{ $env.ABUSEIPDB_API_KEY }}`, `Accept` = `application/json`.
+
+2. **VirusTotal, file hash.** `vt_file_report`. Description:
+
+   ```text
+   Look up a file hash (md5, sha1 or sha256) on VirusTotal. Detection counts are under data.attributes.last_analysis_stats (malicious, suspicious, harmless, undetected). Returns an error when no key is configured. Then say the hash reputation is unavailable.
+   ```
+
+   `GET`, URL (expression):
+
+   ```text
+   https://www.virustotal.com/api/v3/files/{{ $fromAI('hash', 'File hash (md5, sha1 or sha256) to look up', 'string') }}
+   ```
+
+   Headers: `x-apikey` = `{{ $env.VT_API_KEY }}`, `Accept` = `application/json`.
+
+3. **VirusTotal, domain.** `vt_domain_report`. Description:
+
+   ```text
+   Look up a domain on VirusTotal. Detection counts are under data.attributes.last_analysis_stats. Take the host out of a URL first. Returns an error when no key is configured. Then say the domain reputation is unavailable.
+   ```
+
+   `GET`, URL (expression):
+
+   ```text
+   https://www.virustotal.com/api/v3/domains/{{ $fromAI('domain', 'Domain name to look up (host only, no scheme or path)', 'string') }}
+   ```
+
+   Headers: `x-apikey` = `{{ $env.VT_API_KEY }}`, `Accept` = `application/json`.
+
+4. **ThreatFox.** `threatfox_search`. Description:
+
+   ```text
+   Search abuse.ch ThreatFox for an indicator (IP, domain, URL or file hash). Returns matching malware or botnet C2 records with a confidence level, or query_status no_result when the indicator is not known to ThreatFox. Returns an error when no key is configured. Then say ThreatFox is unavailable.
+   ```
+
+   `POST` `https://threatfox-api.abuse.ch/api/v1/`, header `Auth-Key` = `{{ $env.ABUSECH_AUTH_KEY }}`, body `JSON`:
+
+   ```json
+   { "query": "search_ioc", "search_term": "{{ $fromAI('ioc', 'Indicator to search: an IP, domain, URL or file hash', 'string') }}" }
+   ```
+
+One sentence after: a tool that returns an error means the key is missing from `lab/.env`. The agent sees the error and reports it as unavailable rather than inventing the fact.
+
+**Expected**:
+
+- [ ] The agent's `Tool` connector shows seven tools.
+- [ ] Node list:
+
+  ```text
+  Webhook
+  -> Case created only
+  -> Extract case
+  -> Fetch case
+  -> Fetch observables
+  -> Assemble case context
+  -> Triage (AI Agent)
+       -> OpenAI Chat Model (frontier)
+       -> Structured Output Parser
+       -> wazuh_events_for_ip
+       -> wazuh_events_for_host
+       -> thehive_related_cases
+       -> ip_reputation
+       -> vt_file_report
+       -> vt_domain_report
+       -> threatfox_search
+  -> Render verdict
+  -> Write verdict to TheHive
+  ```
+
+No question.
+
+## Exercise #3.5: fire it and read the trace
+
+**Goal**: one run where the agent chose its own lookups, and you can name them in order.
+
+1. **Activate.** Only one workflow on `thehive-alert`.
+
+2. **Fire.** `Brute force`. Each fire draws a random flagged attacker IP, so most repeats start a new case. The range groups alerts from the same attacker IP into one case for 15 minutes, though, so on the rare repeat draw the second fire adds to the open case instead of starting a new run. For a guaranteed fresh run: wait 15 minutes, or fire a different attack.
+
+3. **Read the trace.** Execution, `Triage (AI Agent)`. The intermediate steps list each tool call with the arguments the model filled (`ip`, `host`, `hash`, `domain`, `ioc`) and what came back. Which tools, in which order, which it skipped.
+
+4. **Read it in TheHive.** Four sections. The trailer says `tool calls: N`. Comments curl as Exercise 2.5.
+
+**Expected**:
+
+- [ ] At least one tool call in the trace.
+- [ ] `Determination` starts with `Malicious.`, `Benign.`, or `Undetermined.`.
+- [ ] The close state is one of the four.
+- [ ] The trailer's `tool calls` equals the trace count.
+
+Failure hint: a verdict with `tool calls: 0` and no error means the model never saw the tools. Check all seven are attached to the agent's `Tool` connector, and that `MODEL_FRONTIER` is the frontier id, because the weak tier ignores tools. Normal triage finishes in two or three turns. `Max Iterations` is a safety limit, and a run that reaches all ten ends with no verdict, usually because a tool kept failing and the agent kept retrying.
+
+**Question 4**: the tools the agent called, in order. **Question 5**: the close state.
+
+## Exercise #3.6: you are the gate
+
+The agent has one credential, `TheHive n8n`, and the only call that writes is the comment. It cannot close the case, block an address, or touch the range. That is a permission and a credential, not a smarter model.
+
+A gate needs three things:
+
+1. The reviewer must have the authority to overrule the machine.
+2. The surface must show the evidence the agent recommended from.
+3. Agree and disagree must be equally easy, and neither one the default.
+
+**Then, keep it open.** Your Module 1, Module 2, and Module 3 cases, side by side. Same alert, same contract, three different workers.
+
+**Goal**: your decision, with a reason, is on the case, and nothing else about the case changed.
+
+1. **Read as the reviewer.** Open the case. Read the four sections against the trace.
+
+2. **Decide.** Add a comment to the case: `Agree` or `Disagree`, then one sentence why.
+
+3. **Check nothing moved.** The case status is still `Open`. Two comments: the workflow's and yours.
+
+   ```bash
+   curl -s -H "Authorization: Bearer $THEHIVE_APIKEY" "$THEHIVE_URL/api/v1/case/~<case id>" | jq '{status, tags}'
+   ```
+
+**Expected**:
+
+- [ ] `status` is `Open`.
+- [ ] The comments query returns two comments.
+- [ ] Three cases open, one per module, same alert.
+
+**Question 6**: your decision, and the case id it is on.
 
 ## Stuck five minutes?
 
-Put your hand up. An instructor will give you the Module 3 checkpoint, the finished workflow `SOC triage, Module 3 checkpoint (AI Agent)`. Import it into n8n, deactivate whatever workflow is currently active on the `thehive-alert` webhook path (there can be only one), then activate the checkpoint. Fire an alert and resume from Step 6.
+The checkpoint `SOC triage, Module 3 checkpoint (AI Agent)` is imported and inactive. Deactivate whatever is active on `thehive-alert`, activate it, fire an alert, and resume from Exercise 3.5. The checkpoint also carries a `Canary?` branch that skips the model for rule `100150`. It is not part of the exercises.
