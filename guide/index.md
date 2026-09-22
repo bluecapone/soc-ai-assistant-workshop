@@ -68,9 +68,9 @@ Every attendee runs an independent copy of the same six components. Nothing is s
 
 | Component           | Role                                                                                        | Login                                 |
 | ------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------- |
-| TheHive             | Case management; your agent writes verdicts here                                            | `analyst@brucon.local` / `brucon2026` |
-| n8n                 | Workflow orchestration for Modules 2 and 3                                                  | `admin@brucon.local` / `Brucon2026`   |
-| Wazuh               | SIEM; collects live logs from bank-web and fires detections                                 | `admin` / `brucon2026`                |
+| TheHive             | Case management; your agent writes verdicts here                                            | Exercise 0.2                          |
+| n8n                 | Workflow orchestration for Modules 2 and 3                                                  | Exercise 0.2                          |
+| Wazuh               | SIEM; collects live logs from bank-web and fires detections                                 | Exercise 0.2                          |
 | Range control panel | Attack console: nine attack buttons and six benign twins, all real commands against bank-web | none                                  |
 | bank-web            | Deliberately vulnerable web application, the detection target                               | none                                  |
 | Model gateway       | Every model call routes through it                                                          | your token, one per attendee          |
