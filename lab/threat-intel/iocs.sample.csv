@@ -1,8 +1,0 @@
-type,value,role,label,source
-ip,154.91.63.98,c2,VShell,ThreatFox
-domain,bad-c2.example.net,c2,QakBot,ThreatFox
-ip,45.9.148.200,exfil,Bulletproof host,ThreatFox
-domain,secure-docs-verify.top,phishing,URLhaus host,URLhaus
-url,http://secure-docs-verify.top/login,phishing,URLhaus payload,URLhaus
-sha256,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,malware,AgentTesla,MalwareBazaar
-md5,bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,malware,AgentTesla,MalwareBazaar

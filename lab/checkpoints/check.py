@@ -24,7 +24,7 @@ def log_fail(msg, detail=""):
 files_to_check = [
     (checkpoints_dir / "module-2" / "triage-m2-chain.json", "soctriagem2chk01", "SOC triage, Module 2 checkpoint (LLM chain)"),
     (checkpoints_dir / "module-3" / "triage-m3-agent.json", "soctriagem3chk01", "SOC triage, Module 3 checkpoint (AI Agent)"),
-    (lab_dir / "exercises" / "module-2" / "skeleton.json", "soctriageskel001", "SOC triage, build here (skeleton)"),
+    (lab_dir / "exercises" / "module-2" / "skeleton.json", "soctriageskel001", "SOC triage (skeleton)"),
 ]
 
 for filepath, expected_id, expected_name in files_to_check:
@@ -50,7 +50,6 @@ files_for_cred_check = [
     checkpoints_dir / "module-2" / "triage-m2-chain.json",
     checkpoints_dir / "module-3" / "triage-m3-agent.json",
     lab_dir / "exercises" / "module-2" / "skeleton.json",
-    lab_dir / "platform" / "n8n" / "triage-workflow.json",
 ]
 
 for filepath in files_for_cred_check:
@@ -186,7 +185,6 @@ webhook_files = [
     (checkpoints_dir / "module-2" / "triage-m2-chain.json", "soctriagem2chk01"),
     (checkpoints_dir / "module-3" / "triage-m3-agent.json", "soctriagem3chk01"),
     (lab_dir / "exercises" / "module-2" / "skeleton.json", "soctriageskel001"),
-    (lab_dir / "platform" / "n8n" / "triage-workflow.json", "soctriageref001"),
 ]
 
 for filepath, workflow_id in webhook_files:
@@ -314,7 +312,13 @@ try:
             data = json.load(f)
         
         parser_nodes = [n for n in data['nodes'] if n.get('type') == "@n8n/n8n-nodes-langchain.outputParserStructured"]
-        
+
+        if file_label == "M2":
+            # The chain-per-indicator build carries a second parser for the
+            # per-indicator mini-verdicts; the contract check targets the
+            # gather parser only.
+            parser_nodes = [n for n in parser_nodes if n.get('name') != "Mini-verdict parser"]
+
         if len(parser_nodes) != 1:
             log_fail(f"Check 5: {file_label} parser node", f"expected 1 OutputParserStructured node, found {len(parser_nodes)}")
         else:

@@ -1,6 +1,6 @@
 {
   "id": "soctriageskel001",
-  "name": "SOC triage, build here (skeleton)",
+  "name": "SOC triage (skeleton)",
   "active": false,
   "nodes": [
     {
@@ -28,7 +28,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ message: $json.verdict }) }}",
+        "jsonBody": "={{ JSON.stringify({ message: $json.comment }) }}",
         "options": {}
       },
       "id": "c0000043-0000-4000-8000-000000000043",
@@ -48,7 +48,33 @@
     },
     {
       "parameters": {
-        "content": "Build between these two nodes. The write-back reads two fields from the item it receives: `caseId` (the TheHive case id) and `verdict` (Markdown). The trigger's payload arrives at `$json.body`. Only one workflow with the path `thehive-alert` can be active at a time: deactivate the checkpoints while this one is active.",
+        "method": "PATCH",
+        "url": "=http://thehive.localhost/api/v1/case/{{ $json.caseId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ description: $json.description }) }}",
+        "options": {}
+      },
+      "id": "c0000044-0000-4000-8000-000000000044",
+      "name": "Update case description",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        900,
+        460
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Build between the trigger and the two write-back nodes. Both write-backs read from the item they receive: `caseId` (the TheHive case id) on each, `comment` (plain text; TheHive renders comments as plain text, so no Markdown here) on the comment node, and `description` (Markdown: the original case description with the verdict section appended; tables render there) on the PATCH node. The trigger's payload arrives at `$json.body`. Only one workflow with the path `thehive-alert` can be active at a time: deactivate the checkpoints while this one is active.",
         "width": 600,
         "height": 200
       },
@@ -68,6 +94,11 @@
         [
           {
             "node": "Write verdict to TheHive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update case description",
             "type": "main",
             "index": 0
           }

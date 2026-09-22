@@ -29,12 +29,14 @@ services:
       - "80:80"
     networks:
       soclab:
-        # Let containers reach TheHive at the same http://thehive.localhost the
-        # student types in the browser. Docker resolves *.localhost to loopback
-        # by default; this alias overrides that so n8n's HTTP node hits Caddy,
-        # which reverse-proxies to thehive:9000.
+        # Let containers reach TheHive and the Wazuh indexer at the same
+        # http://*.localhost names the student types in the browser. Docker
+        # resolves *.localhost to loopback by default; these aliases override
+        # that so n8n's HTTP nodes hit Caddy, which reverse-proxies to
+        # thehive:9000 and wazuh.indexer:9200.
         aliases:
           - thehive.localhost
+          - wazuh-indexer.localhost
 
   # --- Fix volume ownership for TheHive (runs as uid 1000) ------------------
   # Docker named volumes are created root-owned; TheHive's embedded BerkeleyJE
@@ -126,7 +128,6 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - n8n-data:/home/node/.n8n
-      - ./platform/n8n:/import:ro
       - ./checkpoints:/import-checkpoints:ro
       - ./exercises:/import-exercises:ro
     ports:

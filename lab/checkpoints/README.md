@@ -20,7 +20,7 @@ A checkpoint is the known good solution for one module. The syllabus rule is tha
 
 ## One active webhook at a time
 
-TheHive posts every event to `http://n8n:5678/webhook/thehive-alert`. n8n allows one active workflow per webhook path, so the reference, the skeleton and the two checkpoints cannot be active together. Deactivate the one you are leaving before activating the one you are entering.
+TheHive posts every event to `http://n8n:5678/webhook/thehive-alert`. n8n allows one active workflow per webhook path, so the skeleton and the two checkpoints cannot be active together. Deactivate the one you are leaving before activating the one you are entering.
 
 ## The answer is in the case, so the checkpoints hide it
 

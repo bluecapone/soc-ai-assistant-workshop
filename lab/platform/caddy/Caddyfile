@@ -2,11 +2,12 @@
 # *.localhost resolves to 127.0.0.1 automatically in Chrome, Edge, and Firefox with no
 # host-file or DNS change. (Safari does not; those users use the localhost:PORT URLs.)
 #
-#   http://web.localhost      -> the vulnerable target intranet
-#   http://panel.localhost    -> the attack control panel
-#   http://thehive.localhost  -> TheHive case management
-#   http://n8n.localhost      -> the n8n workflow editor
-#   http://wazuh.localhost    -> the Wazuh SIEM dashboard
+#   http://web.localhost           -> the vulnerable target intranet
+#   http://panel.localhost         -> the attack control panel
+#   http://thehive.localhost       -> TheHive case management
+#   http://n8n.localhost           -> the n8n workflow editor
+#   http://wazuh.localhost         -> the Wazuh SIEM dashboard
+#   http://wazuh-indexer.localhost -> the Wazuh indexer API (the n8n workflows read alerts here)
 
 {
 	# Plain HTTP on :80; no automatic TLS for .localhost names.
@@ -38,3 +39,13 @@ http://wazuh.localhost {
 	}
 }
 
+http://wazuh-indexer.localhost {
+	# The indexer's REST API on 9200 speaks HTTPS with a self-signed cert. The n8n
+	# workflows query it through this alias so their URLs match the other .localhost
+	# names and drop the per-node "ignore SSL" toggle. Basic auth passes straight through.
+	reverse_proxy https://wazuh.indexer:9200 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}

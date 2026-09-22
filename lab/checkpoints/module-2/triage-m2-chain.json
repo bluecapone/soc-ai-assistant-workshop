@@ -15,8 +15,8 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        240,
-        300
+        112,
+        304
       ],
       "webhookId": "thehive-alert"
     },
@@ -58,8 +58,8 @@
       "type": "n8n-nodes-base.filter",
       "typeVersion": 2.2,
       "position": [
-        460,
-        300
+        336,
+        304
       ]
     },
     {
@@ -136,30 +136,28 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        680,
-        300
+        560,
+        304
       ]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://wazuh.indexer:9200/wazuh-alerts-*/_search",
+        "url": "http://wazuh-indexer.localhost/wazuh-alerts-*/_search",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBasicAuth",
         "sendBody": true,
         "specifyBody": "json",
         "jsonBody": "={ \"size\": 20, \"_source\": [\"timestamp\",\"rule.id\",\"rule.level\",\"rule.description\",\"data.srcip\",\"data.url\",\"data.dstuser\",\"agent.name\"], \"query\": { \"match\": { \"data.srcip\": \"{{ $json.srcip }}\" } }, \"sort\": [ { \"timestamp\": \"desc\" } ] }",
-        "options": {
-          "allowUnauthorizedCerts": true
-        }
+        "options": {}
       },
       "id": "c0000004-0000-4000-8000-000000000004",
       "name": "Enrich: Wazuh",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        900,
-        300
+        768,
+        304
       ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true,
@@ -189,8 +187,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        1560,
-        300
+        2832,
+        -304
       ]
     },
     {
@@ -209,8 +207,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "typeVersion": 1.2,
       "position": [
-        1540,
-        760
+        2192,
+        864
       ],
       "credentials": {
         "openAiApi": {
@@ -229,8 +227,8 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        1700,
-        520
+        2976,
+        -64
       ]
     },
     {
@@ -246,9 +244,15 @@
             },
             {
               "id": "a2",
-              "name": "verdict",
+              "name": "comment",
               "type": "string",
-              "value": "=### Indicator verdicts\n| Type | Indicator | Verdict | Evidence |\n|---|---|---|---|\n{{ $('Assemble verdicts').first().json.indicatorVerdicts.map(v => '| ' + v.indicator_type + ' | `' + (v.indicator || 'n/a') + '` | **' + v.verdict + '** | ' + String(v.evidence || '').replace(/\\|/g, '/') + ' |').join('\\n') }}\n\n### Summary\n{{ $json.output.summary }}\n\n### Suggested close state\n{{ $json.output.suggested_close_state }}\n\n### Recommended actions\n{{ $json.output.recommended_actions }}\n\nWritten by the Module 2 workflow (chain per indicator, model {{ $env.MODEL_WEAK }})."
+              "value": "=AI triage verdict from the Module 2 workflow (chain per indicator, model {{ $env.MODEL_WEAK }}).\n\nIndicator verdicts:\n{{ $('Assemble verdicts').first().json.indicatorVerdicts.map(v => '- ' + v.indicator_type + ' ' + (v.indicator || 'n/a') + ': ' + v.verdict + ' (' + String(v.evidence || '') + ')').join('\\n') }}\n\nSummary:\n{{ $json.output.summary }}\n\nSuggested close state: {{ $json.output.suggested_close_state }}\n\nRecommended actions:\n{{ $json.output.recommended_actions }}\n\nThe same verdict with the indicator table is appended to the case description."
+            },
+            {
+              "id": "a3",
+              "name": "description",
+              "type": "string",
+              "value": "={{ $('Webhook').first().json.body.object.description || '' }}\n\n---\n\n## AI triage verdict\n\n### Indicator verdicts\n\n| Type | Indicator | Verdict | Evidence |\n|---|---|---|---|\n{{ $('Assemble verdicts').first().json.indicatorVerdicts.map(v => '| ' + v.indicator_type + ' | `' + (v.indicator || 'n/a') + '` | **' + v.verdict + '** | ' + String(v.evidence || '').replace(/\\|/g, '/') + ' |').join('\\n') }}\n\n### Summary\n\n{{ $json.output.summary }}\n\n### Suggested close state\n\n{{ $json.output.suggested_close_state }}\n\n### Recommended actions\n\n{{ $json.output.recommended_actions }}\n\nWritten by the Module 2 workflow (chain per indicator, model {{ $env.MODEL_WEAK }})."
             }
           ]
         },
@@ -259,8 +263,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1860,
-        300
+        3264,
+        -304
       ]
     },
     {
@@ -271,7 +275,7 @@
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ message: $json.verdict }) }}",
+        "jsonBody": "={{ JSON.stringify({ message: $json.comment }) }}",
         "options": {}
       },
       "id": "c0000011-0000-4000-8000-000000000011",
@@ -279,8 +283,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2080,
-        300
+        3536,
+        -160
       ],
       "credentials": {
         "httpHeaderAuth": {
@@ -292,9 +296,23 @@
     {
       "parameters": {
         "conditions": {
-          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2},
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
           "conditions": [
-            {"id": "g1", "leftValue": "={{ $('Extract case').first().json.srcip }}", "rightValue": "", "operator": {"type": "string", "operation": "notEmpty", "singleValue": true}}
+            {
+              "id": "g1",
+              "leftValue": "={{ $('Extract case').first().json.srcip }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
           ],
           "combinator": "and"
         },
@@ -304,14 +322,31 @@
       "name": "IP present?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1120, 80]
+      "position": [
+        1120,
+        -208
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2},
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
           "conditions": [
-            {"id": "g2", "leftValue": "={{ $('Extract case').first().json.hash }}", "rightValue": "", "operator": {"type": "string", "operation": "notEmpty", "singleValue": true}}
+            {
+              "id": "g2",
+              "leftValue": "={{ $('Extract case').first().json.hash }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
           ],
           "combinator": "and"
         },
@@ -321,14 +356,31 @@
       "name": "Hash present?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1120, 300]
+      "position": [
+        1056,
+        192
+      ]
     },
     {
       "parameters": {
         "conditions": {
-          "options": {"caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2},
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
           "conditions": [
-            {"id": "g3", "leftValue": "={{ $('Extract case').first().json.domain }}", "rightValue": "", "operator": {"type": "string", "operation": "notEmpty", "singleValue": true}}
+            {
+              "id": "g3",
+              "leftValue": "={{ $('Extract case').first().json.domain }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
           ],
           "combinator": "and"
         },
@@ -338,7 +390,10 @@
       "name": "Domain present?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [1120, 520]
+      "position": [
+        1024,
+        672
+      ]
     },
     {
       "parameters": {
@@ -347,8 +402,14 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {"name": "Key", "value": "={{ $env.ABUSEIPDB_API_KEY }}"},
-            {"name": "Accept", "value": "application/json"}
+            {
+              "name": "Key",
+              "value": "={{ $env.ABUSEIPDB_API_KEY }}"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
           ]
         },
         "options": {}
@@ -357,7 +418,10 @@
       "name": "Lookup IP: AbuseIPDB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1320, 40],
+      "position": [
+        1328,
+        -384
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true
     },
@@ -368,7 +432,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {"name": "x-apikey", "value": "={{ $env.VT_API_KEY }}"}
+            {
+              "name": "x-apikey",
+              "value": "={{ $env.VT_API_KEY }}"
+            }
           ]
         },
         "options": {}
@@ -377,7 +444,10 @@
       "name": "Lookup hash: VirusTotal",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1320, 260],
+      "position": [
+        1280,
+        64
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true
     },
@@ -388,7 +458,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {"name": "Auth-Key", "value": "={{ $env.ABUSECH_AUTH_KEY }}"}
+            {
+              "name": "Auth-Key",
+              "value": "={{ $env.ABUSECH_AUTH_KEY }}"
+            }
           ]
         },
         "sendBody": true,
@@ -400,7 +473,10 @@
       "name": "Lookup domain: ThreatFox",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1320, 480],
+      "position": [
+        1248,
+        512
+      ],
       "onError": "continueRegularOutput",
       "alwaysOutputData": true
     },
@@ -409,7 +485,12 @@
         "mode": "manual",
         "assignments": {
           "assignments": [
-            {"id": "np1", "name": "output", "type": "object", "value": "={{ { indicator_type: 'ip', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"}
+            {
+              "id": "np1",
+              "name": "output",
+              "type": "object",
+              "value": "={{ { indicator_type: 'ip', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"
+            }
           ]
         },
         "options": {}
@@ -418,14 +499,22 @@
       "name": "IP not present",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1320, 160]
+      "position": [
+        1312,
+        -160
+      ]
     },
     {
       "parameters": {
         "mode": "manual",
         "assignments": {
           "assignments": [
-            {"id": "np2", "name": "output", "type": "object", "value": "={{ { indicator_type: 'hash', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"}
+            {
+              "id": "np2",
+              "name": "output",
+              "type": "object",
+              "value": "={{ { indicator_type: 'hash', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"
+            }
           ]
         },
         "options": {}
@@ -434,14 +523,22 @@
       "name": "Hash not present",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1320, 380]
+      "position": [
+        1280,
+        288
+      ]
     },
     {
       "parameters": {
         "mode": "manual",
         "assignments": {
           "assignments": [
-            {"id": "np3", "name": "output", "type": "object", "value": "={{ { indicator_type: 'domain', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"}
+            {
+              "id": "np3",
+              "name": "output",
+              "type": "object",
+              "value": "={{ { indicator_type: 'domain', indicator: '', verdict: 'not present', evidence: 'field absent from the case' } }}"
+            }
           ]
         },
         "options": {}
@@ -450,7 +547,10 @@
       "name": "Domain not present",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1320, 600]
+      "position": [
+        1232,
+        768
+      ]
     },
     {
       "parameters": {
@@ -470,7 +570,10 @@
       "name": "IP verdict",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
-      "position": [1540, 40]
+      "position": [
+        1568,
+        -384
+      ]
     },
     {
       "parameters": {
@@ -490,7 +593,10 @@
       "name": "Hash verdict",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
-      "position": [1540, 260]
+      "position": [
+        1568,
+        -64
+      ]
     },
     {
       "parameters": {
@@ -510,7 +616,10 @@
       "name": "Domain verdict",
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
-      "position": [1540, 480]
+      "position": [
+        1520,
+        384
+      ]
     },
     {
       "parameters": {
@@ -521,7 +630,10 @@
       "name": "Mini-verdict parser",
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
-      "position": [1320, 760]
+      "position": [
+        2304,
+        128
+      ]
     },
     {
       "parameters": {
@@ -532,17 +644,101 @@
       "name": "Merge verdicts",
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3,
-      "position": [1760, 300]
+      "position": [
+        2160,
+        -320
+      ]
     },
     {
       "parameters": {
-        "jsCode": "// One item out: the case, its Wazuh events, and the three indicator verdicts.\nconst c = $('Extract case').first().json;\nconst wz = ((($('Enrich: Wazuh').first().json || {}).hits || {}).hits || []).map(h => h._source);\nconst verdicts = $input.all().map(i => i.json.output).filter(Boolean);\nreturn [{ json: {\n  caseId: c.caseId,\n  case: { title: c.title, ruleId: c.ruleId, srcip: c.srcip, host: c.host, target: c.target, domain: c.domain, hash: c.hash, tags: c.tagsForModel, description: c.descriptionForModel },\n  wazuhEvents: wz,\n  indicatorVerdicts: verdicts,\n} }];"
+        "aggregate": "aggregateIndividualFields",
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output",
+              "renameField": true,
+              "outputFieldName": "indicatorVerdicts"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c0000027-0000-4000-8000-000000000027",
+      "name": "Collect verdicts",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        2352,
+        -304
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "g1",
+              "name": "caseId",
+              "type": "string",
+              "value": "={{ $('Extract case').first().json.caseId }}"
+            },
+            {
+              "id": "g2",
+              "name": "case",
+              "type": "object",
+              "value": "={{ { title: $('Extract case').first().json.title, ruleId: $('Extract case').first().json.ruleId, srcip: $('Extract case').first().json.srcip, host: $('Extract case').first().json.host, target: $('Extract case').first().json.target, domain: $('Extract case').first().json.domain, hash: $('Extract case').first().json.hash, tags: $('Extract case').first().json.tagsForModel, description: $('Extract case').first().json.descriptionForModel } }}"
+            },
+            {
+              "id": "g3",
+              "name": "wazuhEvents",
+              "type": "array",
+              "value": "={{ ($('Enrich: Wazuh').first().json.hits?.hits || []).map(h => h._source) }}"
+            },
+            {
+              "id": "g4",
+              "name": "indicatorVerdicts",
+              "type": "array",
+              "value": "={{ $json.indicatorVerdicts }}"
+            }
+          ]
+        },
+        "options": {}
       },
       "id": "c0000026-0000-4000-8000-000000000026",
       "name": "Assemble verdicts",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1960, 300]
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2576,
+        -304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=http://thehive.localhost/api/v1/case/{{ $json.caseId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ description: $json.description }) }}",
+        "options": {}
+      },
+      "id": "c0000028-0000-4000-8000-000000000028",
+      "name": "Update case description",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3536,
+        -432
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
     }
   ],
   "connections": {
@@ -582,62 +778,209 @@
     "Enrich: Wazuh": {
       "main": [
         [
-          {"node": "IP present?", "type": "main", "index": 0},
-          {"node": "Hash present?", "type": "main", "index": 0},
-          {"node": "Domain present?", "type": "main", "index": 0}
+          {
+            "node": "IP present?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Hash present?",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Domain present?",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "IP present?": {
       "main": [
-        [{"node": "Lookup IP: AbuseIPDB", "type": "main", "index": 0}],
-        [{"node": "IP not present", "type": "main", "index": 0}]
+        [
+          {
+            "node": "Lookup IP: AbuseIPDB",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "IP not present",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Hash present?": {
       "main": [
-        [{"node": "Lookup hash: VirusTotal", "type": "main", "index": 0}],
-        [{"node": "Hash not present", "type": "main", "index": 0}]
+        [
+          {
+            "node": "Lookup hash: VirusTotal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Hash not present",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Domain present?": {
       "main": [
-        [{"node": "Lookup domain: ThreatFox", "type": "main", "index": 0}],
-        [{"node": "Domain not present", "type": "main", "index": 0}]
+        [
+          {
+            "node": "Lookup domain: ThreatFox",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Domain not present",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Lookup IP: AbuseIPDB": {
-      "main": [[{"node": "IP verdict", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "IP verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Lookup hash: VirusTotal": {
-      "main": [[{"node": "Hash verdict", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Hash verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Lookup domain: ThreatFox": {
-      "main": [[{"node": "Domain verdict", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Domain verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "IP verdict": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "IP not present": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Hash verdict": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 1}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     },
     "Hash not present": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 1}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
     },
     "Domain verdict": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 2}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
     },
     "Domain not present": {
-      "main": [[{"node": "Merge verdicts", "type": "main", "index": 2}]]
+      "main": [
+        [
+          {
+            "node": "Merge verdicts",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
     },
     "Merge verdicts": {
-      "main": [[{"node": "Assemble verdicts", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Collect verdicts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect verdicts": {
+      "main": [
+        [
+          {
+            "node": "Assemble verdicts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Assemble verdicts": {
-      "main": [[{"node": "Triage (LLM chain)", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Triage (LLM chain)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Triage (LLM chain)": {
       "main": [
@@ -657,6 +1000,11 @@
             "node": "Write verdict to TheHive",
             "type": "main",
             "index": 0
+          },
+          {
+            "node": "Update case description",
+            "type": "main",
+            "index": 0
           }
         ]
       ]
@@ -664,19 +1012,47 @@
     "OpenAI Chat Model": {
       "ai_languageModel": [
         [
-          {"node": "Triage (LLM chain)", "type": "ai_languageModel", "index": 0},
-          {"node": "IP verdict", "type": "ai_languageModel", "index": 0},
-          {"node": "Hash verdict", "type": "ai_languageModel", "index": 0},
-          {"node": "Domain verdict", "type": "ai_languageModel", "index": 0}
+          {
+            "node": "Triage (LLM chain)",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "IP verdict",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Hash verdict",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Domain verdict",
+            "type": "ai_languageModel",
+            "index": 0
+          }
         ]
       ]
     },
     "Mini-verdict parser": {
       "ai_outputParser": [
         [
-          {"node": "IP verdict", "type": "ai_outputParser", "index": 0},
-          {"node": "Hash verdict", "type": "ai_outputParser", "index": 0},
-          {"node": "Domain verdict", "type": "ai_outputParser", "index": 0}
+          {
+            "node": "IP verdict",
+            "type": "ai_outputParser",
+            "index": 0
+          },
+          {
+            "node": "Hash verdict",
+            "type": "ai_outputParser",
+            "index": 0
+          },
+          {
+            "node": "Domain verdict",
+            "type": "ai_outputParser",
+            "index": 0
+          }
         ]
       ]
     },
