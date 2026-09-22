@@ -142,9 +142,8 @@ The skeleton is pre-built except for the hash and domain branches. Twenty nodes,
   -> Case created only
   -> Extract case
   -> Enrich: Wazuh
-     -> IP present? -> Lookup IP: AbuseIPDB -> IP verdict
-                    -> OpenAI Chat Model, Mini-verdict parser (shared)
-                    -> IP not present
+     -> IP present?  true  -> Lookup IP: AbuseIPDB -> IP verdict -> Merge verdicts
+                     false -> IP not present                     -> Merge verdicts
      -> Hash present?
      -> Domain present?
   -> Merge verdicts
@@ -154,6 +153,11 @@ The skeleton is pre-built except for the hash and domain branches. Twenty nodes,
   -> Render verdict
      -> Write verdict to TheHive
      -> Update case description
+
+  Sub-nodes, attached from below, pointing up into their parent:
+     OpenAI Chat Model        -> IP verdict, and Triage (LLM chain). One model, shared.
+     Mini-verdict parser      -> IP verdict
+     Structured Output Parser -> Triage (LLM chain)
   ```
 
 **Question 1**: the two gates that have nothing wired to their outputs.
