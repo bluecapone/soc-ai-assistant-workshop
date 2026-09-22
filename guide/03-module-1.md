@@ -2,7 +2,7 @@
 
 You build a Claude Code skill, `soc-triage`, from the outside in: first the scripts it runs, then the references and the template it reads, and last the `SKILL.md` that names them all. Then you run it against your own lab. You write that last file last, and the model loads it first. The skill has eight parts. Four of them are in `exercises/module-1/`, flat, and you write the four scripts yourself from the vendor docs. Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
 
-**The plan** 
+**The plan**
 
 A skill begins as a plan. Its author answers four questions, and the `SKILL.md` you write last is where the answers land:
 
