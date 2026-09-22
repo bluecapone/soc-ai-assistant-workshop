@@ -336,20 +336,24 @@ The `not present` objects count as items, which is why the count is three no mat
   -> Case created only
   -> Extract case
   -> Enrich: Wazuh
-     -> IP present?     -> Lookup IP: AbuseIPDB     -> IP verdict     -> Merge verdicts (Input 1)
-                        -> IP not present                             -> Merge verdicts (Input 1)
-     -> Hash present?   -> Lookup hash: VirusTotal  -> Hash verdict   -> Merge verdicts (Input 2)
-                        -> Hash not present                           -> Merge verdicts (Input 2)
-     -> Domain present? -> Lookup domain: ThreatFox -> Domain verdict -> Merge verdicts (Input 3)
-                        -> Domain not present                         -> Merge verdicts (Input 3)
+     -> IP present?     true  -> Lookup IP: AbuseIPDB     -> IP verdict     -> Merge verdicts (Input 1)
+                        false -> IP not present                             -> Merge verdicts (Input 1)
+     -> Hash present?   true  -> Lookup hash: VirusTotal  -> Hash verdict   -> Merge verdicts (Input 2)
+                        false -> Hash not present                           -> Merge verdicts (Input 2)
+     -> Domain present? true  -> Lookup domain: ThreatFox -> Domain verdict -> Merge verdicts (Input 3)
+                        false -> Domain not present                         -> Merge verdicts (Input 3)
   -> Merge verdicts
   -> Collect verdicts
   -> Assemble verdicts
   -> Triage (LLM chain)
-     -> OpenAI Chat Model, Structured Output Parser (shared)
   -> Render verdict
      -> Write verdict to TheHive
      -> Update case description
+
+  Sub-nodes, attached from below, pointing up into their parent:
+     OpenAI Chat Model        -> IP verdict, Hash verdict, Domain verdict, Triage (LLM chain). One model, shared by four.
+     Mini-verdict parser      -> IP verdict, Hash verdict, Domain verdict. One parser, shared by three.
+     Structured Output Parser -> Triage (LLM chain)
   ```
 
 **Question 3**: why `indicatorVerdicts.length` is always `3`.
