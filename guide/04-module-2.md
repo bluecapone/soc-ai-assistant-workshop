@@ -220,7 +220,7 @@ Add a Set node named `Render verdict` after the gather chain, with three string 
 | `comment` | The three sections plus one line per indicator verdict. Plain text only: no headings, no table, no bold. |
 | `description` | The original description, `{{ $('Webhook').first().json.body.object.description }}`, followed by a Markdown verdict section with the indicator table. |
 
-For the indicator lines in the comment, map the verdicts to plain lines: `{{ $('Assemble verdicts').first().json.indicatorVerdicts.map(v => '- ' + v.indicator_type + ' ' + (v.indicator \|\| 'n/a') + ': ' + v.verdict + ' (' + v.evidence + ')').join('\n') }}`. In the description the same map builds table rows instead. The checkpoint workflow carries the full expressions for both fields when you want to compare.
+For the indicator lines in the comment, map the verdicts to plain lines: `{{ $('Assemble verdicts').first().json.indicatorVerdicts.map(v => '- ' + v.indicator_type + ' ' + (v.indicator \|\| 'n/a') + ': ' + v.verdict + ' (' + v.evidence + ')').join('\n') }}`. In the description the same map builds table rows instead. An instructor can share the checkpoint workflow, which carries the full expressions for both fields, if you want to compare.
 
 Wire `Render verdict` into both pre-built write-back nodes: the comment POST and the description PATCH. Both read their fields straight off the item they receive.
 
@@ -248,4 +248,4 @@ Keep both cases open. You have a Module 1 case from the manual run and a Module 
 
 ## Stuck five minutes?
 
-If you are stuck five minutes into this module, the Module 2 checkpoint is already imported and waiting in n8n (inactive). Open n8n, find the workflow `SOC triage, Module 2 checkpoint (LLM chain)`, deactivate whatever workflow is currently active on the `thehive-alert` webhook path (there can be only one), then activate the checkpoint. Fire an alert and resume from Step 11.
+If you are stuck five minutes into this module, put your hand up. An instructor will give you the Module 2 checkpoint, the finished workflow `SOC triage, Module 2 checkpoint (LLM chain)`. Import it into n8n, deactivate whatever workflow is currently active on the `thehive-alert` webhook path (there can be only one), then activate the checkpoint. Fire an alert and resume from Step 11.

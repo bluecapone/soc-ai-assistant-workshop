@@ -267,9 +267,9 @@ function Import-Workflow($workflow_id, $path, $label) {
         if ($LASTEXITCODE -eq 0) { Ok "$label imported" } else { Die "$label import failed" }
     }
 }
-Import-Workflow "soctriageskel001" "/import-workflows/module-2/skeleton.json"   "Module 2 skeleton"
-Import-Workflow "soctriagem2chk01" "/import-workflows/module-2/checkpoint.json" "Module 2 checkpoint"
-Import-Workflow "soctriagem3chk01" "/import-workflows/module-3/checkpoint.json" "Module 3 checkpoint"
+# Only the skeleton is imported. The module checkpoints are instructor-only and
+# handed over by hand when an attendee is stuck (see lab/checkpoints/README.md).
+Import-Workflow "soctriageskel001" "/import-exercises/module-2/skeleton.json" "Module 2 skeleton"
 
 
 # --- 5. Wazuh reachable -------------------------------------------------------

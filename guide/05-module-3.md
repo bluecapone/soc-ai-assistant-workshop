@@ -123,7 +123,7 @@ Let the workflow run to completion. When it finishes, open the n8n execution tra
 
 Read the agent's reasoning: why did it call a Wazuh lookup and skip the email log lookup? This is where you see the agent thinking. Tool-calling through the gateway's base-URL override can fail silently rather than loudly. If the trace shows zero tool calls, check your configuration before assuming the agent chose not to look anything up.
 
-Two more failures look like the agent misbehaving but are really wiring. If the verdict comes back blank and the trace shows the agent ran the full iteration cap, the model's max output tokens is too low (see Step 4). If the case gets several copies of the verdict, the workflow handed the agent more than one item: the observable lookup returns one item per observable, so the agent ran once per observable. Collapse them to a single item before the agent. The checkpoint does this with <ins>Execute Once</ins> on the node that assembles the case.
+Two more failures look like the agent misbehaving but are really wiring. If the verdict comes back blank and the trace shows the agent ran the full iteration cap, the model's max output tokens is too low (see Step 4). If the case gets several copies of the verdict, the workflow handed the agent more than one item: the observable lookup returns one item per observable, so the agent ran once per observable. Collapse them to a single item before the agent, with <ins>Execute Once</ins> on the node that assembles the case.
 
 ## Step 9: approve or reject
 
@@ -135,4 +135,4 @@ Put the three cases side by side. You have a Module 1 case from the manual revie
 
 ## Stuck five minutes?
 
-Open n8n, find the workflow `SOC triage, Module 3 checkpoint (AI Agent)`, deactivate whatever workflow is currently active on the `thehive-alert` webhook path (there can be only one), then activate the checkpoint. Fire an alert and resume from Step 8.
+Put your hand up. An instructor will give you the Module 3 checkpoint, the finished workflow `SOC triage, Module 3 checkpoint (AI Agent)`. Import it into n8n, deactivate whatever workflow is currently active on the `thehive-alert` webhook path (there can be only one), then activate the checkpoint. Fire an alert and resume from Step 8.

@@ -70,11 +70,11 @@ In n8n the gateway credential type is called "OpenAI API" because that protocol 
 
 ## Room rules
 
-Solo work. One checkpoint per module. **Stuck for more than five minutes: take the module's checkpoint and move on.** Every module depends on the one before it, and falling behind costs you the rest of the module. Hands up. Pairing with a neighbour is normal, not failure.
+Solo work. **Stuck for more than five minutes: put your hand up and an instructor will give you the module's checkpoint so you can move on.** Every module depends on the one before it, and falling behind costs you the rest of the module. Pairing with a neighbour is normal, not failure.
 
 ## Guides for exercises
 
-- `lab/workflows/README.md`: the n8n workflows for Modules 2 and 3, the skeleton to start from, the checkpoint to jump to, and the credentials they expect
+- `exercises/README.md`: the files you copy or import per module, and where the Module 2 skeleton lives
 - `exercises/module-1/README.md`: the reference `soc-triage` skill files
 - `instructor-docs/`: the theory behind each part, as background reading
 - [TheHive API](https://docs.strangebee.com/thehive/api-docs/), [Wazuh indexer search](https://documentation.wazuh.com/current/user-manual/wazuh-indexer/index.html), [n8n docs](https://docs.n8n.io/)

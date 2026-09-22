@@ -128,7 +128,10 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - n8n-data:/home/node/.n8n
-      - ./workflows:/import-workflows:ro
+      # The Module 2 skeleton lives in the published exercises/ folder (repo root),
+      # so reach it from the lab dir with ../exercises. Checkpoints are instructor-only
+      # and never mounted; an instructor imports them by hand when someone is stuck.
+      - ../exercises:/import-exercises:ro
     ports:
       - "5678:5678"
     # node is guaranteed present in the n8n image (works whether the base is alpine or debian).
