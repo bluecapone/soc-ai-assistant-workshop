@@ -311,13 +311,13 @@ These three are given, so read them rather than build them.
 
 | Node | Type | Configured as | In and out |
 |---|---|---|---|
-| `Merge verdicts` | `Merge` | already wired, mode `Append`, three inputs fed by the six nodes above (two per branch) | exactly three items out, whichever indicators the case carried |
+| `Merge verdicts` | `Merge` | mode `Append`, three inputs from the six nodes above (two per branch) | six possible items in, exactly three out, whichever indicators the case carried |
 | `Collect verdicts` | `Aggregate` | field to aggregate `output`, output field name `indicatorVerdicts` | three items in, one item out, carrying the three mini-verdicts as one list |
-| `Assemble verdicts` | `Set` | four fields, unchanged from the guide you already followed | one item in, one item out |
+| `Assemble verdicts` | `Set` | four fields, unchanged from the guide you already followed | one item in, one item out, with the case and its Wazuh events alongside the verdicts |
 
 The `not present` objects count as items, which is why the count is three no matter what the case carried.
 
-1. **Read them.** In n8n, open the three nodes and check each against the table.
+1. **Read the three nodes** in n8n against the table.
 
 2. **Fire and read.** `Brute force`. `Assemble verdicts` output: one item, `indicatorVerdicts` an array of exactly three objects (one per branch, even the `not present` ones).
 
