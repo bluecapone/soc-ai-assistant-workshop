@@ -88,15 +88,26 @@ Exercise 0.3 walks it once by hand.
 
 **Goal**: the panel is your front door. From it you reach TheHive and n8n and sign in to both.
 
+Every login for the day, in one place. <ins>The n8n password starts with a capital B, the others do not</ins>.
+
+| Service | Address | User | Password |
+|---|---|---|---|
+| Range control panel | `http://panel.localhost` | no login | no login |
+| TheHive | `http://thehive.localhost` | `analyst@brucon.local` | `brucon2026` |
+| n8n | `http://n8n.localhost` | `admin@brucon.local` | `Brucon2026` |
+| Wazuh | `http://wazuh.localhost` | `admin` | `brucon2026` |
+
+You sign in to the first three now. Wazuh comes in Exercise 0.3.
+
 1. **Panel.** Open `http://panel.localhost`. No login. The quick-access cards at the top list every service with its login. *Click a credential to copy it*. Below is the attack console: nine attack buttons and six benign twins in one list. Every click runs a real command against bank-web, after a confirm dialog.
    
    ![Attack console, quick access](screenshots/connect/03-panel.png)
 
-2. **TheHive.** From its card, open `http://thehive.localhost`. Sign in as `analyst@brucon.local`, password `brucon2026`. *Ignore the licence warning* TheHive shows after login. The lab runs on the free tier and nothing in the workshop needs more.
+2. **TheHive.** From its card, sign in with the table above. *Ignore the licence warning* TheHive shows after login. The lab runs on the free tier and nothing in the workshop needs more.
    
    ![TheHive login](screenshots/connect/01-thehive-login.png)
 
-3. **n8n.** From its card, open `http://n8n.localhost`. Sign in as `admin@brucon.local`, password `Brucon2026`. You see the workflow canvas with two nodes already built: a webhook trigger and a verdict writer.
+3. **n8n.** From its card, sign in with the table above. You see the workflow canvas with two nodes already built: a webhook trigger and a verdict writer.
    
    ![n8n sign in](screenshots/connect/02-n8n-login.png)
 

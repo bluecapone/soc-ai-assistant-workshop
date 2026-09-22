@@ -1,6 +1,10 @@
 # Module 1: drive it by hand
 
-You build a Claude Code skill, `soc-triage`, from the outside in: first the scripts it runs, then the references and the template it reads, and last the `SKILL.md` that names them all. Then you run it against your own lab. You write that last file last, and the model loads it first. The skill has eight parts. Four of them are in `exercises/module-1/`, flat, and you write the four scripts yourself from the vendor docs. Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
+You build a Claude Code skill, `soc-triage`, from the outside in: first the scripts it runs, then the references and the template it reads, and last the `SKILL.md` that names them all. Then you run it against your own lab. You write that last file last, and the model loads it first.
+
+The skill has eight parts. Four of them are in `exercises/module-1/`, flat, and you write the four scripts yourself from the vendor docs.
+
+Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
 
 **The plan**
 
@@ -56,7 +60,11 @@ The same, as one run, top to bottom. Left the run, right the folder, an arrow wh
 
 ## Exercise #1.1: the scripts, made from the docs
 
-The model never sees these files. It runs them and reads what they print. That is why the parts that are easy to get slightly wrong live here: certificates, JSON escaping, fallbacks, error messages. You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that says what you know and what you want, and you test the result against the lab. A model's memory of an API is stale. The docs are the source. The lab is the test.
+The model never sees these files. It runs them and reads what they print. That is why the parts that are easy to get slightly wrong live here: certificates, JSON escaping, fallbacks, error messages.
+
+You do not write them by hand either. You ask Claude Code, with the real API documentation in reach, from a prompt that says what you know and what you want, and you test the result against the lab.
+
+A model's memory of an API is stale. The docs are the source. The lab is the test.
 
 **Goal**: the four scripts exist, each one made from a prompt and the docs, each one tested by hand, and the folder holds the version you chose.
 
@@ -306,7 +314,9 @@ TheHive is the only system the skill writes to, and the only write is a comment.
 
 A reference is documentation the model opens only when `SKILL.md` sends it there: what a script's output looks like, what an error means, how one full run went. Keeping it out of `SKILL.md` keeps the always-loaded part short and puts the long material where it costs nothing until needed.
 
-These two files are given, not generated. The scripts were written once. This file is the one that keeps changing: every failure you meet from now on becomes one more entry, and most fixes to the skill turn out to be a line here rather than a change to a script or a rule. You start from ours so the first version already knows the failures of this lab.
+These two files are given, not generated. The scripts were written once.
+
+This file is the one that keeps changing: every failure you meet from now on becomes one more entry, and most fixes to the skill turn out to be a line here rather than a change to a script or a rule. You start from ours so the first version already knows the failures of this lab.
 
 **Goal**: the two files the skill reads only when it needs them are in place, and your own failures are in the failure list.
 

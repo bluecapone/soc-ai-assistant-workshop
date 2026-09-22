@@ -1,18 +1,18 @@
 # Module 3: let it decide
 
-You open the Module 3 skeleton, which already has the webhook, the filter, the case fetches, and the agent in place. The three wired tools show the pattern. You add four more tools and activate the workflow. The agent reads the whole case, chooses which lookups to run, and judges. Then you decide what happens to the case. The two texts you paste are in `exercises/module-3/`.
+You open the Module 3 skeleton, which already has the webhook, the filter, the case fetches, and the agent in place. The three wired tools show the pattern. You add four more tools and activate the workflow.
+
+The agent reads the whole case, chooses which lookups to run, and judges. Then you decide what happens to the case. The two texts you paste are in `exercises/module-3/`.
 
 **The plan**
 
 ```text
-Use case: triage one TheHive case, the agent choosing what to look up
 Trigger: the same webhook and filter as Module 2
 Steps:   1. read the case and its observables from TheHive
          2. hand the whole case to the agent
          3. the agent calls the lookups it needs, up to 10 turns
          4. it judges, and states its determination in one line
          5. post the verdict, then you agree or disagree on the case
-Result:  one comment with four sections, nothing else changed anywhere, nothing happens to the case until you decide
 ```
 
 ```mermaid
@@ -177,6 +177,17 @@ The system prompt names seven tools. Three are wired. Add the four others as `HT
 
 **Goal**: seven tools on the agent, each describing what the agent needs to know to decide whether to call it.
 
+The four, at a glance. Each is an `HTTP Request Tool` on the agent's `Tool` connector, and each needs its key in `lab/.env`.
+
+| Tool | Method | Source | Header |
+|---|---|---|---|
+| `ip_reputation` | `GET` | AbuseIPDB | `Key` = `{{ $env.ABUSEIPDB_API_KEY }}` |
+| `vt_file_report` | `GET` | VirusTotal | `x-apikey` = `{{ $env.VT_API_KEY }}` |
+| `vt_domain_report` | `GET` | VirusTotal | `x-apikey` = `{{ $env.VT_API_KEY }}` |
+| `threatfox_search` | `POST` | ThreatFox | `Auth-Key` = `{{ $env.ABUSECH_AUTH_KEY }}` |
+
+The first three also send `Accept` = `application/json`. The descriptions and URLs below are pasted verbatim, so they stay in code blocks rather than in the table.
+
 1. **IP reputation.** `HTTP Request Tool`, named `ip_reputation`. Description, URL, headers, body verbatim:
 
    Description:
@@ -273,7 +284,7 @@ No question.
 
 3. **Read the trace.** Execution, `Triage (AI Agent)`. The intermediate steps list each tool call with the arguments the model filled (`ip`, `host`, `hash`, `domain`, `ioc`) and what came back. Which tools, in which order, which it skipped.
 
-4. **Read it in TheHive.** Four sections. The trailer says `tool calls: N`. Comments curl as Exercise 2.5.
+4. **Read it in TheHive.** Four sections. The trailer says `tool calls: N`. Comments curl as Exercise 2.4.
 
 **Expected**:
 
