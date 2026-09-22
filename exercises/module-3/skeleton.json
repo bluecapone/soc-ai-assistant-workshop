@@ -1,0 +1,594 @@
+{
+  "id": "soctriagem3skl01",
+  "name": "SOC triage, Module 3 skeleton (AI Agent)",
+  "active": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "thehive-alert",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "12d72bf1-61ac-4269-8efb-fdb6bd5c3d49",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        160,
+        -80
+      ],
+      "webhookId": "thehive-alert"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f1",
+              "leftValue": "={{ $json.body.objectType }}",
+              "rightValue": "case",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "f2",
+              "leftValue": "={{ $json.body.operation }}",
+              "rightValue": "Creation",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "6e083afd-e671-42e4-bbb3-688255d76cd6",
+      "name": "Case created only",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "caseId",
+              "type": "string",
+              "value": "={{ $json.body.object._id || $json.body.objectId || '' }}"
+            },
+            {
+              "id": "a2",
+              "name": "title",
+              "type": "string",
+              "value": "={{ $json.body.object.title || 'unknown case' }}"
+            },
+            {
+              "id": "a3",
+              "name": "ruleId",
+              "type": "string",
+              "value": "={{ ((($json.body.object.tags || []).find(t => String(t).startsWith('rule:'))) || 'rule:').slice(5) }}"
+            },
+            {
+              "id": "a4",
+              "name": "srcip",
+              "type": "string",
+              "value": "={{ (String($json.body.object.description || '').match(/\\| Source IP \\| `([^`]+)` \\|/) || [])[1] || '' }}"
+            },
+            {
+              "id": "a5",
+              "name": "host",
+              "type": "string",
+              "value": "={{ (String($json.body.object.description || '').match(/on host `([^`]+)`/) || [])[1] || '' }}"
+            },
+            {
+              "id": "a6",
+              "name": "target",
+              "type": "string",
+              "value": "={{ (String($json.body.object.description || '').match(/\\| Target \\| `([^`]+)` \\|/) || [])[1] || '' }}"
+            },
+            {
+              "id": "a7",
+              "name": "domain",
+              "type": "string",
+              "value": "={{ (String($json.body.object.description || '').match(/host=([A-Za-z0-9.-]+\\.[A-Za-z]{2,})/) || [])[1] || '' }}"
+            },
+            {
+              "id": "a8",
+              "name": "tagsForModel",
+              "type": "array",
+              "value": "={{ ($json.body.object.tags || []).filter(t => !String(t).startsWith('kind:')) }}"
+            },
+            {
+              "id": "a9",
+              "name": "descriptionForModel",
+              "type": "string",
+              "value": "={{ String($json.body.object.description || '').split('\\n').filter(l => !l.startsWith('| Classification |')).join('\\n') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2396bde1-490d-471e-83ef-b16b4628f4eb",
+      "name": "Extract case",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=http://thehive.localhost/api/v1/case/{{ $json.caseId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "6a2c0672-b0cf-4b79-a880-d57da2ecd095",
+      "name": "Fetch case",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        -80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://thehive.localhost/api/v1/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ query: [ { _name: 'getCase', idOrName: $('Extract case').first().json.caseId }, { _name: 'observables' } ] }) }}",
+        "options": {}
+      },
+      "id": "aab684e8-87a3-4240-b8f0-69a2bbbb51b3",
+      "name": "Fetch observables",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        -80
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "caseId",
+              "type": "string",
+              "value": "={{ $('Extract case').first().json.caseId }}"
+            },
+            {
+              "id": "a2",
+              "name": "case",
+              "type": "object",
+              "value": "={{ { title: $('Extract case').first().json.title, ruleId: $('Extract case').first().json.ruleId, srcip: $('Extract case').first().json.srcip, host: $('Extract case').first().json.host, target: $('Extract case').first().json.target, domain: $('Extract case').first().json.domain, tags: $('Extract case').first().json.tagsForModel, description: $('Extract case').first().json.descriptionForModel, severity: $('Fetch case').first().json.severity, status: $('Fetch case').first().json.status, createdAt: $('Fetch case').first().json._createdAt } }}"
+            },
+            {
+              "id": "a3",
+              "name": "observables",
+              "type": "array",
+              "value": "={{ $('Fetch observables').all().map(i => i.json).filter(o => o && o.dataType).map(o => ({ dataType: o.dataType, data: o.data, message: o.message, ioc: o.ioc })) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6606100f-2c0a-4967-877e-34f28c783684",
+      "name": "Assemble case context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1168,
+        -80
+      ],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify($json, null, 2) }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "## Task\n\nYou triage exactly one security case at a time from the workshop range. You are given the case, its observables, and the source IP, host and domain pulled from the alert. Read the case, investigate with the tools, reason, and write the verdict. You investigate and recommend only. You never act on the range, never change Wazuh, never modify or close the case. The only write is one comment on the case carrying the verdict, and the workflow posts it for you after you answer.\n\n## Tools\n\nYou decide which tools to call and in what order. You do not have to call all of them; call the ones the evidence needs.\n\n- `wazuh_events_for_ip`: the 20 most recent Wazuh alerts from a source IP. Call it for the source IP before you decide; the address's other activity settles most cases.\n- `wazuh_events_for_host`: the 20 most recent Wazuh alerts on a host (the Wazuh agent name). Call it when the host's wider behaviour matters.\n- `ip_reputation`: AbuseIPDB score for an IP (0 to 100; 50 and above is flagged) and the report count. Call it for any external source IP.\n- `vt_file_report`: VirusTotal detections for a file hash. Call it for any attachment or payload hash in the observables.\n- `vt_domain_report`: VirusTotal detections for a domain. Call it for any callback or link domain; take the host out of a URL first.\n- `threatfox_search`: abuse.ch ThreatFox lookup for any indicator (IP, domain, URL, or hash). Call it to confirm a suspected C2 or malware indicator.\n- `thehive_related_cases`: other cases tagged with the same attacker IP. Call it to check whether this address already appears in earlier or open cases.\n\nA tool that returns an error or nothing means the evidence is missing. Say so; do not invent it.\n\n## How to judge\n\n1. The source IP's other activity decides more than the single event. A scanner user agent plus a 404 burst from one address is recon; the same burst from an authorised scanner is a sanctioned scan.\n2. A successful login is a compromise only when the same source shows failures first or a bad reputation. Otherwise it is an admin login.\n3. An outbound call to a domain is C2 only when the domain is flagged (VirusTotal or ThreatFox) or the host was compromised first. A CDN name is a marketing beacon.\n4. A hash is malicious when VirusTotal returns a non-zero malicious count or ThreatFox knows it. A clean or unknown hash is not evidence of malice on its own.\n5. Email verdicts follow the gateway field: phishing is a true positive, clean is a false positive.\n6. When the evidence does not settle it, say so and choose `other`.\n\n## Verdict contract\n\nReturn the JSON fields `determination`, `summary`, `suggested_close_state` and `recommended_actions`. The workflow renders the headings.\n\n- `determination`: one sentence starting `Malicious.`, `Benign.` or `Undetermined.`, then the reason.\n- `summary`: what happened, what you looked up, what you found. Two to six sentences.\n- `suggested_close_state`: one of `true positive`, `false positive`, `true positive not malicious`, `other`. Choose `true positive` or `false positive` only when the evidence strongly supports it; when uncertain choose `other` and say what would settle it.\n- `recommended_actions`: prose, concrete, addressed to the analyst.",
+          "maxIterations": 10,
+          "returnIntermediateSteps": true
+        }
+      },
+      "id": "1c13f5d8-4d44-4fe6-9dce-0bd59187a079",
+      "name": "Triage (AI Agent)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        1408,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.MODEL_FRONTIER }}"
+        },
+        "options": {
+          "maxTokens": 4096,
+          "temperature": 0.2
+        }
+      },
+      "id": "5a62a887-1bec-42fb-8d14-c2a22e1cb541",
+      "name": "OpenAI Chat Model (frontier)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        192
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "credModelGatewy1",
+          "name": "Model gateway"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"determination\": {\n      \"type\": \"string\"\n    },\n    \"summary\": {\n      \"type\": \"string\"\n    },\n    \"suggested_close_state\": {\n      \"type\": \"string\",\n      \"enum\": [\n        \"true positive\",\n        \"false positive\",\n        \"true positive not malicious\",\n        \"other\"\n      ]\n    },\n    \"recommended_actions\": {\n      \"type\": \"string\"\n    }\n  },\n  \"required\": [\n    \"determination\",\n    \"summary\",\n    \"suggested_close_state\",\n    \"recommended_actions\"\n  ],\n  \"additionalProperties\": false\n}"
+      },
+      "id": "4c195b29-c7ae-4025-b5f2-15f401dcac95",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1392,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "toolDescription": "Return the 20 most recent Wazuh alerts whose source IP equals the given ip. Use it to see what else this address did before and after the event.",
+        "method": "POST",
+        "url": "http://wazuh-indexer.localhost/wazuh-alerts-*/_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"size\": 20, \"_source\": [\"timestamp\",\"rule.id\",\"rule.level\",\"rule.description\",\"data.srcip\",\"data.url\",\"data.dstuser\",\"agent.name\"], \"query\": { \"match\": { \"data.srcip\": \"{{ $fromAI('ip', 'IPv4 address of the source to look up', 'string') }}\" } }, \"sort\": [ { \"timestamp\": \"desc\" } ] }",
+        "options": {}
+      },
+      "id": "73e26d09-7b11-46a0-9bb6-8d471eec19ff",
+      "name": "wazuh_events_for_ip",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1568,
+        192
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "credWazuhIndex01",
+          "name": "Wazuh indexer"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Return the 20 most recent Wazuh alerts on the given host (the Wazuh agent name).",
+        "method": "POST",
+        "url": "http://wazuh-indexer.localhost/wazuh-alerts-*/_search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"size\": 20, \"_source\": [\"timestamp\",\"rule.id\",\"rule.level\",\"rule.description\",\"data.srcip\",\"data.url\",\"data.dstuser\",\"agent.name\"], \"query\": { \"match\": { \"agent.name\": \"{{ $fromAI('host', 'Wazuh agent name of the host', 'string') }}\" } }, \"sort\": [ { \"timestamp\": \"desc\" } ] }",
+        "options": {}
+      },
+      "id": "74d24a27-5492-4996-949a-d970d989fe28",
+      "name": "wazuh_events_for_host",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1728,
+        192
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "credWazuhIndex01",
+          "name": "Wazuh indexer"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Find other TheHive cases tagged with the same attacker IP (tag attacker-ip:<ip>). Use it to see whether this source address already appears in earlier or open cases. Returns cases with title, severity, status and tags; an empty list means this IP is new.",
+        "method": "POST",
+        "url": "http://thehive.localhost/api/v1/query",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"query\": [ { \"_name\": \"listCase\" }, { \"_name\": \"filter\", \"_eq\": { \"_field\": \"tags\", \"_value\": \"attacker-ip:{{ $fromAI('ip', 'IPv4 address of the attacker to pivot on', 'string') }}\" } }, { \"_name\": \"page\", \"from\": 0, \"to\": 20 } ] }",
+        "options": {}
+      },
+      "id": "88ebea85-bb1f-4e17-9285-d13487026b44",
+      "name": "thehive_related_cases",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        1920,
+        192
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "caseId",
+              "type": "string",
+              "value": "={{ $('Assemble case context').first().json.caseId }}"
+            },
+            {
+              "id": "a2",
+              "name": "verdict",
+              "type": "string",
+              "value": "=### Determination\n{{ $json.output.determination }}\n\n### Summary\n{{ $json.output.summary }}\n\n### Suggested close state\n{{ $json.output.suggested_close_state }}\n\n### Recommended actions\n{{ $json.output.recommended_actions }}\n\nWritten by the Module 3 workflow (AI Agent, model {{ $env.MODEL_FRONTIER }}, tool calls: {{ ($json.intermediateSteps || []).length }})."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "44cea06b-aaed-4705-b267-48abcffc2023",
+      "name": "Render verdict",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ message: $json.verdict }) }}",
+        "options": {}
+      },
+      "id": "b1bca58c-9be7-4cec-8227-c206d14c9156",
+      "name": "Write verdict to TheHive",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2256,
+        -80
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 1000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "credTheHiveN8n01",
+          "name": "TheHive n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Complete this agent: add the missing tools\n\nThe system prompt lists seven tools, but only three are wired to the agent: `wazuh_events_for_ip`, `wazuh_events_for_host` and `thehive_related_cases`. Add the four the prompt still names, as **HTTP Request Tool** nodes connected to the agent's tool input:\n\n- `ip_reputation` -> AbuseIPDB score for an IP (https://api.abuseipdb.com/api/v2/check).\n- `vt_file_report` -> VirusTotal detections for a file hash (https://www.virustotal.com/api/v3/files).\n- `vt_domain_report` -> VirusTotal detections for a domain (https://www.virustotal.com/api/v3/domains).\n- `threatfox_search` -> abuse.ch ThreatFox lookup for any indicator (https://threatfox-api.abuse.ch/api/v1/).\n\nUse the three wired tools as the pattern: a clear `toolDescription`, and a `$fromAI(...)` placeholder for the indicator the agent passes in. Put the API keys in `lab/.env`: `ABUSEIPDB_API_KEY`, `VT_API_KEY` and `ABUSECH_AUTH_KEY`. Create a free account at abuseipdb.com and virustotal.com to get the keys.",
+        "height": 340,
+        "width": 820,
+        "color": 4
+      },
+      "id": "c1d2e3f4-0000-4000-8000-000000000002",
+      "name": "Complete the tools",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1568,
+        420
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Case created only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Case created only": {
+      "main": [
+        [
+          {
+            "node": "Extract case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract case": {
+      "main": [
+        [
+          {
+            "node": "Fetch case",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch case": {
+      "main": [
+        [
+          {
+            "node": "Fetch observables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch observables": {
+      "main": [
+        [
+          {
+            "node": "Assemble case context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble case context": {
+      "main": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Triage (AI Agent)": {
+      "main": [
+        [
+          {
+            "node": "Render verdict",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model (frontier)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wazuh_events_for_ip": {
+      "ai_tool": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wazuh_events_for_host": {
+      "ai_tool": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "thehive_related_cases": {
+      "ai_tool": [
+        [
+          {
+            "node": "Triage (AI Agent)",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Render verdict": {
+      "main": [
+        [
+          {
+            "node": "Write verdict to TheHive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "84a6a1f2824332ff913e463a2786bcb3e7b3845d5ed685e728fe4de6a1d7e4f7"
+  }
+}

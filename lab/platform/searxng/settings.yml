@@ -1,0 +1,12 @@
+# Minimal SearXNG config for the n8n assistant's web search.
+# Inherit the upstream defaults and only add what the assistant needs: the JSON
+# output format (off by default) so n8n can read results, and a secret key.
+use_default_settings: true
+
+server:
+  secret_key: "brucon-workshop-searxng"
+
+search:
+  formats:
+    - html
+    - json

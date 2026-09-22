@@ -93,6 +93,33 @@ catch { Ok "vm.max_map_count: skipped (set it in the Docker VM if the indexer fa
 Copy-Item -Force platform/wazuh/ossec.conf platform/wazuh/ossec.runtime.conf
 Ok "runtime ossec.conf created from template"
 
+# n8n AI assistant sandbox secrets. Generated once and written to .env so the
+# sandbox-api, the runner and n8n share the same keys; only generated when
+# missing, so a re-run never rotates a working set. Paired names share a value.
+function Set-EnvVar($var, $val) {
+  $lines = Get-Content .env
+  if ($lines -match "^$var=") { $lines = $lines -replace "^$var=.*", "$var=$val" }
+  else { $lines += "$var=$val" }
+  Set-Content -Path .env -Value ($lines -join "`n") -NoNewline
+}
+if (-not (Select-String -Path .env -Pattern '^SANDBOX_API_KEYS=.+' -Quiet)) {
+  $rand = { -join ((1..24) | ForEach-Object { '{0:x2}' -f (Get-Random -Max 256) }) }
+  $sbKey = & $rand; $sbTok = & $rand; $sbRun = & $rand; $sbSx = & $rand
+  if (-not (Select-String -Path .env -Pattern '^N8N_SANDBOX_VERSION=.+' -Quiet)) { Set-EnvVar 'N8N_SANDBOX_VERSION' 'latest' }
+  Set-EnvVar 'SANDBOX_API_KEYS' $sbKey;                      Set-EnvVar 'N8N_SANDBOX_SERVICE_API_KEY' $sbKey
+  Set-EnvVar 'SANDBOX_API_RUNNER_REGISTRATION_TOKEN' $sbTok; Set-EnvVar 'SANDBOX_RUNNER_REGISTRATION_TOKEN' $sbTok
+  Set-EnvVar 'SANDBOX_API_RUNNER_API_KEY' $sbRun;            Set-EnvVar 'SANDBOX_RUNNER_API_KEYS' $sbRun
+  Set-EnvVar 'SEARXNG_SECRET' $sbSx
+  Ok "n8n assistant sandbox secrets generated"
+} else {
+  Ok "n8n assistant sandbox secrets present"
+}
+
+# The workshop gateway host is fixed; only GATEWAY_API_KEY differs per attendee.
+# Force the URL on every run so a stale .env can't point the lab at the wrong host.
+Set-EnvVar 'GATEWAY_BASE_URL' 'https://workshop-ai.bluecap.one/v1'
+Ok "gateway URL set to https://workshop-ai.bluecap.one/v1"
+
 # --- 1. up --------------------------------------------------------------------
 Say "Starting the stack"
 # Docker Desktop auto-creates a missing per-file bind-mount source (each cert *.pem) as an
@@ -267,9 +294,10 @@ function Import-Workflow($workflow_id, $path, $label) {
         if ($LASTEXITCODE -eq 0) { Ok "$label imported" } else { Die "$label import failed" }
     }
 }
-# Only the skeleton is imported. The module checkpoints are instructor-only and
+# Only the skeletons are imported. The module checkpoints are instructor-only and
 # handed over by hand when an attendee is stuck (see lab/checkpoints/README.md).
 Import-Workflow "soctriageskel001" "/import-exercises/module-2/skeleton.json" "Module 2 skeleton"
+Import-Workflow "soctriagem3skl01" "/import-exercises/module-3/skeleton.json" "Module 3 skeleton"
 
 
 # --- 5. Wazuh reachable -------------------------------------------------------

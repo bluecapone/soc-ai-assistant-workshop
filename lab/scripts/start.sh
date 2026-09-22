@@ -65,6 +65,33 @@ docker run --rm --privileged alpine sysctl -w vm.max_map_count=262144 >/dev/null
 cp -f platform/wazuh/ossec.conf platform/wazuh/ossec.runtime.conf
 ok "runtime ossec.conf created from template"
 
+# n8n AI assistant sandbox secrets. Generated once and written to .env, so the
+# sandbox-api, the runner and n8n all share the same keys. Regenerated only when
+# missing, so re-running the script never rotates a working set out from under
+# the containers. The paired names must hold the same value.
+set_env() {  # set_env <VAR> <VALUE>: replace the line if present, else append
+  local var="$1" val="$2"
+  if grep -qE "^${var}=" .env; then sed -i.bak "s|^${var}=.*|${var}=${val}|" .env && rm -f .env.bak
+  else echo "${var}=${val}" >> .env; fi
+}
+if ! grep -qE '^SANDBOX_API_KEYS=.+' .env; then
+  sb_key="$(openssl rand -hex 24)"; sb_tok="$(openssl rand -hex 24)"
+  sb_run="$(openssl rand -hex 24)"; sb_sx="$(openssl rand -hex 24)"
+  grep -qE '^N8N_SANDBOX_VERSION=.+' .env || set_env N8N_SANDBOX_VERSION latest
+  set_env SANDBOX_API_KEYS "$sb_key";                        set_env N8N_SANDBOX_SERVICE_API_KEY "$sb_key"
+  set_env SANDBOX_API_RUNNER_REGISTRATION_TOKEN "$sb_tok";   set_env SANDBOX_RUNNER_REGISTRATION_TOKEN "$sb_tok"
+  set_env SANDBOX_API_RUNNER_API_KEY "$sb_run";              set_env SANDBOX_RUNNER_API_KEYS "$sb_run"
+  set_env SEARXNG_SECRET "$sb_sx"
+  ok "n8n assistant sandbox secrets generated"
+else
+  ok "n8n assistant sandbox secrets present"
+fi
+
+# The workshop gateway host is fixed; only GATEWAY_API_KEY differs per attendee.
+# Force the URL on every run so a stale .env can't point the lab at the wrong host.
+set_env GATEWAY_BASE_URL https://workshop-ai.bluecap.one/v1
+ok "gateway URL set to https://workshop-ai.bluecap.one/v1"
+
 # --- 1. bring everything up ---------------------------------------------------
 say "Starting the stack"
 # Docker auto-creates a missing per-file bind-mount source (each cert *.pem) as an empty
@@ -235,9 +262,10 @@ import_wf() {  # import_wf <workflow-id> <path-in-container> <label>
     die "$3 import failed"
   fi
 }
-# Only the skeleton is imported. The module checkpoints are instructor-only and
+# Only the skeletons are imported. The module checkpoints are instructor-only and
 # handed over by hand when an attendee is stuck (see lab/checkpoints/README.md).
 import_wf soctriageskel001 /import-exercises/module-2/skeleton.json "Module 2 skeleton"
+import_wf soctriagem3skl01 /import-exercises/module-3/skeleton.json "Module 3 skeleton"
 
 
 # --- 5. Wazuh reachable (fresh init applies the internal_users password) -------
