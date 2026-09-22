@@ -56,7 +56,7 @@ hidden: true
 Have these before Module 0:
 
 - The *workshop folder*: a clone of [github.com/bluecapone/soc-ai-assistant-workshop](https://github.com/bluecapone/soc-ai-assistant-workshop) (Exercise 0.1 shows the command). Its name does not matter. It contains `guide/`, `exercises/` and `lab/`, and every command in this manual says which folder to run it from.
-- Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/macos-linux/start.sh` (or `powershell -ExecutionPolicy Bypass -File .\scripts\windows\start.ps1` on Windows) from the lab directory. Podman is untested.
+- Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/start.sh` (or `powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1` on Windows) from the lab directory. Podman is untested.
 - 16 GB RAM and free disk for the compose stack.
 - Claude Code installed.
 - A gateway token, handed out at the door and revoked when the workshop ends.
