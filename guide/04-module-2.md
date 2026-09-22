@@ -113,7 +113,12 @@ The skeleton is pre-built except for the hash and domain branches. Twenty nodes,
 
 **Goal**: the skeleton is active and one click on the panel shows a complete green execution in n8n.
 
-1. **Open the skeleton.** In n8n, open `SOC triage (skeleton)`. Count the nodes, then find the two gates with nothing on their outputs. Open `Write verdict to TheHive`: it expects an item with `caseId` and `comment`, credential `TheHive n8n`, `POST http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`. Open `Update case description`: same credential, `PATCH http://thehive.localhost/api/v1/case/{{ $json.caseId }}`, an item with `caseId` and `description`. Both addresses are the caddy alias on the compose network, the same one you type in the browser.
+1. **Open the skeleton.** In n8n, open `SOC triage (skeleton)`. Count the nodes, then find the two gates with nothing on their outputs. Two write-back nodes are pre-built and wait for you:
+
+   - `Write verdict to TheHive`: expects an item with `caseId` and `comment`. Credential `TheHive n8n`, `POST http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`.
+   - `Update case description`: same credential, `PATCH http://thehive.localhost/api/v1/case/{{ $json.caseId }}`, an item with `caseId` and `description`.
+
+   Both addresses are the caddy alias on the compose network, the same one you type in the browser.
 
 2. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
 
