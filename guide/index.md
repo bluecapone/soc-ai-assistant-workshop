@@ -81,7 +81,7 @@ In n8n the gateway credential type is called "OpenAI API" because that protocol 
 
 ## Room rules
 
-Solo work. One checkpoint per module. **Stuck for more than five minutes: take the module's checkpoint and move on.** The Module 2 and Module 3 checkpoints are already in n8n, inactive, named `SOC triage, Module 2 checkpoint (LLM chain)` and `SOC triage, Module 3 checkpoint (AI Agent)`. Activate the one you need and deactivate whatever else sits on the `thehive-alert` path. An instructor hands over the Module 1 one. Every module depends on the one before it, and falling behind costs you the rest of the module. Hands up. Pairing with a neighbour is normal, not failure.
+Solo work. One checkpoint per module. The Module 2 and Module 3 checkpoints are already in n8n, inactive, named `SOC triage, Module 2 checkpoint (LLM chain)` and `SOC triage, Module 3 checkpoint (AI Agent)`. Activate the one you need and deactivate whatever else sits on the `thehive-alert` path. An instructor hands over the Module 1 one. Every module depends on the one before it, and falling behind costs you the rest of the module. Hands up. Pairing with a neighbour is normal, not failure.
 
 ## Guides for exercises
 
