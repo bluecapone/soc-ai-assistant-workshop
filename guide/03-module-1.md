@@ -105,12 +105,7 @@ Context7 returns the few paragraphs that answer the question. `WebFetch` returns
 - TheHive API: `https://docs.strangebee.com/thehive/api-docs/`
 - AbuseIPDB: `https://docs.abuseipdb.com/`
 
-No network at all: the four scripts exist in `exercises/module-1/`, written for this manual. Copy them, then read them.
-
-```bash
-mkdir -p .claude/skills/soc-triage/scripts
-cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
-```
+No network at all: ask an instructor for the four scripts, then read them before you install them. They are not in this repository, because writing them from the docs is the exercise.
 
 ### Part B: wazuh_events.sh, a lookup
 

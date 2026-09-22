@@ -1,8 +1,9 @@
 # Module 1 files
 
-Everything Module 1 needs, flat. Exercise 1.1 says where each file goes.
+The reference files Module 1 reads, flat. Exercise 1.1 says where each one goes.
 
-- `SKILL.md`, `get_case.sh`, `wazuh_events.sh`, `reputation.sh`, `post_verdict.sh`, `lookups.md`, `brute-force.md`, `verdict-template.md`: the eight files of the `soc-triage` skill you build. Exercise 1.2 generates the four `.sh` files from the docs. These copies are the fallback when the docs are out of reach.
+- `SKILL.md`, `lookups.md`, `brute-force.md`, `verdict-template.md`: four of the eight files of the `soc-triage` skill you build.
+- The four `.sh` scripts are not here. Exercise 1.2 generates them from the docs, which is the exercise. An instructor hands them over if the docs are out of reach.
 
 ## Security
 
