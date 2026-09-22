@@ -118,12 +118,12 @@ The skeleton already has the foundation: webhook, filter, case reads, the agent,
   -> Render verdict
   -> Write verdict to TheHive
 
-  Sub-nodes, attached from below, pointing up into their parent:
-     OpenAI Chat Model (frontier) -> Triage (AI Agent)
-     Structured Output Parser     -> Triage (AI Agent)
-     wazuh_events_for_ip          -> Triage (AI Agent)
-     wazuh_events_for_host        -> Triage (AI Agent)
-     thehive_related_cases        -> Triage (AI Agent)
+  Sub-nodes of Triage (AI Agent), attached from below, pointing up into it:
+     OpenAI Chat Model (frontier)
+     Structured Output Parser
+     wazuh_events_for_ip
+     wazuh_events_for_host
+     thehive_related_cases
   ```
 
 **Question 1**: the model id `MODEL_FRONTIER` holds.
@@ -264,16 +264,16 @@ One sentence after: a tool that returns an error means the key is missing from `
   -> Render verdict
   -> Write verdict to TheHive
 
-  Sub-nodes, attached from below, pointing up into their parent:
-     OpenAI Chat Model (frontier) -> Triage (AI Agent)
-     Structured Output Parser     -> Triage (AI Agent)
-     wazuh_events_for_ip          -> Triage (AI Agent)
-     wazuh_events_for_host        -> Triage (AI Agent)
-     thehive_related_cases        -> Triage (AI Agent)
-     ip_reputation                -> Triage (AI Agent)
-     vt_file_report               -> Triage (AI Agent)
-     vt_domain_report             -> Triage (AI Agent)
-     threatfox_search             -> Triage (AI Agent)
+  Sub-nodes of Triage (AI Agent), attached from below, pointing up into it:
+     OpenAI Chat Model (frontier)
+     Structured Output Parser
+     wazuh_events_for_ip
+     wazuh_events_for_host
+     thehive_related_cases
+     ip_reputation
+     vt_file_report
+     vt_domain_report
+     threatfox_search
   ```
 
 No question.
