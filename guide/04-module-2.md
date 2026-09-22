@@ -113,7 +113,7 @@ The skeleton is pre-built except for the hash and domain branches. Twenty nodes,
 
 **Goal**: the skeleton is active and one click on the panel shows a complete green execution in n8n.
 
-1. **Open the skeleton.** In n8n, open `SOC triage (skeleton)`. Count the nodes, then find the two gates with nothing on their outputs. Open `Write verdict to TheHive`: it expects an item with `caseId` and `comment`, credential `TheHive n8n`, `POST http://thehive:9000/api/v1/case/{{ $json.caseId }}/comment`. Open `Update case description`: same credential, `PATCH http://thehive:9000/api/v1/case/{{ $json.caseId }}`, an item with `caseId` and `description`. Both addresses are the caddy alias on the compose network, the same one you type in the browser.
+1. **Open the skeleton.** In n8n, open `SOC triage (skeleton)`. Count the nodes, then find the two gates with nothing on their outputs. Open `Write verdict to TheHive`: it expects an item with `caseId` and `comment`, credential `TheHive n8n`, `POST http://thehive.localhost/api/v1/case/{{ $json.caseId }}/comment`. Open `Update case description`: same credential, `PATCH http://thehive.localhost/api/v1/case/{{ $json.caseId }}`, an item with `caseId` and `description`. Both addresses are the caddy alias on the compose network, the same one you type in the browser.
 
 2. **Activate it.** <ins>Only one workflow on the path `thehive-alert` can be active</ins>. Deactivate any other, then toggle this one on.
 
@@ -282,7 +282,9 @@ Build the domain branch following the same pattern as the hash branch. Three new
 
 **Goal**: the domain branch judges the domain when it is present, skips the lookup when it is not, and both paths reach `Merge verdicts`.
 
-1. **Add the lookup.** `HTTP Request` after `Domain present?` (true path), named `Lookup domain: ThreatFox`. `POST`, URL:
+1. **Check the gate.** The `Domain present?` node is already configured, one condition, string `notEmpty` on `{{ $('Extract case').first().json.domain }}`. Close it without changes.
+
+2. **Add the lookup.** `HTTP Request` after `Domain present?` (true path), named `Lookup domain: ThreatFox`. `POST`, URL:
 
    ```text
    https://threatfox-api.abuse.ch/api/v1/
@@ -296,13 +298,13 @@ Build the domain branch following the same pattern as the hash branch. Three new
 
    Settings: `On Error` = `Continue (using regular output)`, `Always Output Data` on.
 
-2. **Add the skip.** `Edit Fields (Set)` on the `Domain present?` false path, named `Domain not present`. One field, `output` (object):
+3. **Add the skip.** `Edit Fields (Set)` on the `Domain present?` false path, named `Domain not present`. One field, `output` (object):
 
    ```text
    { indicator_type: 'domain', indicator: '', verdict: 'not present', evidence: 'field absent from the case' }
    ```
 
-3. **Add the judge.** `Basic LLM Chain` after `Lookup domain: ThreatFox`, named `Domain verdict`. Prompt `Define below`, text:
+4. **Add the judge.** `Basic LLM Chain` after `Lookup domain: ThreatFox`, named `Domain verdict`. Prompt `Define below`, text:
 
    ```text
    Indicator (domain): {{ $('Extract case').first().json.domain }}
@@ -313,9 +315,9 @@ Build the domain branch following the same pattern as the hash branch. Three new
 
    `Require Specific Output Format` on. System message: paste `exercises/module-2/domain-verdict-prompt.md` (included below).
 
-4. **Wire the model and parser.** Click `Domain verdict`'s `Model` connector, pick the shared `OpenAI Chat Model` node. Click `Domain verdict`'s `Output Parser` connector, pick the shared `Mini-verdict parser` node.
+5. **Wire the model and parser.** Click `Domain verdict`'s `Model` connector, pick the shared `OpenAI Chat Model` node. Click `Domain verdict`'s `Output Parser` connector, pick the shared `Mini-verdict parser` node.
 
-5. **Wire to merge.** Connect both `Lookup domain: ThreatFox -> Domain verdict` and `Domain not present` to `Merge verdicts` `Input 3`.
+6. **Wire to merge.** Connect both `Lookup domain: ThreatFox -> Domain verdict` and `Domain not present` to `Merge verdicts` `Input 3`.
 
 Domain verdict system message, `exercises/module-2/domain-verdict-prompt.md`:
 

@@ -89,7 +89,7 @@ Solo work. One checkpoint per module. **Stuck for more than five minutes: take t
 ## Guides for exercises
 
 - `exercises/module-1/README.md`: the reference `soc-triage` skill files
-- Each module's `Stuck five minutes?` section: the checkpoint to import and the exercise to resume from
+- The `Stuck five minutes?` section in Parts 2 and 3: the checkpoint to import and the exercise to resume from
 - [TheHive API](https://docs.strangebee.com/thehive/api-docs/), [Wazuh indexer search](https://documentation.wazuh.com/current/user-manual/wazuh-indexer/index.html), [n8n docs](https://docs.n8n.io/)
 
 ## Safety
