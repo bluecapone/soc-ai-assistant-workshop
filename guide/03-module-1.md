@@ -1,4 +1,4 @@
-# Part 1: Module 1, drive it by hand
+# Module 1: drive it by hand
 
 You build a Claude Code skill, `soc-triage`, from the outside in: first the scripts it runs, then the references and the template it reads, and last the `SKILL.md` that names them all. Then you run it against your own lab. You write that last file last, and the model loads it first. Its eight parts are in `exercises/module-1/`, flat. Each exercise explains what one part does and why it exists, and you add it to the skill folder. You learn why each line is there.
 
@@ -70,10 +70,10 @@ One prompt shape, used four times. Nothing in it is code. Four things it always 
 Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
 ```
 
-**What you know about the lab.** All of it from Part 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the fields of the alert you expanded. The variables say where the address and the login come from.
+**What you know about the lab.** All of it from Module 0: the address, the login, the certificate warning in the browser, the index pattern on the Discover page, the fields of the alert you expanded. The variables say where the address and the login come from.
 
 ```text
-What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
+What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Module 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
 ```
 
 **Look it up first.** Which docs. The HTTP call is the model's job, and the docs are where it must get it, not its memory.
@@ -124,7 +124,7 @@ cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
    
    ```text
    Write a bash script, .claude/skills/soc-triage/scripts/wazuh_events.sh, for a Claude Code skill to run. Given an IP address it prints the last 20 Wazuh alerts from that source IP, newest first. It only reads.
-   What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Part 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
+   What I know about the lab: the Wazuh indexer is OpenSearch, its address is in WAZUH_URL, the login is admin / brucon2026, its certificate is self-signed, and the alerts are in the indices named wazuh-alerts-*. For each alert I only need what I read in the Wazuh alert in Module 0: the time, the rule (id, level, description), the source IP, the URL, the user and the agent name.
    Look up the OpenSearch search API in the docs before writing.
    Output: only JSON, how many matched, then the alerts. When WAZUH_URL is not set, say so and stop. When anything fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
@@ -132,7 +132,7 @@ cp exercises/module-1/*.sh .claude/skills/soc-triage/scripts/
 
 3. **Watch** for the `ctx7` commands, then read the file it wrote.
 
-4. **Hand tests.** Open a second terminal in the workshop folder and export the same variables as Exercise 0.4. Nothing below runs without them. The example IP, `35.235.240.58`, is one of the noise sources every lab has. Your own Part 0 source IP works as well: in TheHive, in the case observables, or in Wazuh, in the alert's `data.srcip`. Three runs.
+4. **Hand tests.** Open a second terminal in the workshop folder and export the same variables as Exercise 0.4. Nothing below runs without them. The example IP, `35.235.240.58`, is one of the noise sources every lab has. Your own Module 0 source IP works as well: in TheHive, in the case observables, or in Wazuh, in the alert's `data.srcip`. Three runs.
 
    The example IP. Expect its alerts, newest first:
 
@@ -182,7 +182,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    
    ```text
    Write a bash script, .claude/skills/soc-triage/scripts/get_case.sh, for a Claude Code skill to run. Given a TheHive case id, written like ~123456, it prints that case: title, tags, description, the source IP and the observables. It only reads.
-   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description has a table with a Source IP row, as I saw in Part 0. I want that IP as its own field, empty when the row is missing.
+   What I know about the lab: TheHive 5 is at the address in THEHIVE_URL and an API key is in THEHIVE_APIKEY. The case description has a table with a Source IP row, as I saw in Module 0. I want that IP as its own field, empty when the row is missing.
    Look up the TheHive 5 API in the docs before writing.
    Output: only JSON. When the observables cannot be read, print the rest anyway. When THEHIVE_URL or THEHIVE_APIKEY is not set, say which and stop. When anything else fails, exit with an error that says what failed, and print no partial answer.
    Make it executable. Do not run it.
@@ -198,7 +198,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    Make it executable. Do not run it.
    ```
 
-3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Part 0 case, Question 3: with the case open, the part of the address bar that starts with `~`, as in `.../cases/~4206800/details`. In quotes, because to the shell a bare `~` is somebody's home folder. Three runs.
+3. **Hand tests for the read.** Same terminal, same variables. If a script says a variable is not set, redo Exercise 0.4 step 2 in this terminal. `~<case id>` is your Module 0 case, Question 3: with the case open, the part of the address bar that starts with `~`, as in `.../cases/~4206800/details`. In quotes, because to the shell a bare `~` is somebody's home folder. Three runs.
 
    Your case. Expect its title, tags, source IP and observables:
 
@@ -224,7 +224,7 @@ TheHive is the only system the skill writes to, and the only write is a comment.
    .claude/skills/soc-triage/scripts/post_verdict.sh
    ```
 
-   Then one real comment on your Part 0 case. The text comes in on standard input, so it is piped. Run it without the pipe and the script waits for text and looks frozen: `Ctrl+C` gets out, `Ctrl+D` would post an empty comment. Expect the comment's id and creation time:
+   Then one real comment on your Module 0 case. The text comes in on standard input, so it is piped. Run it without the pipe and the script waits for text and looks frozen: `Ctrl+C` gets out, `Ctrl+D` would post an empty comment. Expect the comment's id and creation time:
 
    ```bash
    echo "test comment from post_verdict.sh" | .claude/skills/soc-triage/scripts/post_verdict.sh '~<case id>'

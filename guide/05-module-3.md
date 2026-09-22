@@ -1,4 +1,4 @@
-# Part 3: Module 3, let it decide
+# Module 3: let it decide
 
 You open the Module 3 skeleton, which already has the webhook, the filter, the case fetches, and the agent in place. The three wired tools show the pattern. You add four more tools and activate the workflow. The agent reads the whole case, chooses which lookups to run, and judges. Then you decide what happens to the case. The two texts you paste are in `exercises/module-3/`.
 
@@ -317,7 +317,3 @@ A gate needs three things:
 - [ ] Three cases open, one per module, same alert.
 
 **Question 6**: your decision, and the case id it is on.
-
-## Stuck five minutes?
-
-The checkpoint `SOC triage, Module 3 checkpoint (AI Agent)` is imported and inactive. Deactivate whatever is active on `thehive-alert`, activate it, fire an alert, and resume from Exercise 3.5. The checkpoint also carries a `Canary?` branch that skips the model for rule `100150`. It is not part of the exercises.

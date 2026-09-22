@@ -15,26 +15,25 @@ hidden: true
 03-module-1.md
 04-module-2.md
 05-module-3.md
-07-take-home.md
 08-appendix-frontmatter.md
 ```
 
 ## Exercises
 
-- [Part 0: Connect](02-connect.md)
+- [Module 0: Connect](02-connect.md)
   - [Exercise #0.1: bring up the lab](02-connect.md#exercise-01-bring-up-the-lab)
   - [Exercise #0.2: sign in everywhere](02-connect.md#exercise-02-sign-in-everywhere)
   - [Exercise #0.3: fire a benign button and follow it](02-connect.md#exercise-03-fire-a-benign-button-and-follow-it)
   - [Exercise #0.4: connect Claude Code to the gateway](02-connect.md#exercise-04-connect-claude-code-to-the-gateway)
   - [Exercise #0.5: connect the docs server](02-connect.md#exercise-05-connect-the-docs-server)
-- [Part 1: Module 1, drive it by hand](03-module-1.md)
+- [Module 1: drive it by hand](03-module-1.md)
   - [Exercise #1.1: the scripts, made from the docs](03-module-1.md#exercise-11-the-scripts-made-from-the-docs)
   - [Exercise #1.2: the references](03-module-1.md#exercise-12-the-references)
   - [Exercise #1.3: the asset](03-module-1.md#exercise-13-the-asset)
   - [Exercise #1.4: SKILL.md](03-module-1.md#exercise-14-skillmd)
   - [Exercise #1.5: test it](03-module-1.md#exercise-15-test-it)
   - [Exercise #1.6: share it](03-module-1.md#exercise-16-share-it)
-- [Part 2: Module 2, run it unattended](04-module-2.md)
+- [Module 2: run it unattended](04-module-2.md)
   - [Exercise #2.1: what the skeleton already does](04-module-2.md#exercise-21-what-the-skeleton-already-does)
   - [Exercise #2.2: read the worked IP branch](04-module-2.md#exercise-22-read-the-worked-ip-branch)
   - [Exercise #2.3: add the hash branch](04-module-2.md#exercise-23-add-the-hash-branch)
@@ -43,19 +42,18 @@ hidden: true
   - [Exercise #2.6: the gather chain and the contract](04-module-2.md#exercise-26-the-gather-chain-and-the-contract)
   - [Exercise #2.7: fire it and walk away](04-module-2.md#exercise-27-fire-it-and-walk-away)
   - [Exercise #2.8: fix the text](04-module-2.md#exercise-28-fix-the-text)
-- [Part 3: Module 3, let it decide](05-module-3.md)
+- [Module 3: let it decide](05-module-3.md)
   - [Exercise #3.1: open the Module 3 skeleton](05-module-3.md#exercise-31-open-the-module-3-skeleton)
   - [Exercise #3.2: what the agent is given](05-module-3.md#exercise-32-what-the-agent-is-given)
   - [Exercise #3.3: read the three wired tools](05-module-3.md#exercise-33-read-the-three-wired-tools)
   - [Exercise #3.4: add the four missing tools](05-module-3.md#exercise-34-add-the-four-missing-tools)
   - [Exercise #3.5: fire it and read the trace](05-module-3.md#exercise-35-fire-it-and-read-the-trace)
   - [Exercise #3.6: you are the gate](05-module-3.md#exercise-36-you-are-the-gate)
-- [Take-home](07-take-home.md)
 - [Appendix: skill frontmatter](08-appendix-frontmatter.md)
 
 ## Prerequisites
 
-Have these before Part 0:
+Have these before Module 0:
 
 - The *workshop folder*: a clone of [github.com/bluecapone/soc-ai-assistant-workshop](https://github.com/bluecapone/soc-ai-assistant-workshop) (Exercise 0.1 shows the command). Its name does not matter. It contains `guide/`, `exercises/` and `lab/`, and every command in this manual says which folder to run it from.
 - Docker with Docker Compose ([install Docker Desktop](https://docs.docker.com/desktop/)), tested by running `./scripts/macos-linux/start.sh` (or `powershell -ExecutionPolicy Bypass -File .\scripts\windows\start.ps1` on Windows) from the lab directory. Podman is untested.
@@ -89,7 +87,6 @@ Solo work. One checkpoint per module. **Stuck for more than five minutes: take t
 ## Guides for exercises
 
 - `exercises/module-1/README.md`: the reference `soc-triage` skill files
-- The `Stuck five minutes?` section in Parts 2 and 3: the checkpoint to import and the exercise to resume from
 - [TheHive API](https://docs.strangebee.com/thehive/api-docs/), [Wazuh indexer search](https://documentation.wazuh.com/current/user-manual/wazuh-indexer/index.html), [n8n docs](https://docs.n8n.io/)
 
 ## Safety

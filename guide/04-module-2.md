@@ -1,4 +1,4 @@
-# Part 2: Module 2, run it unattended
+# Module 2: run it unattended
 
 You complete an n8n workflow that triages a case the way you did by hand in Module 1, for every indicator the case carries, with nobody at the keyboard. TheHive posts every case event to a webhook. The skeleton `SOC triage (skeleton)` is already imported, inactive, and mostly pre-built: the trigger, the case extraction, the Wazuh lookup, three gates, the gather chain, and both write-backs are all wired. The IP branch is a complete worked example. You add the hash and domain branches following the same pattern, then activate and run it. The texts you paste are in `exercises/module-2/`.
 
@@ -520,7 +520,3 @@ Failure hint: a red `Triage (LLM chain)` with a parser error means the model did
 - [ ] Each fix was one sentence, one save, one click.
 
 **Question 8**: the sentence you changed, and the summary phrase that disappeared when you weakened it.
-
-## Stuck five minutes?
-
-The checkpoint `SOC triage, Module 2 checkpoint (LLM chain)` is imported and inactive. Deactivate whatever is active on `thehive-alert`, activate it, fire an alert, and resume from Exercise 2.7.
