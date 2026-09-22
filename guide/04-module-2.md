@@ -158,15 +158,29 @@ The IP branch shows the pattern you will copy for hash and domain: a gate (`IP p
 
 **Goal**: understand the pattern on the IP branch so you can repeat it twice.
 
-1. **Trace the IP path.** In n8n, click `IP present?`. Trace its `true` output to `Lookup IP: AbuseIPDB`, then to `IP verdict`, then to `Merge verdicts` `Input 1`. Trace its `false` output to `IP not present`, then to `Merge verdicts` `Input 1` as well. Two paths, one endpoint. The merge node has three inputs, and the IP branch owns the first, which leaves `Input 2` and `Input 3` free for the two branches you build next.
+1. **Trace the path.** Click `IP present?`. Its `true` output runs `Lookup IP: AbuseIPDB` then `IP verdict`; its `false` output runs `IP not present`. Both land on `Merge verdicts` input 1. The merge has three inputs, so inputs 2 and 3 stay free for the branches you build next.
 
-2. **Read the gate.** `IP present?` is an `IF` node (not `Filter`). One condition: string `notEmpty` on `{{ $('Extract case').first().json.srcip }}`.
+2. **The gate.** `IP present?` is an IF node (not a Filter), with one condition: the source IP is not empty.
 
-3. **Read the lookup.** `Lookup IP: AbuseIPDB` is an `HTTP Request` node. `GET`, URL (expression) `https://api.abuseipdb.com/api/v2/check?ipAddress={{ $('Extract case').first().json.srcip }}&maxAgeInDays=90`. Headers: `Key` = `{{ $env.ABUSEIPDB_API_KEY }}`, `Accept` = `application/json`. Settings: `On Error` = `Continue (using regular output)`, `Always Output Data` on.
+   ```
+   {{ $('Extract case').first().json.srcip }}
+   ```
 
-4. **Read the skip.** `IP not present` is a `Set` node with one field `output` (object) holding `{ indicator_type: 'ip', indicator: '', verdict: 'not present', evidence: 'field absent from the case' }`.
+3. **The lookup.** `Lookup IP: AbuseIPDB` is an HTTP Request node, `GET`:
 
-5. **Read the mini-judge.** `IP verdict` is a `Basic LLM Chain`. Prompt `Define below`, text:
+   ```
+   https://api.abuseipdb.com/api/v2/check?ipAddress={{ $('Extract case').first().json.srcip }}&maxAgeInDays=90
+   ```
+
+   Headers `Key: {{ $env.ABUSEIPDB_API_KEY }}` and `Accept: application/json`. On error, continue (using regular output), and turn Always Output Data on.
+
+4. **The skip.** `IP not present` is a Set node with one object field, `output`:
+
+   ```
+   { indicator_type: 'ip', indicator: '', verdict: 'not present', evidence: 'field absent from the case' }
+   ```
+
+5. **The mini-judge.** `IP verdict` is a Basic LLM Chain. Its prompt text:
 
    ```text
    Indicator (ipv4): {{ $('Extract case').first().json.srcip }}
@@ -175,7 +189,7 @@ The IP branch shows the pattern you will copy for hash and domain: a gate (`IP p
    {{ JSON.stringify($json, null, 2) }}
    ```
 
-   `Require Specific Output Format` on. System message: `exercises/module-2/ip-verdict-prompt.md` (included below). Model: the shared `OpenAI Chat Model`, credential `Model gateway`, model `By ID` `{{ $env.MODEL_WEAK }}`, temperature `0.2`. Parser: the shared `Mini-verdict parser`, schema `exercises/module-2/mini-verdict-schema.json` (included below).
+   Turn Require Specific Output Format on. It runs on the shared `OpenAI Chat Model` (credential `Model gateway`, model by id `{{ $env.MODEL_WEAK }}`, temperature 0.2) and the shared `Mini-verdict parser`. The system message and the parser schema are below.
 
 IP verdict system message, `exercises/module-2/ip-verdict-prompt.md`:
 
