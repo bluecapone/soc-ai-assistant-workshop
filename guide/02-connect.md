@@ -34,14 +34,14 @@ The start script does the one-time setup, so there is nothing to configure by ha
    
    ```bash
    cd lab
-   ./scripts/macos-linux/start.sh
+   ./scripts/start.sh
    ```
    
    On Windows:
    
    ```powershell
    cd lab
-   powershell -ExecutionPolicy Bypass -File .\scripts\windows\start.ps1
+   powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
    ```
 
 4. **Let it finish.** <ins>Do nothing else until it prints the Ready block.</ins> The first run builds three images and pulls the rest, a few minutes.

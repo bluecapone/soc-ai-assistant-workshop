@@ -10,7 +10,7 @@
 #                         #   which is slow on arm64 under emulation. Use --images for a
 #                         #   from-scratch rebuild of just our code without that re-pull.
 set -uo pipefail
-# Work from the lab root. This script lives in lab/scripts/macos-linux/, so climb
+# Work from the lab root. This script lives in lab/scripts/, so climb
 # up until the compose file is found.
 cd "$(dirname "$0")"
 for _ in 1 2 3; do [ -f docker-compose.yml ] && break; cd ..; done

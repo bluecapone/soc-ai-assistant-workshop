@@ -9,7 +9,7 @@
   responses and cookies reliably where Invoke-RestMethod does not.
 #>
 # Work from the lab root (the dir with docker-compose.yml). This script lives in
-# lab/scripts/windows/, so climb up until the compose file is found.
+# lab/scripts/, so climb up until the compose file is found.
 Set-Location $PSScriptRoot
 for ($i = 0; $i -lt 3 -and -not (Test-Path docker-compose.yml); $i++) { Set-Location .. }
 $ErrorActionPreference = 'Continue'

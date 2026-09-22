@@ -9,7 +9,7 @@
 set -uo pipefail
 export DOCKER_CLI_HINTS=false   # no "What's next: Debug with Gordon" noise after compose commands
 # Work from the lab root (the dir with docker-compose.yml). This script lives in
-# lab/scripts/macos-linux/, so climb up until the compose file is found.
+# lab/scripts/, so climb up until the compose file is found.
 cd "$(dirname "$0")"
 for _ in 1 2 3; do [ -f docker-compose.yml ] && break; cd ..; done
 

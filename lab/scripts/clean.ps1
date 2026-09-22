@@ -9,7 +9,7 @@
 #>
 param([switch]$Images, [switch]$All)
 $ErrorActionPreference = 'Continue'
-# Work from the lab root. This script lives in lab/scripts/windows/, so climb up
+# Work from the lab root. This script lives in lab/scripts/, so climb up
 # until the compose file is found.
 Set-Location $PSScriptRoot
 for ($i = 0; $i -lt 3 -and -not (Test-Path docker-compose.yml); $i++) { Set-Location .. }

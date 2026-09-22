@@ -23,13 +23,13 @@ cd soc-ai-assistant-workshop/lab
 Start everything on macOS or Linux:
 
 ```bash
-./scripts/macos-linux/start.sh
+./scripts/start.sh
 ```
 
 Start everything on Windows (PowerShell):
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\windows\start.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\start.ps1
 ```
 
 The first run pulls images and builds three services, so it takes a few minutes. It is safe to run again if you interrupt it. Wait for the `== Ready` block: it prints every address and login.
@@ -55,17 +55,17 @@ Run from the lab folder. Clean stops the containers and deletes the lab data. Yo
 macOS or Linux:
 
 ```bash
-./scripts/macos-linux/clean.sh            # containers, volumes, generated state
-./scripts/macos-linux/clean.sh --images   # also remove the built images and the build cache
-./scripts/macos-linux/clean.sh --all      # also remove the pulled base images (a bare slate)
+./scripts/clean.sh            # containers, volumes, generated state
+./scripts/clean.sh --images   # also remove the built images and the build cache
+./scripts/clean.sh --all      # also remove the pulled base images (a bare slate)
 ```
 
 Windows (PowerShell):
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\windows\clean.ps1           # containers, volumes, generated state
-powershell -ExecutionPolicy Bypass -File .\scripts\windows\clean.ps1 -Images   # also remove the built images and the build cache
-powershell -ExecutionPolicy Bypass -File .\scripts\windows\clean.ps1 -All       # also remove the pulled base images (a bare slate)
+powershell -ExecutionPolicy Bypass -File .\scripts\clean.ps1           # containers, volumes, generated state
+powershell -ExecutionPolicy Bypass -File .\scripts\clean.ps1 -Images   # also remove the built images and the build cache
+powershell -ExecutionPolicy Bypass -File .\scripts\clean.ps1 -All       # also remove the pulled base images (a bare slate)
 ```
 
 Use `--images` (`-Images`) to rebuild the workshop services from scratch without re-pulling several GB. Use `--all` (`-All`) only when you want nothing left behind, because the next start re-pulls the base images.
