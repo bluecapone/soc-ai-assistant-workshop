@@ -1,0 +1,32 @@
+# Line-ending normalization.
+#
+# The attack scripts run as `bash script.sh` inside the (Linux) range-control
+# container. Git for Windows defaults to core.autocrlf=true, so without this a
+# Windows attendee checks the scripts out with CRLF; bash then reads
+# `set -euo pipefail\r` and aborts with `set: pipefail: invalid option name`,
+# and the attack buttons do nothing. Force LF on everything the containers run.
+
+# Default: detect text vs binary, and check text out with LF on every platform.
+* text=auto eol=lf
+
+# Scripts that run in Linux containers or on macOS/Linux hosts — must be LF.
+*.sh      text eol=lf
+*.bash    text eol=lf
+*.py      text eol=lf
+*.command text eol=lf
+
+# Windows-native scripts — keep CRLF.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binaries — never touch.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.tar  binary
+*.gz   binary
+*.zip  binary
+*.pdf  binary
