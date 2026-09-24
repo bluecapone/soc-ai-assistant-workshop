@@ -209,6 +209,13 @@ copy_in platform/wazuh/local_decoder.xml               /var/ossec/etc/decoders/l
 for f in custom-w2thive custom-w2thive.py custom-n8n custom-n8n.py; do
   copy_in "platform/wazuh/integrations/$f" "/var/ossec/integrations/$f"
 done
+# Strip CR from the integration scripts inside the container. A Windows checkout (CRLF) leaves
+# \r on these files and docker compose cp copies them in verbatim; integratord then cannot exec
+# a wrapper whose shebang ends in \r (#!/bin/sh\r -> "required file not found"), so the alert
+# fires but no case is ever created. .gitattributes only normalises fresh clones, so an already
+# cloned Windows attendee still needs this. wazuh.manager is a stock image (no Dockerfile to strip
+# CR at build, unlike the range-control attack scripts), so do it here.
+docker compose exec -T wazuh.manager sh -c 'for f in custom-w2thive custom-w2thive.py custom-n8n custom-n8n.py; do sed -i "s/\r$//" "/var/ossec/integrations/$f"; done'
 docker compose exec -T wazuh.manager chmod +x /var/ossec/integrations/custom-w2thive /var/ossec/integrations/custom-w2thive.py /var/ossec/integrations/custom-n8n /var/ossec/integrations/custom-n8n.py
 ok "workshop config copied into wazuh.manager"
 docker compose restart wazuh.manager >/dev/null
