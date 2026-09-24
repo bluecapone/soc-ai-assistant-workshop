@@ -92,6 +92,22 @@ fi
 set_env GATEWAY_BASE_URL https://workshop-ai.bluecap.one/v1
 ok "gateway URL set to https://workshop-ai.bluecap.one/v1"
 
+# The gateway key is per-attendee (handed out at the workshop). Prompt when .env
+# still has the placeholder so n8n and the assistant sandbox boot with a working key.
+gw_key="$(grep -E '^GATEWAY_API_KEY=' .env | head -1 | cut -d= -f2-)"
+if [ -z "$gw_key" ] || [ "$gw_key" = "replace-with-per-attendee-key" ]; then
+  [ -t 0 ] || die "GATEWAY_API_KEY is not set in .env — edit .env or run ./start.sh from a terminal"
+  while :; do
+    printf '   Enter your attendee gateway API key: '
+    read -r gw_key
+    [ -n "$gw_key" ] && break
+  done
+  set_env GATEWAY_API_KEY "$gw_key"
+  ok "gateway API key saved to .env"
+else
+  ok "gateway API key present"
+fi
+
 # --- 1. bring everything up ---------------------------------------------------
 say "Starting the stack"
 # Docker auto-creates a missing per-file bind-mount source (each cert *.pem) as an empty

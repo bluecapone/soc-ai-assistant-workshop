@@ -120,6 +120,19 @@ if (-not (Select-String -Path .env -Pattern '^SANDBOX_API_KEYS=.+' -Quiet)) {
 Set-EnvVar 'GATEWAY_BASE_URL' 'https://workshop-ai.bluecap.one/v1'
 Ok "gateway URL set to https://workshop-ai.bluecap.one/v1"
 
+# The gateway key is per-attendee (handed out at the workshop). Prompt when .env
+# still has the placeholder so n8n and the assistant sandbox boot with a working key.
+$gwLine = Select-String -Path .env -Pattern '^GATEWAY_API_KEY=' | Select-Object -First 1
+$gwKey  = if ($gwLine) { $gwLine.Line -replace '^GATEWAY_API_KEY=' } else { '' }
+if ([string]::IsNullOrWhiteSpace($gwKey) -or $gwKey -eq 'replace-with-per-attendee-key') {
+    if ([Console]::IsInputRedirected) { Die "GATEWAY_API_KEY is not set in .env - edit .env or run .\start.ps1 from a terminal" }
+    do { $gwKey = (Read-Host "   Enter your attendee gateway API key").Trim() } until ($gwKey)
+    Set-EnvVar 'GATEWAY_API_KEY' $gwKey
+    Ok "gateway API key saved to .env"
+} else {
+    Ok "gateway API key present"
+}
+
 # --- 1. up --------------------------------------------------------------------
 Say "Starting the stack"
 # Docker Desktop auto-creates a missing per-file bind-mount source (each cert *.pem) as an

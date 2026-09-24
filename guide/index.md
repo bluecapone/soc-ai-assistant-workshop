@@ -75,7 +75,7 @@ Every attendee runs an independent copy of the same six components. Nothing is s
 | bank-web            | Deliberately vulnerable web application, the detection target                               | none                                  |
 | Model gateway       | Every model call routes through it                                                          | your token, one per attendee          |
 
-Configuration lives in `lab/.env`: `THEHIVE_N8N_APIKEY` (minted by the start script), `GATEWAY_BASE_URL`, `GATEWAY_API_KEY`, `MODEL_WEAK`, `MODEL_FRONTIER`. Model ids are announced from the slide on the day.
+Configuration lives in `lab/.env`: `THEHIVE_N8N_APIKEY` (minted by the start script), `GATEWAY_BASE_URL`, `GATEWAY_API_KEY` (the start script prompts for your attendee key on first run and saves it), `MODEL_WEAK`, `MODEL_FRONTIER`. Model ids are announced from the slide on the day.
 
 In n8n the gateway credential type is called "OpenAI API" because that protocol is a common standard several providers implement, not because OpenAI is involved. The two models behind the gateway are Gemini (`MODEL_WEAK`) and Claude (`MODEL_FRONTIER`), never GPT.
 
